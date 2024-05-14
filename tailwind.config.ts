@@ -17,7 +17,9 @@ const config: Config = {
       },
       fontFamily: {
         'robot': `"Roboto", sans-serif`,
-        'ubuntu': `"Ubuntu Sans", sans-serif`
+        'ubuntu': `"Ubuntu Sans", sans-serif`,
+        'roboto-mono': `"Roboto Mono", monospace`,
+        'plus-jakarta-ans': `"Plus Jakarta Sans", sans-serif`,
       }
     },
   },

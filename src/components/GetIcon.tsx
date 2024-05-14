@@ -13,8 +13,15 @@ import {
     Plus,
     PencilLine,
     Settings2,
+    ImageUp,
+    Clapperboard,
+    FileText,
+    MessagesSquare,
+    Share2,
+    ThumbsUp
 } from "lucide-react"
 import React from "react";
+
 
 interface Prams {
     name: string
@@ -55,6 +62,19 @@ export const GetIcon = (prams: Prams): React.JSX.Element => {
             return <PencilLine className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
         case 'setting':
             return <Settings2 className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
+        case 'image-upload':
+            return <ImageUp className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
+        case 'video':
+            return <Clapperboard className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
+        case 'text-file':
+            return <FileText className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
+        case 'comment':
+            return <MessagesSquare className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
+        case 'share':
+            return <Share2 className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
+        case 'like':
+            return <ThumbsUp className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
+
         default :
             return <Home className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
     }
