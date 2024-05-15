@@ -21,7 +21,7 @@ const initial = {
     transform: "translateY(80px)"
 }
 
-const MobileNavbar = () => {
+const MobileNavbar = ({isVisible}: {isVisible: boolean}) => {
     const pathName = usePathname();
 
     const [navButtonPosition, setNavButtonPosition] = useState<number>(40)
@@ -68,16 +68,15 @@ const MobileNavbar = () => {
         const totalWidth = (parseInt(computedStyle.width.slice(0, -2)) - 280) / 4;
         setNavButtonHover(data)
         setNavButtonPosition(40 + (totalWidth * indexToSet) + (40 * indexToSet))
-        console.log(40 + (totalWidth * indexToSet) + (40 * indexToSet))
     }, []);
 
     return (
         <motion.div
-            initial={initial}
-            animate={{ opacity: 1, transform: "translateY(0px)" }}
+            initial={{y: 150}}
+            animate={{ y: isVisible ? 0 : 150 }}
             transition={{ duration: 0.5 }}
-            className={`h-[70px] fixed bg-default-200/70 bottom-2 rounded-2xl py-2 left-[5px]`}
-            style={{ width: 'calc(100% - 10px)'}}
+            className={`w-full h-[70px] fixed bg-default-200 bottom-0 py-2 z-30`}
+            // style={{ width: 'calc(100% - 10px)'}}
         >
             <ul ref={f} className={'relative w-full h-full px-10 flex items-center justify-between'}>
                 <li className={'w-[40px] relative flex flex-col gap-y-2 items-center justify-between'}>
@@ -90,7 +89,7 @@ const MobileNavbar = () => {
                             variant="light"
                             size={"sm"}
                             onClick={() => setNavButton('home')}
-                            className={`${navButtonHover['home'] && '-translate-y-[40px]'} z-50`}
+                            className={`${navButtonHover['home'] && '-translate-y-[32px]'} z-50`}
                         >
                             <GetIcon name={'home'} className={`${pathName === '/' ? 'text-black' : ''}`}/>
                         </Button>
@@ -111,7 +110,7 @@ const MobileNavbar = () => {
                             variant="light"
                             size={'sm'}
                             onClick={() => setNavButton('friend')}
-                            className={`${navButtonHover['friend'] && '-translate-y-[40px]'} z-50`}
+                            className={`${navButtonHover['friend'] && '-translate-y-[32px]'} z-50`}
                         >
                             <GetIcon name={'friend'}
                                      className={pathName === '/friend' ? 'text-black' : ''}/>
@@ -132,7 +131,7 @@ const MobileNavbar = () => {
                             variant="light"
                             size={"sm"}
                             onClick={() => setNavButton('reels')}
-                            className={`${navButtonHover['reels'] && '-translate-y-[40px]'} z-50`}
+                            className={`${navButtonHover['reels'] && '-translate-y-[32px]'} z-50`}
                         >
                             <GetIcon name={'video-reels'}
                                      className={pathName === '/reels' ? 'text-black' : ''} size={10}/>
@@ -153,7 +152,7 @@ const MobileNavbar = () => {
                             variant="light"
                             size={"sm"}
                             onClick={() => setNavButton('message')}
-                            className={`${navButtonHover['massg'] && '-translate-y-[40px]'} z-50`}
+                            className={`${navButtonHover['massg'] && '-translate-y-[32px]'} z-50`}
                         >
                             <GetIcon name={'message'}
                                      className={`${pathName === '/message' ? 'text-black' : ''}`}
@@ -175,7 +174,7 @@ const MobileNavbar = () => {
                             aria-label="more than 99 notifications"
                             variant="light"
                             onClick={() => setNavButton('notification')}
-                            className={`${navButtonHover['notify'] && '-translate-y-[40px]'} z-50`}
+                            className={`${navButtonHover['notify'] && '-translate-y-[32px]'} z-50`}
                         >
                             <GetIcon name={'notification'}
                                      className={pathName === '/notification' ? 'text-black' : ''}/>
@@ -186,7 +185,7 @@ const MobileNavbar = () => {
                                     Notification
                                 </span>
                 </li>
-                <div className={`nav-toggle-button absolute w-[70px] h-[70px] top-[-90%] bg-green-400 rounded-full duration-500 border-[6px] border-solid border-black`} style={{left: `${navButtonPosition - 15}px`}}></div>
+                <div className={`nav-toggle-button absolute w-[70px] h-[70px] top-[-70%] bg-green-400 rounded-full duration-500 border-[6px] border-solid border-default-200`} style={{left: `${navButtonPosition - 15}px`}}></div>
             </ul>
         </motion.div>
     );

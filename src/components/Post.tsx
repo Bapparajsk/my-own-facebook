@@ -16,13 +16,6 @@ interface Props {
     share: number
 }
 
-interface BadgeDate {
-    color: string,
-    shape: string,
-    placement: string
-    content?: string
-}
-
 
 const Post = ({name, time, userImg, description, userActive, imgSrc, like, comment, share}: Props) => {
 
@@ -38,22 +31,12 @@ const Post = ({name, time, userImg, description, userActive, imgSrc, like, comme
         }
     }
 
-    const badgeDate: BadgeDate = {
-        color: "success",
-        shape: "circle",
-        placement: "bottom-right",
-    }
-
-    if (userActive) {
-        badgeDate.content = "";
-    }
-
     return (
         <>
             <div className={'w-full h-auto flex flex-col items-start justify-center gap-y-4 mb-5'}>
                 <div className={'w-auto h-full flex flex-col'}>
                     <div className={'w-auto h-full flex gap-x-2 items-center justify-start'}>
-                        <Badge color={'success'} shape={'circle'} placement={'bottom-right'} content={badgeDate.content}>
+                        <Badge color={'success'} shape={'circle'} placement={'bottom-right'} content={userActive && ""}>
                             <Avatar
                                 radius="full"
                                 src={userImg}
@@ -79,7 +62,7 @@ const Post = ({name, time, userImg, description, userActive, imgSrc, like, comme
                     />
                 </div>
                 <div className={'w-full h-auto flex items-center justify-center gap-x-2'}>
-                    <Button color="primary" variant="flat" className={'grow'}>
+                    <Button color="primary" variant="shadow" className={'grow'}>
                         <GetIcon name={'like'} className={'!w-6'}/>
                         <span>{formatNumber(like)}</span>
                     </Button>

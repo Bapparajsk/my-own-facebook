@@ -13,6 +13,21 @@ export default function Nav(): React.JSX.Element {
     const pathName = usePathname();
     const size = useScreenSize();
 
+    const [isNavbarVisible, setNavbarVisible] = useState(true);
+
+    useEffect(() => {
+        let lastScrollTop = 0;
+        const handleScroll = () => {
+            const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            setNavbarVisible(currentScrollTop < lastScrollTop);
+            lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
         <>
@@ -102,7 +117,7 @@ export default function Nav(): React.JSX.Element {
                             </NavbarItem>
                         </NavbarContent>
                     </Navbar>
-                ) : ( <MobileNavbar/> )
+                ) : ( <MobileNavbar isVisible={isNavbarVisible}/> )
             }
         </>
     );
