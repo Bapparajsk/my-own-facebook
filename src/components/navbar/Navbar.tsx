@@ -1,9 +1,9 @@
 "use client"
 
 import React, {useEffect, useState} from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Badge, Button} from "@nextui-org/react";
-import Link  from 'next/link';
-import { usePathname } from "next/navigation"
+import {Badge, Button, Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/react";
+import Link from 'next/link';
+import {usePathname} from "next/navigation"
 import useScreenSize from "@/hook/useScreenSize";
 import {GetIcon} from "@/components/GetIcon";
 import MobileNavbar from "@/components/navbar/MobileNavbar";
@@ -37,9 +37,9 @@ export default function Nav(): React.JSX.Element {
                         <NavbarBrand className="flex-grow-0">
                             <p className="font-bold text-inherit">Code</p>
                         </NavbarBrand>
-                        <NavbarContent justify={'end'}  className={'gap-x-10 sm:gap-x-14 text-default-900'}>
+                        <NavbarContent justify={'end'} className={'gap-x-10 sm:gap-x-14 text-default-900'}>
                             <NavbarItem className={'flex items-center gap-x-2'}>
-                                <Badge  shape="circle" color="danger" size={"md"}>
+                                <Badge shape="circle" color="danger" size={"md"}>
                                     <Button
                                         as={Link}
                                         href={'/'}
@@ -54,7 +54,7 @@ export default function Nav(): React.JSX.Element {
                                 {size && size > 768 && <span>Home</span>}
                             </NavbarItem>
                             <NavbarItem className={'flex items-center gap-x-2'}>
-                                <Badge  shape="circle" color="danger" size={"md"}>
+                                <Badge shape="circle" color="danger" size={"md"}>
                                     <Button
                                         as={Link}
                                         href={'/friend'}
@@ -64,13 +64,14 @@ export default function Nav(): React.JSX.Element {
                                         variant="light"
                                         size={'sm'}
                                     >
-                                        <GetIcon name={'friend'} className={pathName === '/friend' ? 'text-blue-500' : ''}/>
+                                        <GetIcon name={'friend'}
+                                                 className={pathName === '/friend' ? 'text-blue-500' : ''}/>
                                     </Button>
                                 </Badge>
                                 {size && size > 768 && <span>Friend</span>}
                             </NavbarItem>
                             <NavbarItem className={'flex items-center gap-x-2'}>
-                                <Badge  shape="circle" color="danger" size={"md"}>
+                                <Badge shape="circle" color="danger" size={"md"}>
                                     <Button
                                         as={Link}
                                         href={'/message'}
@@ -79,7 +80,8 @@ export default function Nav(): React.JSX.Element {
                                         variant="light"
                                         size={"sm"}
                                     >
-                                        <GetIcon name={'video-reels'} className={pathName === '/message' ? 'text-blue-500' : ''} size={10}/>
+                                        <GetIcon name={'video-reels'}
+                                                 className={pathName === '/message' ? 'text-blue-500' : ''} size={10}/>
                                     </Button>
                                 </Badge>
                                 {size && size > 768 && <span>Reels</span>}
@@ -94,14 +96,15 @@ export default function Nav(): React.JSX.Element {
                                         variant="light"
                                         size={"sm"}
                                     >
-                                        <GetIcon name={'message'} className={pathName === '/message' ? 'text-blue-500' : ''}
+                                        <GetIcon name={'message'}
+                                                 className={pathName === '/message' ? 'text-blue-500' : ''}
                                                  size={10}/>
                                     </Button>
                                 </Badge>
                                 {size && size > 768 && <span>Message</span>}
                             </NavbarItem>
                             <NavbarItem className={'flex items-center gap-x-2'}>
-                                <Badge  shape="circle" color="danger" size={"md"}>
+                                <Badge shape="circle" color="danger" size={"md"}>
                                     <Button
                                         as={Link}
                                         href={'/notification'}
@@ -110,14 +113,15 @@ export default function Nav(): React.JSX.Element {
                                         aria-label="more than 99 notifications"
                                         variant="light"
                                     >
-                                        <GetIcon name={'notification'} className={pathName === '/notification' ? 'text-blue-500' : ''}/>
+                                        <GetIcon name={'notification'}
+                                                 className={pathName === '/notification' ? 'text-blue-500' : ''}/>
                                     </Button>
                                 </Badge>
                                 {size && size > 768 && <span>Notification</span>}
                             </NavbarItem>
                         </NavbarContent>
                     </Navbar>
-                ) : ( <MobileNavbar isVisible={isNavbarVisible}/> )
+                ) : (<MobileNavbar isVisible={isNavbarVisible}/>)
             }
         </>
     );

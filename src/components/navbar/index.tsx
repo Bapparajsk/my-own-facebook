@@ -8,12 +8,10 @@ import {usePathname} from "next/navigation";
 const MainNavbar = () => {
 
     const pathname = usePathname();
-    const pathIdx = ["/profile", "/search", "/setting", "/reels", "/sign-in", "/sign-up"].indexOf(pathname);
+    const pathIdx = ["/profile", "/search", "/setting", "/reels", "/sign-in", "/sign-up", '/friend/requests', '/friend/suggestions'].indexOf(pathname);
     if (pathIdx !== -1) {
         return null;
     }
-
-    console.log(pathname);
 
     return (
         <>

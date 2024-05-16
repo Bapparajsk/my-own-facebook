@@ -9,7 +9,7 @@ import ProfileContains from "@/components/profile";
 
 const Profile = () => {
     return (
-        <main className={'w-screen h-full flex flex-col items-center'}>
+        <div className={'w-screen h-full flex flex-col items-center'}>
             <SettingNav/>
             <div className={'w-full h-auto max-w-[1024px] items-center relative flex flex-col'}>
                 <div className={'w-full z-10 relative'}>
@@ -58,7 +58,7 @@ const Profile = () => {
             </div>
             <div className={'w-full max-w-[1024px] h-[3px] bg-default-300 mt-[110px]'}/>
             <ProfileContains/>
-        </main>
+        </div>
     );
 };
 

@@ -5,7 +5,6 @@ import {Badge, Button} from "@nextui-org/react";
 import Link from "next/link";
 import { GetIcon } from "@/components/GetIcon";
 import { usePathname } from "next/navigation"
-import { useNavContext } from '@/context/NavContext';
 import { motion } from "framer-motion"
 
 interface Data {
@@ -185,7 +184,7 @@ const MobileNavbar = ({isVisible}: {isVisible: boolean}) => {
                                     Notification
                                 </span>
                 </li>
-                <div className={`nav-toggle-button absolute w-[70px] h-[70px] top-[-70%] bg-green-400 rounded-full duration-500 border-[6px] border-solid border-default-200`} style={{left: `${navButtonPosition - 15}px`}}></div>
+                <div className={`absolute w-[70px] h-[70px] top-[-73%] bg-green-400 rounded-full duration-500 border-[6px] border-solid border-default-200`} style={{left: `${navButtonPosition - 15}px`}}></div>
             </ul>
         </motion.div>
     );

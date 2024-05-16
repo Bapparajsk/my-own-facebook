@@ -9,7 +9,7 @@ import RenderPosts from "@/components/home/RenderPosts";
 export default function Home() {
 
   return (
-      <main className={'w-full h-auto px-4'}>
+      <div className={'w-full h-auto px-4'}>
           <div className={'w-full h-auto flex gap-x-8 items-center mt-2'}>
               <Badge
                   color="primary"
@@ -29,6 +29,6 @@ export default function Home() {
           </div>
           <hr className="border-none h-[1px] bg-default-300 text-red-800 mt-4"/>
           <RenderPosts/>
-      </main>
+      </div>
   );
 }
