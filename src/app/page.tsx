@@ -22,7 +22,7 @@ export default function Home() {
                       size={'lg'}
                       isBordered={false}
                       color={'success'}
-                      src="https://i.pravatar.cc/150?u=a04258114e29026302d"
+                      src="https://pbs.twimg.com/profile_images/1754927710302883841/ylGsCbNa_400x400.jpg"
                   />
               </Badge>
               <StatusBox/>

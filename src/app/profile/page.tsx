@@ -27,7 +27,7 @@ const Profile = () => {
                     className={"relative left-[-28%] -mt-[72px] z-20 w-36 h-36 rounded-full overflow-hidden border-[6px] border-solid border-black"}>
                     <img
                         className={'w-full h-full object-cover'}
-                        src={"https://th.bing.com/th/id/OIP.4hjKSvNoStamnhUXbI911wHaEo?&rs=1&pid=ImgDetMain"}
+                        src={"https://pbs.twimg.com/profile_images/1754927710302883841/ylGsCbNa_400x400.jpg"}
                         alt={"hero"}
                     />
                     <div
