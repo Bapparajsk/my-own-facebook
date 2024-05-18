@@ -12,6 +12,7 @@ interface NotificationProps {
     name?: string
 }
 
+
 const getIconName = (name: string): string => {
     if (name === "like") {
         return 'like'
@@ -47,7 +48,7 @@ const NotifyCard = ({imgSrc, content, isOpen, relasotion, name} : NotificationPr
 
 
     return (
-        <div className={`w-full h-auto flex gap-x-4 justify-between items-center ${isOpen ? 'bg-default-200/50' : 'bg-default-200'}  pl-2 py-1 rounded-[10px]`}>
+        <div className={`w-full h-auto flex gap-x-4  justify-between items-center ${isOpen ? 'bg-default-200/50' : 'bg-default-200'}  pl-2 py-1 rounded-[10px]`}>
             <div className={'w-auto h-full self-start'}>
                 <Badge
                     isOneChar

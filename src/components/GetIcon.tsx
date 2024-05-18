@@ -20,9 +20,11 @@ import {
     Share2,
     ThumbsUp,
     EllipsisVertical,
-    MonitorPlay
+    MonitorPlay,
+    Send
 } from "lucide-react"
 import React from "react";
+
 
 interface Prams {
     name: string
@@ -79,6 +81,8 @@ export const GetIcon = (prams: Prams): React.JSX.Element => {
             return <EllipsisVertical className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
         case 'notify-video':
             return <MonitorPlay className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
+        case 'send':
+            return <Send className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
         default :
             return <Home className={`${className} w-full h-auto`} strokeWidth={ strokeWidth ? strokeWidth : 1.5} size={size}/>
     }

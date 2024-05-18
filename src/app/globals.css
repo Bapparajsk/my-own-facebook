@@ -7,3 +7,7 @@
     border-width: 3px;
     border-image: linear-gradient(to bottom , red, rgba(240, 128, 128, 0)) 1 100%;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}

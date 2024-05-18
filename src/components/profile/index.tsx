@@ -85,7 +85,7 @@ const ProfileContains = () => {
                     </div>
                 </div>
             </div>
-            <hr className="border-none h-[1px] bg-default-300 text-red-800"/>
+            <hr className="border-none h-[1px] bg-default-300"/>
             <UserPosts/>
         </div>
     );
