@@ -24,7 +24,7 @@ const Nav = () => {
                         <span>back</span>
                     </motion.div>
                 </NavbarItem>
-                <NavbarItem>
+                <NavbarItem className={'w-full'}>
                     <Input
                         type="text"
                         variant={'underlined'}

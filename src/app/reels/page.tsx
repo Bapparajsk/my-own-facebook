@@ -1,11 +1,29 @@
 import React from 'react';
-import MainLayout from "@/app/MainLayout";
 
 const Reels = () => {
     return (
-        <main>
-            <h1>Reels</h1>
-        </main>
+        <div className="relative overflow-y-scroll snap-y snap-mandatory h-screen">
+            <div className="w-full h-full bg-orange-700 relative snap-y snap-mandatory">
+                <div className="w-full h-screen snap-start">
+                    <video className="w-full h-full object-cover" src="/videos/reel1.mp4" autoPlay loop muted></video>
+                </div>
+                <div className="w-full h-screen snap-start">
+                    <video className="w-full h-full object-cover" src="/videos/reel2.mp4" autoPlay loop muted></video>
+                </div>
+                <div className="w-full h-screen snap-start">
+                    <video className="w-full h-full object-cover" src="/videos/reel3.mp4" autoPlay loop muted></video>
+                </div>
+                <div className="w-full h-screen snap-start">
+                    <video className="w-full h-full object-cover" src="/videos/reel1.mp4" autoPlay loop muted></video>
+                </div>
+                <div className="w-full h-screen snap-start">
+                    <video className="w-full h-full object-cover" src="/videos/reel2.mp4" autoPlay loop muted></video>
+                </div>
+                <div className="w-full h-screen snap-start">
+                    <video className="w-full h-full object-cover" src="/videos/reel3.mp4" autoPlay loop muted></video>
+                </div>
+            </div>
+        </div>
     );
 };
 
