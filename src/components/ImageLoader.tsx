@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from "next/image";
-import useScreenSize from "@/hook/useScreenSize";
+import useScreenSize from "@/hooks/useScreenSize";
 
 interface Props {
     src: object; // Assuming src is a string representing the image URL

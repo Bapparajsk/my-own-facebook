@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import {Badge, Button, Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/react";
 import Link from 'next/link';
 import {usePathname} from "next/navigation"
-import useScreenSize from "@/hook/useScreenSize";
+import useScreenSize from "@/hooks/useScreenSize";
 import {GetIcon} from "@/components/GetIcon";
 import MobileNavbar from "@/components/navbar/MobileNavbar";
 

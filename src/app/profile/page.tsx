@@ -15,7 +15,7 @@ const Profile = () => {
                 <div className={'w-full z-10 relative'}>
                     <Image
                         className={'w-screen max-h-96 object-cover'}
-                        src={"https://scontent.fccu31-2.fna.fbcdn.net/v/t39.30808-6/405266294_883868466735789_4190385623778386864_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=WdoQtzZfhR0Q7kNvgHgTd5U&_nc_ht=scontent.fccu31-2.fna&oh=00_AYAfFWCD6it8LWVdnVHPHJc_TsmJP6D5NRZhUVsAaS2YqQ&oe=66477D72"}
+                        src={"https://th.bing.com/th/id/OIP.5vUWBlv-Z2l1asf_LKrsEAHaDz?rs=1&pid=ImgDetMain"}
                         alt={"hero"}
                     />
                     <div

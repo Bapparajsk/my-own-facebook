@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, User } from "@nextui-org/react";
 import { SearchIcon } from "@nextui-org/shared-icons";
-import useScreenSize from "@/hook/useScreenSize";
+import useScreenSize from "@/hooks/useScreenSize";
 import Link from "next/link";
 import { GetIcon } from "@/components/GetIcon";
 import { motion } from "framer-motion";
-import { useNavContext } from '@/context/NavContext';
 
 const initial = {
     transform: "translateY(-80px)"
@@ -15,11 +14,7 @@ const MotionLink = motion(Link);
 
 export default function TopLogo(): React.JSX.Element | null {
     const size = useScreenSize();
-    const { nevTopAnimation, setNevTopAnimation } = useNavContext();
 
-    useEffect(() => {
-        setNevTopAnimation(false);
-    }, []);
 
     if (size && size > 640) {
         return null;
@@ -27,14 +22,14 @@ export default function TopLogo(): React.JSX.Element | null {
 
     return (
         <motion.div
-            initial={nevTopAnimation && {opacity: 0, transform: "translateY(-80px)"}}
+            initial={{opacity: 0, transform: "translateY(-80px)"}}
             animate={{opacity: 1, transform: "translateY(0px)"}}
             transition={{ duration: 0.5 }}
         >
             <Navbar shouldHideOnScroll>
                 <NavbarBrand>
                     <MotionLink
-                        initial={nevTopAnimation && {opacity: 0, transform: "translateX(-80px)"}}
+                        initial={{opacity: 0, transform: "translateX(-80px)"}}
                         animate={{opacity: 1, transform: "translateX(0px)"}}
                         transition={{ duration: 0.5, delay: 0.5}}
                         href={'profile'}

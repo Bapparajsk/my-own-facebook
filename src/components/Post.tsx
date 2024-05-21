@@ -10,14 +10,15 @@ interface Props {
     userImg: string
     description: string
     userActive: boolean
-    imgSrc: string
+    isImage: boolean
+    containUrl: string | undefined
     like: number
     comment: number
     share: number
 }
 
 
-const Post = ({name, time, userImg, description, userActive, imgSrc, like, comment, share}: Props) => {
+const Post = ({name, time, userImg, description, userActive, isImage, containUrl, like, comment, share}: Props) => {
 
     function formatNumber(num: number): string {
         if (num >= 1e9) {
@@ -54,12 +55,26 @@ const Post = ({name, time, userImg, description, userActive, imgSrc, like, comme
                     </div>
                 </div>
                 <div>
-                    <Image
-                        loading={'lazy'}
-                        className={'w-screen h-auto object-cover'}
-                        alt="NextUI hero Image with delay"
-                        src={imgSrc}
-                    />
+                    {isImage ? (
+                        <Image
+                            loading={'lazy'}
+                            className={'w-screen h-auto object-cover'}
+                            alt="NextUI hero Image with delay"
+                            src={containUrl}
+                        />
+                    ) : (
+                        <video className={'w-screen h-full object-cover'} controls preload={'https://th.bing.com/th/id/OIP.yQ5dqe9e_mtXsEk9EHo5IwHaKX?w=182&h=254&c=7&r=0&o=5&dpr=1.3&pid=1.7'}>
+                            <source src={containUrl} type="video/mp4" />
+                            <track
+                                src="/path/to/captions.vtt"
+                                kind="subtitles"
+                                srcLang="en"
+                                label="English"
+                            />
+                            Your browser does not support the video tag.
+                        </video>
+                    )}
+
                 </div>
                 <div className={'w-full h-auto flex items-center justify-center gap-x-2'}>
                     <Button color="primary" variant="shadow" className={'grow'}>
