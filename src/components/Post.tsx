@@ -1,35 +1,37 @@
 "use client"
 
-import React from 'react';
-import {Badge, Avatar, Image, Button} from "@nextui-org/react";
+import React, {useEffect, useState} from 'react';
+import {Badge, Avatar, Image, Button, Modal, ModalContent, ModalBody, ModalFooter, useDisclosure, Textarea} from "@nextui-org/react";
 import {GetIcon} from "@/components/GetIcon";
+import {Comment} from "@/components/Comment";
+import {PostProps} from "@/interface/component";
+import Share from "@/components/Share";
 
-interface Props {
-    name: string
-    time: string
-    userImg: string
-    description: string
-    userActive: boolean
-    isImage: boolean
-    containUrl: string | undefined
-    like: number
-    comment: number
-    share: number
+function formatNumber(num: number): string {
+    if (num >= 1e9) {
+        return (num / 1e9).toFixed(2) + 'B';
+    } else if (num >= 1e6) {
+        return (num / 1e6).toFixed(2) + 'M';
+    } else if (num >= 1e3) {
+        return (num / 1e3).toFixed(2) + 'K';
+    } else {
+        return num.toString();
+    }
 }
 
+interface PopupDetails {
+    placement: "bottom" | "center" | undefined
+    height: number
+    isComment: boolean
+}
 
-const Post = ({name, time, userImg, description, userActive, isImage, containUrl, like, comment, share}: Props) => {
+const Post = ({name, time, userImg, description, userActive, isImage, containUrl, like, comment, share}: PostProps) => {
+    const [popupDetails, setPopupDetails] = useState<PopupDetails>({placement: 'bottom', height: 20, isComment: true});
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
-    function formatNumber(num: number): string {
-        if (num >= 1e9) {
-            return (num / 1e9).toFixed(2) + 'B';
-        } else if (num >= 1e6) {
-            return (num / 1e6).toFixed(2) + 'M';
-        } else if (num >= 1e3) {
-            return (num / 1e3).toFixed(2) + 'K';
-        } else {
-            return num.toString();
-        }
+    const handleClick = (data: PopupDetails) => {
+        setPopupDetails(data);
+        onOpen()
     }
 
     return (
@@ -74,23 +76,83 @@ const Post = ({name, time, userImg, description, userActive, isImage, containUrl
                             Your browser does not support the video tag.
                         </video>
                     )}
-
                 </div>
                 <div className={'w-full h-auto flex items-center justify-center gap-x-2'}>
                     <Button color="primary" variant="shadow" className={'grow'}>
                         <GetIcon name={'like'} className={'!w-6'}/>
                         <span>{formatNumber(like)}</span>
                     </Button>
-                    <Button color="primary" variant="flat" className={'grow'}>
+                    <Button
+                        onPress={() => handleClick({placement: 'bottom', height: 20, isComment: true})}
+                        color="primary"
+                        variant="flat"
+                        className={'grow'}
+                    >
                         <GetIcon name={'comment'} className={'!w-6'}/>
                         <span>{formatNumber(comment)}</span>
                     </Button>
-                    <Button color="primary" variant="flat" className={'grow'}>
+                    <Button
+                        onPress={() => handleClick({placement: 'center', height: 30, isComment: false})}
+                        color="primary"
+                        variant="flat"
+                        className={'grow'}
+                    >
                         <GetIcon name={'share'} className={'!w-6'}/>
                         <span>{formatNumber(share)}</span>
                     </Button>
                 </div>
             </div>
+            <Modal
+                isOpen={isOpen}
+                placement={popupDetails.placement!}
+                onOpenChange={onOpenChange}
+                backdrop={'blur'}
+                hideCloseButton={true}
+                style={{ height: `calc(100vh - ${popupDetails.height}%)`}}
+                scrollBehavior={'inside'}
+                radius={'sm'}
+            >
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalBody className={'mt-2'}>
+                                {/*<Comment*/}
+                                {/*    key={2}*/}
+                                {/*    name={'Sohey khatun'}*/}
+                                {/*    comment={'hello bappa a kis ki photo hey'}*/}
+                                {/*    profileImageUrl={'https://th.bing.com/th/id/OIP.TXJ-iZJ33GINbidIe2rg9AAAAA?rs=1&pid=ImgDetMain'}*/}
+                                {/*/>*/}
+                                {/*<Comment*/}
+                                {/*    key={2}*/}
+                                {/*    name={'Susmita aktar'}*/}
+                                {/*    comment={'Can you write the installation steps? Each details pls. I want to this make myself'}*/}
+                                {/*    profileImageUrl={'https://i.pinimg.com/originals/bb/c3/8f/bbc38f08f0347efb0b29edb119d3c18f.jpg'}*/}
+                                {/*/>*/}
+                                <Share/>
+                            </ModalBody>
+                            {popupDetails.isComment && <ModalFooter>
+                                <div className="flex w-full gap-x-2">
+                                    <Avatar
+                                        radius="full"
+                                        src={userImg}
+                                    />
+                                    <Textarea
+                                        label="Comment"
+                                        placeholder="Write a comment..."
+                                        radius={'md'}
+                                        minRows={1}
+                                        endContent={
+                                            <Button color="primary" onPress={onClose}>
+                                                Action
+                                            </Button>
+                                        }
+                                    />
+                                </div>
+                            </ModalFooter>}
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
             <hr className="border-none h-[1px] bg-default-300 text-red-800 mb-4"/>
         </>
     );

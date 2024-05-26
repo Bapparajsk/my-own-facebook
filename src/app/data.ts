@@ -1,8 +1,7 @@
-import {signIconsTypes} from "@/types/inputTypes"
+import {signIconsTypes} from "@/interface/inputTypes"
 
 import google from '@/assets/images/google.png';
 import fb from '@/assets/images/fb.png';
-import linkedin from '@/assets/images/linkedin.png';
 import github from '@/assets/images/github.png';
 
 export const singIconDetails:signIconsTypes[] = [
@@ -17,10 +16,6 @@ export const singIconDetails:signIconsTypes[] = [
     {
         url: github,
         alt: "github sign-up",
-    },
-    {
-        url: linkedin,
-        alt: "linkedin sign-up",
     },
 ]
 

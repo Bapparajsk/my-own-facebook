@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import {Input, Button } from "@nextui-org/react";
 import {EyeFilledIcon} from "@nextui-org/shared-icons";
 import {EyeSlashFilledIcon} from "@nextui-org/shared-icons";
-import {SignUpInputs, signIconsTypes} from "@/types/inputTypes"
+import {SignUpInputs, signIconsTypes} from "@/interface/inputTypes"
 import {singIconDetails} from "@/app/data";
 import {ImageLoader} from "@/components/ImageLoader";
 import Link from "next/link"
@@ -27,15 +27,12 @@ export const Form = () => {
         return true;
     }
 
-    console.log(errors);
-
-
     return (
         <form onSubmit={handleSubmit(onSubmit)} >
             <div className={'w-full h-auto flex items-center justify-center'}>
                 <h1 className={'text-[40px] font-medium text-blue-500'}>sign-up</h1>
             </div>
-            <div className="w-full h-20 flex items-center justify-between">
+            <div className="w-full h-20 flex items-center justify-evenly">
                 {
                     singIconDetails.map((item, idx) => {
                         return <ImageLoader src={item.url} alt={item.alt} className={'w-8 h-8 object-cover cursor-pointer'} key={idx} />

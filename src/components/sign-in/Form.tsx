@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import {Input, Button, User, Card, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem} from "@nextui-org/react";
 import {EyeFilledIcon} from "@nextui-org/shared-icons";
 import {EyeSlashFilledIcon} from "@nextui-org/shared-icons";
-import {SignUpInputs} from "@/types/inputTypes"
+import {SignUpInputs} from "@/interface/inputTypes"
 import Link from "next/link"
 import {users} from '@/app/data';
 
