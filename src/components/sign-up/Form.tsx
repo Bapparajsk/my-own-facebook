@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, {useState} from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {Input, Button } from "@nextui-org/react";
 import {EyeFilledIcon} from "@nextui-org/shared-icons";
@@ -19,8 +19,7 @@ export const Form = () => {
     } = useForm<SignUpInputs>()
     const onSubmit: SubmitHandler<SignUpInputs> = (data) => console.log(data)
 
-    const [isVisible, setIsVisible] = React.useState(false);
-    const toggleVisibility = () => setIsVisible(!isVisible);
+    const [isVisible, setIsVisible] = useState<boolean>(false);
 
     const validateCustom  = (value: string): boolean | string => {
         // console.log(value)
@@ -61,7 +60,7 @@ export const Form = () => {
                     placeholder="Enter your password"
                     autoComplete="off"
                     endContent={
-                        <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                        <button className="focus:outline-none" type="button" onClick={() => setIsVisible(!isVisible)}>
                             {isVisible ? (
                                 <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                             ) : (

@@ -20,7 +20,9 @@ const MainNavbar = () => {
         '/friend/friends',
         '/notification',
         '/message',
-        '/message/*'
+        '/message/*',
+        '/verify',
+        '/verify/*',
     ];
     // const shouldHideNavbar = hiddenPaths.includes(pathname);
     // console.log(shouldHideNavbar, pathname)
