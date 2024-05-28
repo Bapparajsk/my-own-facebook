@@ -94,7 +94,7 @@ export const Email = () => {
     }, [otp]);
 
     return (
-        <Card className="w-[350px] max-w-[500px] px-5 flex flex-col gap-y-2">
+        <Card className="w-[350px] max-w-[500px] px-5 py-8 flex flex-col gap-y-2 z-50 bg-transparent backdrop-blur-[5px]">
             <CardHeader className="flex items-center justify-center gap-3">
                 <div className="flex flex-col items-center justify-center">
                     <h2 className="font-bold text-2xl">Email Validation</h2>

@@ -9,9 +9,6 @@ import {GetIcon} from "@/components/GetIcon";
 const Page = () => {
 
     const router = useRouter();
-    const pathname = useSearchParams();
-
-    console.log(pathname);
 
     return (
         <div className={'w-screen h-screen flex px-5 items-center justify-center overflow-hidden'}>

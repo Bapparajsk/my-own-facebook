@@ -9,8 +9,8 @@ import { GetIcon } from '@/components/GetIcon';
 import ChatScrine from '@/components/chat/ChatScrine';
 
 const Page = () => {
-    const qurey = useSearchParams();
-    const username: string | null = qurey.get('id');
+    // const qurey = useSearchParams();
+    // const username: string | null = qurey.get('id');
     const router = useRouter();
 
     return (
