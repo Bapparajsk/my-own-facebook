@@ -10,7 +10,7 @@ import ProfileContains from "@/components/profile";
 const Profile = () => {
     return (
         <div className={'w-screen h-full flex flex-col items-center'}>
-            <SettingNav/>
+            <SettingNav isSearchIon/>
             <div className={'w-full h-auto max-w-[1024px] items-center relative flex flex-col'}>
                 <div className={'w-full z-10 relative'}>
                     <Image

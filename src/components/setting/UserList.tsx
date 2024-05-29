@@ -3,8 +3,6 @@ import Link from "next/link";
 import {User, Card} from "@nextui-org/react";
 import {GetIcon} from "@/components/GetIcon";
 import {useRouter} from "next/navigation";
-import * as querystring from "node:querystring";
-import {isBoolean} from "node:util";
 
 const UserList = () => {
 

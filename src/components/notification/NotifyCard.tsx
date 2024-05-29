@@ -25,7 +25,7 @@ const getIconName = (name: string): string => {
     }
 }
 
-const getColorName = (name: string): string => {
+const getColorName = (name: string): "primary" | "success" | "danger" | undefined => {
     if (name === "like" || name === "frient-request") {
         return 'primary';
     } else if (name === "comment") {
@@ -52,10 +52,8 @@ const NotifyCard = ({imgSrc, content, isOpen, relasotion, name} : NotificationPr
             <div className={'w-auto h-full self-start'}>
                 <Badge
                     isOneChar
-                    content={
-                        <GetIcon name={getIconName(relasotion)} className={'!w-4 !h-4'}/>
-                    }
-                    // @ts-ignore
+                    content={ <GetIcon name={getIconName(relasotion)} className={'!w-4 !h-4'}/>}
+                    disableAnimation={false}
                     color={getColorName(relasotion)}
                     className={'w-8 h-8 '}
                     size={'lg'}

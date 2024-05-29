@@ -13,7 +13,7 @@ const UserCard = ({userImg, name, isFriendRequest} : UserCardProps) => {
     return (
         <div className={'w-full h-auto flex items-center justify-start gap-x-2'}>
             <div className={'w-auto flex items-center justify-center'}>
-                <Avatar src={userImg} className="!w-20 !h-20 text-large" />
+                <Avatar src={userImg} disableAnimation={false} className="!w-20 !h-20 text-large" />
             </div>
             <div className={'w-full h-full flex flex-col items-start justify-center gap-y-2'}>
                 <p>{name}</p>

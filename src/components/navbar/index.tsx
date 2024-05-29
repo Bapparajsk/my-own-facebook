@@ -11,7 +11,7 @@ const MainNavbar = () => {
     const hiddenPaths = [
         "/profile",
         "/search",
-        "/setting",
+        "/setting/*",
         "/reels",
         "/sign-in",
         "/sign-up",
@@ -19,9 +19,7 @@ const MainNavbar = () => {
         '/friend/suggestions',
         '/friend/friends',
         '/notification',
-        '/message',
         '/message/*',
-        '/verify',
         '/verify/*',
     ];
     // const shouldHideNavbar = hiddenPaths.includes(pathname);

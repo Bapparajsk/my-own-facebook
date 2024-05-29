@@ -36,7 +36,7 @@ const Page = () => {
                         onClick={() => router.back()}
                         className={'flex w-auto gap-x-2 text-default-500'}
                     >
-                        <Badge content="" color="success" shape="circle" placement="bottom-right">
+                        <Badge disableAnimation={false} content="" color="success" shape="circle" placement="bottom-right">
                             <Avatar
                                 radius="full"
                                 src="https://i.pravatar.cc/150?u=a04258a2462d826712d"

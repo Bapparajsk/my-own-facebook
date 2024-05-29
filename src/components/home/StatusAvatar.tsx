@@ -18,6 +18,7 @@ const StatusAvatar = ({id, imgSrc, totalStatusNumber} : Props) => {
             size="md"
             showOutline={false}
             content={totalStatusNumber && totalStatusNumber}
+            disableAnimation={false}
         >
             <Avatar
                 size={'lg'}

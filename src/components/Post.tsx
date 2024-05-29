@@ -39,7 +39,7 @@ const Post = ({name, time, userImg, description, userActive, isImage, containUrl
             <div className={'w-full h-auto flex flex-col items-start justify-center gap-y-4 mb-5'}>
                 <div className={'w-auto h-full flex flex-col'}>
                     <div className={'w-auto h-full flex gap-x-2 items-center justify-start'}>
-                        <Badge color={'success'} shape={'circle'} showOutline={false} placement={'bottom-right'} content={userActive && ""}>
+                        <Badge disableAnimation={false} color={'success'} shape={'circle'} showOutline={false} placement={'bottom-right'} content={userActive && ""}>
                             <Avatar
                                 radius="full"
                                 src={userImg}

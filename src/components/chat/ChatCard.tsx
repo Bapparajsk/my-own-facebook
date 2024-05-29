@@ -14,7 +14,7 @@ const ChatCard = ({imgSrc, name, lastMessage, isActive, id}: ChatCardProps) => {
     return (
         <Link href={`/message/chat?id=${id}`} passHref>
             <div className={'w-full h-auto flex items-center justify-start gap-x-4'}>
-                <Badge content={isActive && ""} showOutline={false} color="success" shape="circle" placement="bottom-right">
+                <Badge disableAnimation={false} content={isActive && ""} showOutline={false} color="success" shape="circle" placement="bottom-right">
                     <Avatar
                         size="lg"
                         radius="full"

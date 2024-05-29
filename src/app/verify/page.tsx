@@ -2,7 +2,7 @@
 
 import React, {useRef, useEffect} from 'react';
 import {Email} from "@/components/verify/Email";
-import {Password} from "@/components/verify/Password";
+import {UserDetails} from "@/components/verify/UserDetails";
 
 const Verify = () => {
 
@@ -28,7 +28,8 @@ const Verify = () => {
                 </video>
             </div>
             <div className={'border-3 border-green-200 rounded-2xl w-auto h-auto bg-transparent'}>
-                <Email/>
+                {/*<Email/>*/}
+                <UserDetails/>
             </div>
 
         </div>

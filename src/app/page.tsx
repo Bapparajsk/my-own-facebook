@@ -17,6 +17,7 @@ export default function Home() {
                   placement={'bottom-right'}
                   showOutline={false}
                   content={<GetIcon name={'plus'}/>}
+                  disableAnimation={false}
               >
                   <Avatar
                       size={'lg'}
