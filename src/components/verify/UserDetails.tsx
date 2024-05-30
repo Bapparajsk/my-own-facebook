@@ -1,19 +1,9 @@
 "use client"
 
 import React from "react";
-import {Card, CardBody, CardHeader, Input, Select, SelectItem, DatePicker, Button } from "@nextui-org/react";
-import {BriefcaseBusiness, User} from "lucide-react";
+import { Card, CardBody, CardHeader, Input, Select, SelectItem, DatePicker, Button } from "@nextui-org/react";
+import { qualification } from '@/app/data'
 
-const animals = [
-    {key: "fsd", label: "Full Stack Developer"},
-    {key: "se", label: "Software Engineering"},
-    {key: "sde", label: "Software Developer Engineering"},
-    {key: "DevOps ", label: "Development and Operations (DevOps)"},
-    {key: "eh", label: "Ethical Hacker"},
-    {key: "fed", label: "Front end Developer"},
-    {key: "bed", label: "Back end Developer"},
-    {key: "others", label: "Others"}
-];
 
 export const UserDetails = () => {
     return (
@@ -42,9 +32,9 @@ export const UserDetails = () => {
                         defaultSelectedKeys={["Full Stack Developer"]}
                         className="max-w-xs"
                     >
-                        {animals.map((animal) => (
-                            <SelectItem key={animal.key}>
-                                {animal.label}
+                        {qualification.map((qualify) => (
+                            <SelectItem key={qualify.key}>
+                                {qualify.label}
                             </SelectItem>
                         ))}
                     </Select>

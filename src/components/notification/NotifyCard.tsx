@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Avatar, Badge, Popover, PopoverTrigger, PopoverContent, Button} from "@nextui-org/react";
 import {GetIcon} from "@/components/GetIcon"
 
@@ -36,15 +36,17 @@ const getColorName = (name: string): "primary" | "success" | "danger" | undefine
 }
 
 const NotifyCard = ({imgSrc, content, isOpen, relasotion, name} : NotificationProps) => {
-    const PopUpcontent = (
-        <PopoverContent>
-            <div className="px-1 py-2">
-                <Button color="danger" variant="flat">
-                    Delete
-                </Button>
-            </div>
-        </PopoverContent>
-    );
+    const PopUpcContent = useMemo(() => {
+        return (
+            <PopoverContent>
+                <div className="px-1 py-2">
+                    <Button color="danger" variant="flat">
+                        Delete
+                    </Button>
+                </div>
+            </PopoverContent>
+        )
+    }, []);
 
 
     return (
@@ -74,13 +76,13 @@ const NotifyCard = ({imgSrc, content, isOpen, relasotion, name} : NotificationPr
                 <p>May 15 at 5:58PM</p>
             </div>
             <div className={'w-full h-full flex items-center justify-center max-w-10 '}>
-                <Popover key={'right-start'} placement={'right-start'} color="default">
+                <Popover backdrop={'blur'} key={'right-start'} placement={'right-start'} color="default">
                     <PopoverTrigger>
                         <Button color="danger" variant="light" className="capitalize" size={'sm'} isIconOnly={true}>
                             <GetIcon name={'notify-setting'} className={'!w-auto !h-auto'}/>
                         </Button>
                     </PopoverTrigger>
-                    {PopUpcontent}
+                    {PopUpcContent}
                 </Popover>
             </div>
         </div>

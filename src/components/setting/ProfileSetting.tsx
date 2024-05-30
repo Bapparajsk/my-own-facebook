@@ -2,6 +2,8 @@
 
 import React from "react";
 import {CardHeader, Avatar, Card, CardBody} from "@nextui-org/react";
+import {CircleUserRound, ShieldCheck, Cake, Image, NotebookText} from "lucide-react";
+import {ProfileSettingButton} from "@/components/setting/ProfileSettingButton";
 
 export const ProfileSetting = () => {
     return (
@@ -11,8 +13,12 @@ export const ProfileSetting = () => {
                 <h3 className={'font-bold text-2xl'}>Bapparaj Sk</h3>
                 <p className={'font-light text-sm'}>Software Engining</p>
             </CardHeader>
-            <CardBody>
-
+            <CardBody className={'gap-y-2'}>
+                <ProfileSettingButton name={'Name'} link={'name'} icon={<CircleUserRound/>}/>
+                <ProfileSettingButton name={'Role'} link={'role'} icon={<NotebookText/>}/>
+                <ProfileSettingButton name={'Contact info'} link={'contact-information'} icon={<ShieldCheck />}/>
+                <ProfileSettingButton name={'Date of birth'} link={'date-of-birth'} icon={<Cake />}/>
+                <ProfileSettingButton name={'Profile picture'} link={'profile-picture'} icon={<Image />}/>
             </CardBody>
         </Card>
     );

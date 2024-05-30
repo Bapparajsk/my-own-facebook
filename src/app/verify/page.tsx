@@ -31,7 +31,6 @@ const Verify = () => {
                 {/*<Email/>*/}
                 <UserDetails/>
             </div>
-
         </div>
     );
 };
