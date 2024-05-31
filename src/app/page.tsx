@@ -5,6 +5,8 @@ import {GetIcon} from "@/components/GetIcon";
 import StatusBox from "@/components/home/StatusBox";
 import React from "react";
 import RenderPosts from "@/components/home/RenderPosts";
+import {postData} from "@/app/teptData";
+import Post from "@/components/Post";
 
 export default function Home() {
 
@@ -29,7 +31,7 @@ export default function Home() {
               <StatusBox/>
           </div>
           <hr className="border-none h-[1px] bg-default-300 text-red-800 mt-4"/>
-          <RenderPosts/>
+          <RenderPosts />
       </div>
   );
 }

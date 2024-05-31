@@ -7,9 +7,9 @@ const RenderPosts = () => {
         <div className={'w-full h-auto mt-4'}>
             {
                 postData.map((post, idx) => {
-
                     const containUrl= post.isImage ? post.imgSrc : post.videoSrc;
-
+                    // console.log("containUrl", containUrl);
+                    // // console.log(post)
                     return <Post
                         key={idx}
                         name={post.name}

@@ -1,11 +1,12 @@
 "use client"
 
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import {Badge, Avatar, Image, Button, Modal, ModalContent, ModalBody, ModalFooter, useDisclosure, Textarea} from "@nextui-org/react";
 import {GetIcon} from "@/components/GetIcon";
 import {Comment} from "@/components/Comment";
 import {PostProps} from "@/interface/component";
 import Share from "@/components/Share";
+
 
 function formatNumber(num: number): string {
     if (num >= 1e9) {
@@ -28,6 +29,7 @@ interface PopupDetails {
 const Post = ({name, time, userImg, description, userActive, isImage, containUrl, like, comment, share}: PostProps) => {
     const [popupDetails, setPopupDetails] = useState<PopupDetails>({placement: 'bottom', height: 20, isComment: true});
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const [notfound, setNotfound] = useState(false);
 
     const handleClick = (data: PopupDetails) => {
         setPopupDetails(data);
@@ -62,7 +64,10 @@ const Post = ({name, time, userImg, description, userActive, isImage, containUrl
                             loading={'lazy'}
                             className={'w-screen h-auto object-cover'}
                             alt="NextUI hero Image with delay"
-                            src={containUrl}
+                            src={notfound ? '/notfound.jpg' : containUrl}
+                            onError={() => {
+                                setNotfound(true);
+                            }}
                         />
                     ) : (
                         <video className={'w-screen h-full object-cover'} controls preload={'https://th.bing.com/th/id/OIP.yQ5dqe9e_mtXsEk9EHo5IwHaKX?w=182&h=254&c=7&r=0&o=5&dpr=1.3&pid=1.7'}>
@@ -116,18 +121,18 @@ const Post = ({name, time, userImg, description, userActive, isImage, containUrl
                     {(onClose) => (
                         <>
                             <ModalBody className={'mt-2'}>
-                                {/*<Comment*/}
-                                {/*    key={2}*/}
-                                {/*    name={'Sohey khatun'}*/}
-                                {/*    comment={'hello bappa a kis ki photo hey'}*/}
-                                {/*    profileImageUrl={'https://th.bing.com/th/id/OIP.TXJ-iZJ33GINbidIe2rg9AAAAA?rs=1&pid=ImgDetMain'}*/}
-                                {/*/>*/}
-                                {/*<Comment*/}
-                                {/*    key={2}*/}
-                                {/*    name={'Susmita aktar'}*/}
-                                {/*    comment={'Can you write the installation steps? Each details pls. I want to this make myself'}*/}
-                                {/*    profileImageUrl={'https://i.pinimg.com/originals/bb/c3/8f/bbc38f08f0347efb0b29edb119d3c18f.jpg'}*/}
-                                {/*/>*/}
+                                <Comment
+                                    key={2}
+                                    name={'Sohey khatun'}
+                                    comment={'hello bappa a kis ki photo hey'}
+                                    profileImageUrl={'https://th.bing.com/th/id/OIP.TXJ-iZJ33GINbidIe2rg9AAAAA?rs=1&pid=ImgDetMain'}
+                                />
+                                <Comment
+                                    key={2}
+                                    name={'Susmita aktar'}
+                                    comment={'Can you write the installation steps? Each details pls. I want to this make myself'}
+                                    profileImageUrl={'https://i.pinimg.com/originals/bb/c3/8f/bbc38f08f0347efb0b29edb119d3c18f.jpg'}
+                                />
                                 <Share/>
                             </ModalBody>
                             {popupDetails.isComment && <ModalFooter>
