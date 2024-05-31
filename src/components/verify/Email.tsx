@@ -7,7 +7,7 @@ interface VerifyEmail {
 }
 
 export const Email = () => {
-    const { register: registerEmail, handleSubmit: handleSubmitEmail, formState: { errors: errorsEmail } } = useForm<VerifyEmail>();
+    const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm<VerifyEmail>();
     const [otp, setOtp] = useState('');
     const [countdown, setCountdown] = useState<number>(0);
     const [isSendOTP, setIsSendOTP] = useState<boolean>(false);
@@ -15,8 +15,9 @@ export const Email = () => {
 
     const onSubmitEmail: SubmitHandler<VerifyEmail> = useCallback((data) => {
         setIsSendOTP(true);
-        console.log(data);
+        console.log(data.email)
     }, []);
+
 
     const onSubmitOtp = useCallback((e: any) => {
         e.preventDefault();
@@ -94,7 +95,7 @@ export const Email = () => {
     }, [otp]);
 
     return (
-        <Card className="w-[350px] max-w-[500px] px-5 py-8 flex flex-col gap-y-2 z-50 bg-transparent backdrop-blur-[5px]">
+        <Card className="w-full px-5 py-8 flex flex-col gap-y-2 z-50 bg-transparent backdrop-blur-[5px]">
             <CardHeader className="flex items-center justify-center gap-3">
                 <div className="flex flex-col items-center justify-center">
                     <h2 className="font-bold text-2xl">Email Validation</h2>
@@ -102,15 +103,18 @@ export const Email = () => {
                 </div>
             </CardHeader>
             <CardBody className="h-full w-full flex flex-col gap-y-5">
-                <form onSubmit={handleSubmitEmail(onSubmitEmail)} className="w-full flex flex-col gap-y-5">
+                <form onSubmit={handleSubmit(onSubmitEmail)} className="w-full flex flex-col gap-y-5">
                     <Input
+                        // ref={emailRef}
                         type="email"
                         autoComplete="off"
                         variant="bordered"
                         label="Email"
                         disabled={isSendOTP}
+                        isInvalid={errors.email && true}
+                        errorMessage={errors.email && errors.email.message}
                         placeholder="Enter your email"
-                        {...registerEmail('email', { required: 'This field is required!' })}
+                        {...register('email', { required: 'This field is required!' })}
                     />
                     <Button type="submit" color="primary" variant="shadow" disabled={isSendOTP}>
                         Send OTP

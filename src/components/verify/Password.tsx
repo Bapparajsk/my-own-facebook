@@ -57,7 +57,7 @@ export const Password = ({resetOldPass}: {resetOldPass?: boolean}) => {
     },[]);
 
     return (
-        <Card className={`w-[350px] max-w-[500px] px-5 py-5 flex flex-col gap-y-2 bg-transparent/50 backdrop-blur-[5px]`}>
+        <Card className={`w-full px-5 py-5 flex flex-col gap-y-2 bg-transparent/50 backdrop-blur-[5px]`}>
             <CardHeader className={'flex flex-col items-center justify-center'}>
                 <h2 className="font-bold text-2xl">Set new Password</h2>
                 <p className={'text-center'}>save new password, next time login to use</p>

@@ -17,7 +17,7 @@ export const ProfileSetting = () => {
                 <ProfileSettingButton name={'Name'} link={'name'} icon={<CircleUserRound/>}/>
                 <ProfileSettingButton name={'Role'} link={'role'} icon={<NotebookText/>}/>
                 <ProfileSettingButton name={'Contact info'} link={'contact-information'} icon={<ShieldCheck />}/>
-                <ProfileSettingButton name={'Date of birth'} link={'date-of-birth'} icon={<Cake />}/>
+                <ProfileSettingButton name={'Date of birth'} link={'birthday'} icon={<Cake />}/>
                 <ProfileSettingButton name={'Profile picture'} link={'profile-picture'} icon={<Image />}/>
             </CardBody>
         </Card>

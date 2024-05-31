@@ -27,9 +27,9 @@ const Verify = () => {
                     <source  src={'http://localhost:3000/video/verifybg.mp4'} type="video/mp4" />
                 </video>
             </div>
-            <div className={'border-3 border-green-200 rounded-2xl w-auto h-auto bg-transparent'}>
-                {/*<Email/>*/}
-                <UserDetails/>
+            <div className={'w-full max-w-[500px] border-3 border-green-200 rounded-2xl h-auto bg-transparent'}>
+                <Email/>
+                {/*<UserDetails/>*/}
             </div>
         </div>
     );

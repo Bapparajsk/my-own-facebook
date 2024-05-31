@@ -7,7 +7,7 @@ import { qualification } from '@/app/data'
 
 export const UserDetails = () => {
     return (
-        <Card className="w-[370px] max-w-[500px] px-5 py-4 flex flex-col z-50 bg-transparent backdrop-blur-[5px]">
+        <Card className="w-full px-5 py-4 flex flex-col z-50 bg-transparent backdrop-blur-[5px]">
             <CardHeader className="flex items-center justify-center gap-3">
                 <div className="flex flex-col items-center justify-center">
                     <h2 className="font-bold text-2xl">User Details</h2>
