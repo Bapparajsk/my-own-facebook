@@ -1,13 +1,21 @@
 'use client'
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {Input, Button, User, Card, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem} from "@nextui-org/react";
 import {EyeFilledIcon} from "@nextui-org/shared-icons";
 import {EyeSlashFilledIcon} from "@nextui-org/shared-icons";
-import {SignUpInputs} from "@/interface/inputTypes"
+import {SignIpInputs} from "@/interface/inputTypes"
 import Link from "next/link"
-import {users} from '@/app/data';
+import { useRouter } from "next/navigation";
+import {validatePassword} from "@/lib/validation";
+import axios from "axios";
+
+interface LogDintUser {
+    name: string
+    description?: string
+    url?: string
+}
 
 export const Form = () => {
     const {
@@ -15,22 +23,54 @@ export const Form = () => {
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm<SignUpInputs>()
-    const onSubmit: SubmitHandler<SignUpInputs> = (data) => console.log(data)
+        clearErrors,
+        setError
+    } = useForm<SignIpInputs>()
+
+    const onSubmit: SubmitHandler<SignIpInputs> = async ({email, password}) => {
+        const isValid = validatePassword(password);
+        if (isValid !== null) {
+            setError('password', {
+                type: 'validate',
+                message: isValid
+            });
+            return;
+        } else {
+            clearErrors('password');
+        }
+        // console.log(process.env.NEXT_PUBLIC_SERVER_URL)
+
+        const body = {
+            email,
+            password
+        }
+        try {
+            const res = await axios.post(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`,
+                body
+            );
+
+            console.log(res)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const [isVisible, setIsVisible] = React.useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
+    const [logDintUser, setLogDintUser] = useState<LogDintUser[]>([])
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className={'w-full h-auto flex items-center justify-center'}>
                 <h1 className={'text-xl  py-5 font-medium text-blue-500'}>login your account</h1>
             </div>
-            <Card className="w-full h-full flex flex-col gap-y-2 py-3 px-2 items-center justify-between bg-default-200/40">
+            <Card className={`w-full h-full flex flex-col gap-y-2 ${logDintUser.length !== 0 && 'py-3'} px-2 items-center justify-between bg-default-200/40`}>
                 {
-                    users.length > 2 ?
+                    logDintUser.length > 2 ?
                         (<>
-                            {users.slice(0, 2).map((item, idx) => {
+                            {logDintUser.slice(0, 2).map((item, idx) => {
                                 return <div key={idx} className={'w-full h-full'}>
                                     <User
                                         name={item.name}
@@ -47,7 +87,7 @@ export const Form = () => {
                                 </DropdownTrigger>
                                 <DropdownMenu variant="faded" aria-label="Static Actions" className={'w-[300px]'}>
                                     {
-                                        users.slice(2).map((item, idx) => {
+                                        logDintUser.slice(2).map((item, idx) => {
                                             return (
                                                 <DropdownItem key={idx}>
                                                     <div key={idx} className={'w-full h-full'}>
@@ -67,8 +107,7 @@ export const Form = () => {
                                 </DropdownMenu>
                             </Dropdown>
                         </>)
-
-                        : users.map((item, idx) => {
+                        : logDintUser.map((item, idx) => {
                             return <div key={idx} className={'w-full h-full'}>
                                 <User
                                     name={item.name}
@@ -82,8 +121,14 @@ export const Form = () => {
                 }
             </Card>
             <div className={'w-full h-auto flex flex-col gap-y-4 items-center mt-5 justify-center px-2'}>
-                <Input type="email" autoComplete="off" variant={"underlined"} label="Email"
-                       placeholder="Enter your email"/>
+                <Input
+                    type="email"
+                    autoComplete="off"
+                    variant={"underlined"}
+                    label="Email"
+                    placeholder="Enter your email"
+                    {...register('email', { required: "this field is required!" })}
+                />
                 <Input
                     label="Password"
                     variant="underlined"
@@ -100,6 +145,16 @@ export const Form = () => {
                     }
                     type={isVisible ? "text" : "password"}
                     className="max-w-xs"
+                    {...register("password",
+                        {required: "this field is required!",
+                            minLength: {
+                                value: 8,
+                                message: "Password must be at least 8 characters"
+                            }
+                        })
+                    }
+                    isInvalid={errors.password && true}
+                    errorMessage={errors.password && errors.password.message}
                 />
 
                 <div className={'w-full h-auto flex items-center justify-between'}>
@@ -109,7 +164,7 @@ export const Form = () => {
                             Create Account
                         </span>
                     </Link>
-                    <Button color="primary" variant="flat" className={"tracking-wide"}>
+                    <Button type={'submit'} color="primary" variant="flat" className={"tracking-wide"}>
                         Login
                     </Button>
                 </div>

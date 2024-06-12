@@ -1,14 +1,21 @@
 'use client'
 
-import {Avatar, Badge} from "@nextui-org/react";
-import {GetIcon} from "@/components/GetIcon";
+import { Avatar, Badge } from "@nextui-org/react";
+import { GetIcon } from "@/components/GetIcon";
 import StatusBox from "@/components/home/StatusBox";
-import React from "react";
 import RenderPosts from "@/components/home/RenderPosts";
-import {postData} from "@/app/teptData";
-import Post from "@/components/Post";
+import { useRouter } from "next/navigation";
+import {useEffect} from "react";
 
 export default function Home() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const token = localStorage.getItem("app-token");
+        if (token === null) {
+            router.replace("/sign-in", { scroll: true });
+        }
+    }, [router]);
 
   return (
       <div className={'w-full h-auto px-4'}>

@@ -5,6 +5,7 @@ import './fonts.css';
 import React from "react";
 import NextUiProvider from "@/app/NextUIProvider";
 import MainNavbar from "@/components/navbar";
+import { UserProvider } from '@/context/UserProvider';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +23,10 @@ export default function RootLayout({
     <html lang="en" className='dark'>
       <body className={inter.className} >
         <NextUiProvider >
-            <MainNavbar/>
-            {children}
+            <UserProvider>
+                <MainNavbar/>
+                {children}
+            </UserProvider>
         </NextUiProvider>
       </body>
     </html>

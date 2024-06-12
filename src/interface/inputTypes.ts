@@ -1,13 +1,15 @@
 import React from "react";
 
-export interface SignUpInputs  {
-    useName: string
+export interface SignIpInputs  {
     email: string
     password: string
 }
 
+export interface SignUpInputs extends SignIpInputs {
+    userName: string
+}
+
 export interface signIconsTypes {
-    url: object
     alt: string
 }
 

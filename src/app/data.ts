@@ -1,21 +1,14 @@
 import {signIconsTypes} from "@/interface/inputTypes"
 
-import google from '@/assets/images/google.png';
-import fb from '@/assets/images/fb.png';
-import github from '@/assets/images/github.png';
-
 export const singIconDetails:signIconsTypes[] = [
     {
-        url: google,
-        alt: "google sign-up",
+        alt: "google",
     },
     {
-        url: fb,
-        alt: "facebook sign-up",
+        alt: "facebook",
     },
     {
-        url: github,
-        alt: "github sign-up",
+        alt: "github",
     },
 ]
 

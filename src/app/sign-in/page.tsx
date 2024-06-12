@@ -9,13 +9,15 @@ import {GetIcon} from "@/components/GetIcon";
 const Page = () => {
 
     const router = useRouter();
+    const params = useSearchParams();
+    const isTrue = params.get("create-new-account");
 
     return (
         <div className={'w-screen h-screen flex px-5 items-center justify-center overflow-hidden'}>
-            <div onClick={() => router.back()} className={'flex gap-x-2 text-default-500 fixed top-2 left-2 z-30'}>
+            {isTrue && <div onClick={() => router.back()} className={'flex gap-x-2 text-default-500 fixed top-2 left-2 z-30'}>
                 <GetIcon name={'move-left'}/>
                 <span>back</span>
-            </div>
+            </div>}
             <Card className={'w-[400px] h-auto p-10 border-style relative'}>
                 <Form/>
             </Card>

@@ -5,6 +5,9 @@ import {Card} from "@nextui-org/card";
 import {Form} from '@/components/sign-up/Form'
 
 const Page = () => {
+
+
+
     return (
         <div className={'w-screen h-screen flex items-center justify-center overflow-hidden'}>
             <div className={'w-full h-screen flex items-center justify-center'}>
