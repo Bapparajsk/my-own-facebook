@@ -6,16 +6,35 @@ import StatusBox from "@/components/home/StatusBox";
 import RenderPosts from "@/components/home/RenderPosts";
 import { useRouter } from "next/navigation";
 import {useEffect} from "react";
+import {getUser} from "@/lib/user";
+import { useUserContext } from '@/context/UserProvider'
 
 export default function Home() {
     const router = useRouter();
+    const { setUserDetails } = useUserContext();
+
 
     useEffect(() => {
         const token = localStorage.getItem("app-token");
         if (token === null) {
             router.replace("/sign-in", { scroll: true });
+            return;
         }
-    }, [router]);
+
+        const init = async () => {
+            const user = await getUser(token);
+
+            if (user === null) {
+                router.replace("/sign-in", { scroll: true });
+                return;
+            }
+
+            setUserDetails(user)
+        }
+
+        init().catch(e => console.log(e));
+
+    }, []);
 
   return (
       <div className={'w-full h-auto px-4'}>

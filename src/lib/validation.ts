@@ -52,3 +52,25 @@ export const handleValidation = (validationFn: (value: string) => string | null,
         return true;
     }
 };
+
+
+export const isValidBrithDate = (day: number, month: number, year: number) => {
+    // Create a Date object for the birth_date
+    const birthDate = new Date(year, month - 1, day); // month is 0-indexed
+
+    // Get the current date
+    const currentDate = new Date();
+
+    // Calculate the age
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const monthDiff = currentDate.getMonth() - birthDate.getMonth();
+    const dayDiff = currentDate.getDate() - birthDate.getDate();
+
+    // Adjust age if the birth_date hasn't occurred yet this year
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        age--;
+    }
+
+    // Return true if the age is at least 12, otherwise false
+    return age >= 12;
+}

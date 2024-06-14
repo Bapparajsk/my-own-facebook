@@ -6,6 +6,7 @@ import React from "react";
 import NextUiProvider from "@/app/NextUIProvider";
 import MainNavbar from "@/components/navbar";
 import { UserProvider } from '@/context/UserProvider';
+import { ToasterProvider } from '@/context/ToasterContext';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,8 +25,10 @@ export default function RootLayout({
       <body className={inter.className} >
         <NextUiProvider >
             <UserProvider>
-                <MainNavbar/>
-                {children}
+                <ToasterProvider>
+                    <MainNavbar/>
+                    {children}
+                </ToasterProvider>
             </UserProvider>
         </NextUiProvider>
       </body>

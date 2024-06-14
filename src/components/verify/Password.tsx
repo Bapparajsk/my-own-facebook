@@ -13,7 +13,12 @@ interface PasswordInput {
     confirmPassword: string
 }
 
-export const Password = ({resetOldPass}: {resetOldPass?: boolean}) => {
+interface PasswordInputProps {
+    resetOldPass?: boolean
+    onSubmit: (pass: string, oldpass?: string) => void
+}
+
+export const Password = ({resetOldPass, onSubmit}: PasswordInputProps) => {
     const [isVisible, setIsVisible] = useState<{password: boolean, cPassword: boolean}>({
         password: false,
         cPassword: false,
@@ -37,6 +42,7 @@ export const Password = ({resetOldPass}: {resetOldPass?: boolean}) => {
                 type: 'validate',
                 message: isValid
             });
+            return;
         } else {
             clearErrors('password');
         }
@@ -46,9 +52,12 @@ export const Password = ({resetOldPass}: {resetOldPass?: boolean}) => {
                 type: "manual",
                 message: "Passwords do not match",
             });
+            return;
         } else {
             clearErrors("confirmPassword");
         }
+
+        onSubmit(password);
 
     }, [setError, clearErrors])
 

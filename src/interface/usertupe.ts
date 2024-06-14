@@ -48,5 +48,4 @@ export interface UserSType {
     friendRequestSend: Map<unknown, FriendsType>
     chat: ChatType[]
     notification: NotificationType[]
-    createdAt: Date
 }

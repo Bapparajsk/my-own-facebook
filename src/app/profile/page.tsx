@@ -1,13 +1,42 @@
 "use client"
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import SettingNav from "@/components/setting/SettingNav";
 import {Image} from "@nextui-org/image";
 import {Button} from "@nextui-org/react";
 import {GetIcon} from "@/components/GetIcon";
 import ProfileContains from "@/components/profile";
+import {getUser} from "@/lib/user";
+import {useRouter} from "next/navigation";
+import { useUserContext } from '@/context/UserProvider'
 
 const Profile = () => {
+
+    const router = useRouter();
+    const { setUserDetails, userDetails } = useUserContext();
+
+    useEffect(() => {
+        const token = localStorage.getItem("app-token");
+        if (token === null) {
+            router.replace("/sign-in", { scroll: true });
+            return;
+        }
+
+        const init = async () => {
+            const user = await getUser(token);
+
+            if (user === null) {
+                router.replace("/sign-in", { scroll: true });
+                return;
+            }
+
+            setUserDetails(user)
+        }
+
+        init().catch(e => console.log(e));
+
+    }, []);
+
     return (
         <div className={'w-screen h-full flex flex-col items-center'}>
             <SettingNav isSearchIon/>
@@ -27,7 +56,7 @@ const Profile = () => {
                     className={"relative left-[-28%] -mt-[72px] z-20 w-36 h-36 rounded-full overflow-hidden border-[6px] border-solid border-black"}>
                     <img
                         className={'w-full h-full object-cover'}
-                        src={"https://pbs.twimg.com/profile_images/1754927710302883841/ylGsCbNa_400x400.jpg"}
+                        src={userDetails ? userDetails.profileImage.profileImageURL : "https://www.pngkey.com/png/full/73-730477_first-name-profile-image-placeholder-png.png"}
                         alt={"hero"}
                     />
                     <div
@@ -37,7 +66,7 @@ const Profile = () => {
                 </div>
                 <div className={"w-full h-auto absolute left-0 -bottom-[100px] flex flex-col px-5"}>
                     <div>
-                        <h3 className={'text-2xl text-default-800/60 font-ubuntu'}>Bapparaj sk</h3>
+                        <h3 className={'text-2xl text-default-800/60 font-ubuntu'}>{userDetails?.name}</h3>
                         <p className={'font-bold font-robot text-default-800/90 tracking-widest'}>598 <span
                             className={'text-default-800/60 font-normal'}>friend</span></p>
                     </div>

@@ -15,21 +15,21 @@ const OtpForm = ({isSendOTP, setIsSendOTP, resendOTP, submitOTP, isWrongOTP}: IP
     const [countdown, setCountdown] = useState<number>(0);
 
     const setFocusIndex = useCallback(() => {
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 6; i++) {
             const item = inputs.current[i];
             if (item?.value === "") {
                 item.focus();
                 return;
             }
         }
-        inputs.current[3]?.focus();
+        inputs.current[5]?.focus();
     }, []);
 
     const handleChange = useCallback((value: string, index: number) => {
         const otpArray = otp.split('');
         otpArray[index] = value;
         setOtp(otpArray.join(''));
-        if (value.length === 1 && index < 3) {
+        if (value.length === 1 && index < 5) {
             inputs.current[index + 1]?.focus();
         }
     }, [otp]);
@@ -41,7 +41,7 @@ const OtpForm = ({isSendOTP, setIsSendOTP, resendOTP, submitOTP, isWrongOTP}: IP
     }, []);
 
     const otpInputs = useMemo(() => {
-        return Array(4).fill('').map((_, index) => (
+        return Array(6).fill('').map((_, index) => (
             <Input
                 key={index}
                 type="text"

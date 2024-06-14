@@ -5,6 +5,7 @@ import useScreenSize from "@/hooks/useScreenSize";
 import Link from "next/link";
 import { GetIcon } from "@/components/GetIcon";
 import { motion } from "framer-motion";
+import { useUserContext } from '@/context/UserProvider'
 
 const initial = {
     transform: "translateY(-80px)"
@@ -14,11 +15,12 @@ const MotionLink = motion(Link);
 
 export default function TopLogo(): React.JSX.Element | null {
     const size = useScreenSize();
-
-
+    const { userDetails } = useUserContext();
+    console.log(userDetails)
     if (size && size > 640) {
         return null;
     }
+
 
     return (
         <motion.div
@@ -36,12 +38,12 @@ export default function TopLogo(): React.JSX.Element | null {
                         className={'flex'}
                     >
                         <User
-                            name={'Bapparaj sk'}
+                            name={userDetails?.name}
                             description={'full Stack Developer'}
 
                             avatarProps={{
                                 fallback: true,
-                                src: "https://pbs.twimg.com/profile_images/1754927710302883841/ylGsCbNa_400x400.jpg"
+                                src: userDetails?.profileImage.profileImageURL
                             }}
                         />
                     </MotionLink>
