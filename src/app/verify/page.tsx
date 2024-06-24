@@ -16,8 +16,7 @@ const Verify = () => {
     const params = useSearchParams();
     const router = useRouter();
     const token = params.get('token');
-    const [nextStep, setNextStep] = useState<number>(3);
-    const [, set] = useState()
+    const [nextStep, setNextStep] = useState<number>(1);
 
     useEffect(() => {
         if (token === null) {

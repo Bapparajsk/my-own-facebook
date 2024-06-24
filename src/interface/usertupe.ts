@@ -28,8 +28,10 @@ export interface FriendsType {
 }
 
 export interface UserSType {
+    _id: string
     name: string
     active: boolean
+    role: string
     dateOfBirth: DateOfBirthType,
     emails: { value: string }[]
     profileImage: {
@@ -41,11 +43,12 @@ export interface UserSType {
         githubId?: string
         facebookId?: string
     },
-    post: { postId: unknown }[]
+    post: { postId: string }[]
     reel: { reelId: string }[]
     friends: Map<unknown, FriendsType>
     friendRequest: Map<unknown, FriendsType>
     friendRequestSend: Map<unknown, FriendsType>
     chat: ChatType[]
     notification: NotificationType[]
+    like: { [key: string]: string }
 }

@@ -1,6 +1,7 @@
 export interface PostProps {
+    id: string
     name: string
-    time: string
+    time: Date
     userImg: string
     description: string
     userActive: boolean
@@ -9,6 +10,7 @@ export interface PostProps {
     like: number
     comment: number
     share: number
+    preview?: boolean
 }
 
 export interface CommentProps {

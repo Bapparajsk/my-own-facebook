@@ -21,6 +21,7 @@ const MainNavbar = () => {
         '/notification',
         '/message/*',
         '/verify/*',
+        '/profile/upload',
     ];
     // const shouldHideNavbar = hiddenPaths.includes(pathname);
     // console.log(shouldHideNavbar, pathname)

@@ -128,7 +128,7 @@ export const Email = ({emails, token}: EmailProps) => {
             setUserDetails(user)
             localStorage.setItem('app-token', app_token);
             dismiss(id);
-            router.push('/', {scroll: true});
+            router.replace('/', {scroll: true});
         } catch (error) {
             console.log(error);
             dismiss(id);

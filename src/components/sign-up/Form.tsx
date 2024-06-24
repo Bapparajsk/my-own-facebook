@@ -60,11 +60,13 @@ export const Form = () => {
                 email,
                 password
             }
+
+            console.log(body);
             const res = await axios.post(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/register`,
                 body
             );
-
+            console.log(res.data);
             const { accessToken, message } = res.data;
             setAccessToken(accessToken);
             toast.dismiss(toastId)

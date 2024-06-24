@@ -1,41 +1,37 @@
 'use client'
 
-import { Avatar, Badge } from "@nextui-org/react";
+import { Avatar, Badge, Spinner } from "@nextui-org/react";
 import { GetIcon } from "@/components/GetIcon";
 import StatusBox from "@/components/home/StatusBox";
 import RenderPosts from "@/components/home/RenderPosts";
 import { useRouter } from "next/navigation";
-import {useEffect} from "react";
-import {getUser} from "@/lib/user";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import { useUserContext } from '@/context/UserProvider'
 
 export default function Home() {
     const router = useRouter();
-    const { setUserDetails } = useUserContext();
+    const { setUserDetails, fetchUser } = useUserContext();
 
 
-    useEffect(() => {
-        const token = localStorage.getItem("app-token");
-        if (token === null) {
-            router.replace("/sign-in", { scroll: true });
-            return;
-        }
+    const {isPending, isError, data, isSuccess} = useQuery({
+        queryKey: ["get-user"],
+        queryFn: fetchUser,
+        staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
+        retry: 2, // Retry failed requests twice
 
-        const init = async () => {
-            const user = await getUser(token);
+    });
 
-            if (user === null) {
-                router.replace("/sign-in", { scroll: true });
-                return;
-            }
-
-            setUserDetails(user)
-        }
-
-        init().catch(e => console.log(e));
-
-    }, []);
-
+    if (isPending) {
+        console.log("data is loading please wiet");
+        return (
+            <div className={'w-screen h-screen absolute flex items-center justify-center'}>
+                <Spinner color="success" size={'lg'}/>
+            </div>
+        );
+    }
+    if(!isSuccess) {
+        router.replace('/sign-in');
+    }
   return (
       <div className={'w-full h-auto px-4'}>
           <div className={'w-full h-auto flex gap-x-8 items-center mt-2'}>

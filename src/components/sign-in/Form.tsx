@@ -10,6 +10,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation";
 import {validatePassword} from "@/lib/validation";
 import axios from "axios";
+import { useToasterContext } from '@/context/ToasterContext';
+import { useUserContext } from '@/context/UserProvider';
 
 interface LogDintUser {
     name: string
@@ -27,18 +29,14 @@ export const Form = () => {
         setError
     } = useForm<SignIpInputs>()
 
+    const router = useRouter();
+
+    const { setToastDetail, dismiss } = useToasterContext();
+    const { setUserDetails,userDetails } = useUserContext();
+
     const onSubmit: SubmitHandler<SignIpInputs> = async ({email, password}) => {
-        const isValid = validatePassword(password);
-        if (isValid !== null) {
-            setError('password', {
-                type: 'validate',
-                message: isValid
-            });
-            return;
-        } else {
-            clearErrors('password');
-        }
-        // console.log(process.env.NEXT_PUBLIC_SERVER_URL)
+
+        const id = setToastDetail({message: "please wait...", type: "loading"})
 
         const body = {
             email,
@@ -50,10 +48,19 @@ export const Form = () => {
                 body
             );
 
-            console.log(res)
+            const { token, user, message } = res.data;
+            dismiss(id);
+            setToastDetail({ message, type: "success" });
+
+            localStorage.setItem("app-token", token);
+            setUserDetails(user);
+            router.replace("/", { scroll: true});
 
         } catch (error) {
             console.log(error)
+            dismiss(id);
+            // @ts-ignore
+            setToastDetail({ message: error?.response.data.message || "something went wrong please try again...", type: "warning" })
         }
     }
 

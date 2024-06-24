@@ -16,12 +16,9 @@ const MotionLink = motion(Link);
 export default function TopLogo(): React.JSX.Element | null {
     const size = useScreenSize();
     const { userDetails } = useUserContext();
-    console.log(userDetails)
     if (size && size > 640) {
         return null;
     }
-
-
     return (
         <motion.div
             initial={{opacity: 0, transform: "translateY(-80px)"}}

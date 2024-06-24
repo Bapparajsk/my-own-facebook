@@ -11,7 +11,6 @@ import {motion} from "framer-motion";
 const SettingNav = ({isSearchIon, isUnder}: {isSearchIon?: boolean, isUnder?:boolean}) => {
 
     const router = useRouter();
-    console.log("isUnder", isUnder)
 
     return (
         <Navbar shouldHideOnScroll isBlurred={false} className={'bg-transparent'}>

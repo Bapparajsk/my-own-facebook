@@ -6,6 +6,7 @@ import {GetIcon} from "@/components/GetIcon";
 import {Comment} from "@/components/Comment";
 import {PostProps} from "@/interface/component";
 import Share from "@/components/Share";
+import { useUserContext } from "@/context/UserProvider";
 
 
 function formatNumber(num: number): string {
@@ -26,7 +27,7 @@ interface PopupDetails {
     isComment: boolean
 }
 
-const Post = ({name, time, userImg, description, userActive, isImage, containUrl, like, comment, share}: PostProps) => {
+const Post = ({id, name, time, userImg, description, userActive, isImage, containUrl, like, comment, share, preview}: PostProps) => {
     const [popupDetails, setPopupDetails] = useState<PopupDetails>({placement: 'bottom', height: 20, isComment: true});
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [notfound, setNotfound] = useState(false);
@@ -36,6 +37,8 @@ const Post = ({name, time, userImg, description, userActive, isImage, containUrl
         onOpen()
     }
 
+    const { userDetails } = useUserContext();
+    
     return (
         <>
             <div className={'w-full h-auto flex flex-col items-start justify-center gap-y-4 mb-5'}>
@@ -43,13 +46,13 @@ const Post = ({name, time, userImg, description, userActive, isImage, containUrl
                     <div className={'w-auto h-full flex gap-x-2 items-center justify-start'}>
                         <Badge disableAnimation={false} color={'success'} shape={'circle'} showOutline={false} placement={'bottom-right'} content={userActive && ""}>
                             <Avatar
-                                radius="full"
+                                radius="md"
                                 src={userImg}
                             />
                         </Badge>
                         <div className={'w-auto h-full flex flex-col items-start justify-center font-roboto-mono'}>
                             <p className={'font-bold tracking-[.8px] text-default-800/90'}>{name}</p>
-                            <p className={'font-light text-default-500'}>{time}</p>
+                            {/*<p className={'font-light text-default-500'}>{time.getDay()}</p>*/}
                         </div>
                     </div>
                     <div className={'w-3/4 h-full'}>
@@ -83,7 +86,12 @@ const Post = ({name, time, userImg, description, userActive, isImage, containUrl
                     )}
                 </div>
                 <div className={'w-full h-auto flex items-center justify-center gap-x-2'}>
-                    <Button color="primary" variant="shadow" className={'grow'}>
+                    <Button 
+                        color="primary"  
+                        variant={userDetails && userDetails.like[id] ? "shadow" : "flat"} 
+                        className={'grow'}
+                        disabled={userDetails && userDetails.like[id] ? true : false}
+                    >
                         <GetIcon name={'like'} className={'!w-6'}/>
                         <span>{formatNumber(like)}</span>
                     </Button>
@@ -107,7 +115,7 @@ const Post = ({name, time, userImg, description, userActive, isImage, containUrl
                     </Button>
                 </div>
             </div>
-            <Modal
+            {!preview && <Modal
                 isOpen={isOpen}
                 placement={popupDetails.placement!}
                 onOpenChange={onOpenChange}
@@ -157,8 +165,8 @@ const Post = ({name, time, userImg, description, userActive, isImage, containUrl
                         </>
                     )}
                 </ModalContent>
-            </Modal>
-            <hr className="border-none h-[1px] bg-default-300 text-red-800 mb-4"/>
+            </Modal>}
+            <hr className="border-none h-[1px] bg-default-300 mb-4"/>
         </>
     );
 };

@@ -7,6 +7,7 @@ import NextUiProvider from "@/app/NextUIProvider";
 import MainNavbar from "@/components/navbar";
 import { UserProvider } from '@/context/UserProvider';
 import { ToasterProvider } from '@/context/ToasterContext';
+import { QueryProvider } from './QueryClientProvider'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,14 +23,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className='dark'>
-      <body className={inter.className} >
+      <body className={`${inter.className} relative`  } >
         <NextUiProvider >
-            <UserProvider>
-                <ToasterProvider>
-                    <MainNavbar/>
-                    {children}
-                </ToasterProvider>
-            </UserProvider>
+            <ToasterProvider>
+                <QueryProvider>
+                    <UserProvider>
+                        <MainNavbar/>
+                        {children}
+                    </UserProvider>
+                </QueryProvider>
+            </ToasterProvider>
         </NextUiProvider>
       </body>
     </html>
