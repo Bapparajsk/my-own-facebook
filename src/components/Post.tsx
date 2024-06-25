@@ -56,7 +56,7 @@ const Post = ({id, name, time, userImg, description, userActive, isImage, contai
                         </div>
                     </div>
                     <div className={'w-3/4 h-full'}>
-                        <pre className={'whitespace-pre-line font-plus-jakarta-ans'}>
+                        <pre className={`whitespace-pre-line font-plus-jakarta-ans ${preview && description === "Say something about this post..." && "text-default-500"}`}>
                             {description}
                         </pre>
                     </div>
@@ -166,7 +166,7 @@ const Post = ({id, name, time, userImg, description, userActive, isImage, contai
                     )}
                 </ModalContent>
             </Modal>}
-            <hr className="border-none h-[1px] bg-default-300 mb-4"/>
+            {!preview && <hr className="border-none h-[1px] bg-default-300 mb-4"/>}
         </>
     );
 };
