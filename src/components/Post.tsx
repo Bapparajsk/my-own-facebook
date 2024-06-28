@@ -1,12 +1,14 @@
 "use client"
 
 import React, { useState } from 'react';
-import {Badge, Avatar, Image, Button, Modal, ModalContent, ModalBody, ModalFooter, useDisclosure, Textarea} from "@nextui-org/react";
+import {Badge, Avatar, Image, Button, Modal, ModalContent, ModalBody, ModalFooter, useDisclosure, Textarea, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import {GetIcon} from "@/components/GetIcon";
 import {Comment} from "@/components/Comment";
 import {PostProps} from "@/interface/component";
 import Share from "@/components/Share";
 import { useUserContext } from "@/context/UserProvider";
+import { Ellipsis } from 'lucide-react';
+import { DeleteDocumentBulkIcon, EditDocumentBulkIcon } from "@nextui-org/shared-icons";
 
 
 function formatNumber(num: number): string {
@@ -19,6 +21,12 @@ function formatNumber(num: number): string {
     } else {
         return num.toString();
     }
+}
+
+function getDate(time: Date): string {
+    const date = new Date(time);
+    return date.toDateString();
+
 }
 
 interface PopupDetails {
@@ -42,22 +50,58 @@ const Post = ({id, name, time, userImg, description, userActive, isImage, contai
     return (
         <>
             <div className={'w-full h-auto flex flex-col items-start justify-center gap-y-4 mb-5'}>
-                <div className={'w-auto h-full flex flex-col'}>
-                    <div className={'w-auto h-full flex gap-x-2 items-center justify-start'}>
-                        <Badge disableAnimation={false} color={'success'} shape={'circle'} showOutline={false} placement={'bottom-right'} content={userActive && ""}>
-                            <Avatar
-                                radius="md"
-                                src={userImg}
-                            />
-                        </Badge>
-                        <div className={'w-auto h-full flex flex-col items-start justify-center font-roboto-mono'}>
-                            <p className={'font-bold tracking-[.8px] text-default-800/90'}>{name}</p>
-                            {/*<p className={'font-light text-default-500'}>{time.getDay()}</p>*/}
+                <div className={'w-full h-full flex flex-col'}>
+                    <div className={'w-full h-full flex gap-x-2 items-center justify-between'}>
+                        <div className={"w-auto h-full flex gap-x-2 items-center justify-start"}>
+                            <Badge disableAnimation={false} color={'success'} shape={'circle'} showOutline={false} placement={'bottom-right'} content={userActive && ""}>
+                                <Image
+                                    alt='user image'
+                                    className='w-10 h-10 object-cover rounded-full'
+                                    src={userImg || '/images/default-forground.png'}
+                                />
+                            </Badge>
+                            <div className={'w-auto h-full flex flex-col items-start justify-center font-roboto-mono'}>
+                                <p className={'font-bold tracking-[.8px] text-default-800/90'}>{name}</p>
+                                <p className={'font-light text-default-500'}>{getDate(time)}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <Dropdown>
+                                <DropdownTrigger>
+                                    <Button 
+                                        color={"secondary"}
+                                        variant={"flat"}
+                                        isIconOnly
+                                    >
+                                        <Ellipsis />
+                                    </Button>
+                                </DropdownTrigger>
+                                <DropdownMenu aria-label="Static Actions">
+                                    <DropdownItem key="edit">
+                                        <div className={'w-full h-auto flex items-center justify-start gap-x-2'}>
+                                            <EditDocumentBulkIcon/> 
+                                            <span>Edit Post</span>
+                                        </div>
+                                    </DropdownItem>
+                                    <DropdownItem key="share">
+                                        <div className={'w-full h-auto flex items-center justify-start gap-x-2'}>
+                                            <GetIcon name={'share'} className={'!w-4'}/> 
+                                            <span> Share Post </span> 
+                                        </div>
+                                    </DropdownItem>
+                                    <DropdownItem key="delete" className="text-danger" color="danger">
+                                        <div className={'w-full h-auto flex items-center justify-start gap-x-2'}>
+                                            <DeleteDocumentBulkIcon/> 
+                                            <span>Delete Post</span>
+                                        </div>
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
                         </div>
                     </div>
                     <div className={'w-3/4 h-full'}>
-                        <pre className={`whitespace-pre-line font-plus-jakarta-ans ${preview && description === "Say something about this post..." && "text-default-500"}`}>
-                            {description}
+                        <pre className={`whitespace-pre-line font-plus-jakarta-ans ${preview && description.length === 0 && "text-default-500"}`}>
+                            {description.length === 0 ? 'Say something about this post...' : description}
                         </pre>
                     </div>
                 </div>

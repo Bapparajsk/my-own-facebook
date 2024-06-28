@@ -5,19 +5,10 @@ import {Card, CardBody, CardFooter, Image, Avatar, Button, Divider} from "@nextu
 import Link from "next/link";
 import {GetIcon} from "@/components/GetIcon";
 import UserPosts from "@/components/profile/UserPosts";
-import { useQueryClient } from "@tanstack/react-query";
-import { useUserContext } from "@/context/UserProvider";
-import { useRouter } from 'next/navigation'
+import { UserSType } from '@/interface/usertupe';
 
-const ProfileContains = () => {
-    const router = useRouter();
-    const { userDetails } = useUserContext();
-    const queryClient = useQueryClient();
-    if (!userDetails) {
-        queryClient.invalidateQueries({queryKey: ['get-user']}).catch(e => {
-            router.replace('/sign-in');
-        })
-    }
+
+const ProfileContains = ({userDetails}: {userDetails: UserSType}) => {
 
     return (
         <div className={'w-full max-w-[1024px] h-full mt-5 px-5 flex flex-col gap-y-3'}>
@@ -53,7 +44,7 @@ const ProfileContains = () => {
                 <div className={'w-full h-auto flex items-center gap-x-2 justify-start'}>
                     <Avatar
                         className={'cursor-pointer'}
-                        src={userDetails?.profileImage.profileImageURL || "https://www.pngkey.com/png/full/73-730477_first-name-profile-image-placeholder-png.png"}
+                        src={userDetails.profileImage.profileImageURL || "/images/default-forground.png"}
                     />
                     <Button as={Link} href={'/profile/upload?env=image'} className={'grow justify-start font-robot text-medium'}>Post a status update</Button>
                     <Button
@@ -103,7 +94,7 @@ const ProfileContains = () => {
                 </div>
             </div>
             <hr className="border-none h-[1px] bg-default-300"/>
-            <UserPosts/>
+            <UserPosts userDetails={userDetails}/>
         </div>
     );
 };

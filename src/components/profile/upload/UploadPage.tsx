@@ -15,12 +15,13 @@ import {
 } from "@nextui-org/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { UserSType } from '@/interface/usertupe';
-import { CaseSensitive, FileImage, Video, X } from 'lucide-react';
+import { FileImage, Video, X } from 'lucide-react';
 import { LinkButton } from './LinkButton';
 import Post from '@/components/Post';
 import { useToasterContext } from "@/context/ToasterContext";
 import { formatSize } from '@/lib/fetchPost';
 import axios from 'axios';
+import { useMutation } from "@tanstack/react-query"
 
 export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
     const [inputSrc, setInoutSrc] = useState<{value: string, type: "image" | "video"} | null>(null);
@@ -34,11 +35,13 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
     const env = pram.get("env");
     const router = useRouter();
 
+
     if (env !== null && env !== "image" && env !== "video") {
         return <div>Invalid Request</div>
     }
 
     const [inputAccptType, setInputAccptType] = useState<"image" | "video" | null>(env);
+    
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -72,11 +75,12 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
         }
     };
 
-    const { setToastDetail, dismiss } = useToasterContext();
+    const { setToastDetail } = useToasterContext();
 
     const postUpload = async () => {
-        console.log("Post Upload");
-        if (inputAccptType === "image" || inputAccptType === "video" || inputSrc === null || file === null) {
+        console.log(inputAccptType, inputSrc, file);
+        
+        if ((inputAccptType === "image" || inputAccptType === "video") && (inputSrc === null || file === null)) {
             setToastDetail({
                 message: "Please select a file",
                 type: "error"
@@ -84,32 +88,17 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
             return;
         }
 
-        const id = setToastDetail({
-            message: "Uploading...",
-            type: "loading"
-        });
-
         try {
 
             const app_Token = localStorage.getItem('app-token');
 
             if (app_Token === null) {
-                dismiss(id);
-                setToastDetail({
-                    message: "Failed to upload",
-                    type: "error"
-                });
+                throw new Error("Token not found");
                 router.replace('/sign-up');
-                return;
             }
 
             if(!file.name || !file.type) {
-                dismiss(id);
-                setToastDetail({
-                    message: "Failed to upload",
-                    type: "error"
-                });
-                return;
+                throw new Error("File name or type not found");
             }
 
             const body = {
@@ -150,21 +139,35 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                 {headers}
             );
 
-            dismiss(id);
-            setToastDetail({
-                message: "Uploaded",
-                type: "success"
-            });
-
         } catch (error) {
             console.log(error);
-            dismiss(id);
-            setToastDetail({
-                message: "Failed to upload",
-                type: "error"
-            });
+            throw new Error("Failed to upload try again later...");
         }
     };
+
+    const fetchPost = useMutation({
+        mutationFn: postUpload,
+        onMutate: () => {
+            setToastDetail({
+                message: "Uploading...",
+                type: "loading"
+            },{autoremove: true, durationSeconds: 3});
+        },
+
+        onError: () => {
+            setToastDetail({
+                message: "Failed to upload, try again later...",
+                type: "error"
+            });
+        },
+
+        onSuccess: () => {
+            setToastDetail({
+                message: "Uploaded",
+                type: "success",
+            });
+        }
+    });
 
     useEffect(() => {
         if (inputRef.current) {
@@ -192,8 +195,8 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                             <Image
                                 alt="nextui logo"
                                 height={40}
-                                radius="sm"
-                                src={userDetails.profileImage.profileImageURL || "https://avatars.githubusercontent.com/u/86160567?s=200&v=4"}
+                                radius={"sm"}
+                                src={userDetails.profileImage.profileImageURL || "/images/default-forground.png"}
                                 width={40}
                             />
                             <div className="flex flex-col">
@@ -212,7 +215,7 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                             <Button
                                 color={'success'}
                                 variant={'shadow'}
-                                onClick={postUpload}
+                                onClick={() => fetchPost.mutate()}
                             >
                                 Post
                             </Button>
@@ -229,7 +232,7 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
-                        <input 
+                        <Input 
                             ref={inputRef} 
                             id={'containt-input'} 
                             type={"file"} 
@@ -244,7 +247,7 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                                     name={userDetails.name}
                                     time={new Date()}
                                     userImg='https://avatars.githubusercontent.com/u/86160567?s=200&v=4'
-                                    description={description || `Say something about this post...`}
+                                    description={description}
                                     userActive={true}
                                     isImage={inputSrc.type === "image"}
                                     containUrl={inputSrc.value}
@@ -318,7 +321,7 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                                 variant={'shadow'}
                                 fullWidth
                                 className={'grow'}
-                                onClick={postUpload}
+                                onClick={() => fetchPost.mutate()}
                             >
                                 Post
                             </Button>

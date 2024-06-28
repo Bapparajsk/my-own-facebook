@@ -1,22 +1,18 @@
 "use client"
 
-import React, {useEffect} from 'react';
-import SettingNav from "@/components/setting/SettingNav";
-import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Spinner, user} from "@nextui-org/react";
+import React from 'react';
+import {Spinner} from "@nextui-org/react";
 import {useUserContext} from "@/context/UserProvider";
-import useScreenSize from "@/hooks/useScreenSize";
-import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import {useRouter} from "next/navigation";
 import { UploadPage } from '@/components/profile/upload/UploadPage';
 
 const Page = () => {
 
-    const { userDetails, fetchUser} = useUserContext();
+    const { fetchUser} = useUserContext();
     const router = useRouter();
-    const size = useScreenSize();
-    const queryClient = useQueryClient();
 
-    const {isPending, isError, data, isSuccess} = useQuery({
+    const {isPending, data, isSuccess} = useQuery({
         queryKey: ["get-user"],
         queryFn: fetchUser,
         staleTime: 5 * 60 * 1000, // Cache data for 5 minutes

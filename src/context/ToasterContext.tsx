@@ -12,13 +12,13 @@ export interface ToastDetails {
 
 interface ToasterContextType {
     toastDetails: ToastDetails | undefined;
-    setToastDetail: (date: ToastDetails) => string | number;
+    setToastDetail: (date: ToastDetails, options?: {autoremove?: boolean, durationSeconds?: number}) => string | number;
     dismiss: (id: string | number) =>  void;
 }
 
 const ToasterContext = createContext<ToasterContextType>({
     toastDetails: undefined,
-    setToastDetail: (date: ToastDetails) => "",
+    setToastDetail: (date: ToastDetails, options?: {autoremove?: boolean, durationSeconds?: number}) => "",
     dismiss: (id: string | number) => {}
 });
 
@@ -37,17 +37,28 @@ const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) =>
     //
     // }, [toastDetails]);
 
-    const setToastDetail = (date: ToastDetails) => {
+    
+
+    const setToastDetail = (date: ToastDetails, options?: {autoremove?: boolean, durationSeconds?: number}) => {
         const event = toast[date.type];
-        return event(date.message, {
+        const { autoremove = false, durationSeconds } = options || {};
+        const id = event(date.message, {
             duration: date.duration || 5000,
         });
+
+        if (autoremove) {
+            setTimeout(() => {
+                toast.dismiss(id);
+            }, durationSeconds ? durationSeconds * 1000 : 5000);
+        }
+
+        return id;
     }
 
     const dismiss = (id: string | number) => {
         toast.dismiss(id);
     }
-
+    
     return (
         <ToasterContext.Provider
             value={{

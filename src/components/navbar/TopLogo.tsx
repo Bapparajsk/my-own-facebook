@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, User } from "@nextui-org/react";
 import { SearchIcon } from "@nextui-org/shared-icons";
 import useScreenSize from "@/hooks/useScreenSize";
@@ -40,7 +40,7 @@ export default function TopLogo(): React.JSX.Element | null {
 
                             avatarProps={{
                                 fallback: true,
-                                src: userDetails?.profileImage.profileImageURL
+                                src: userDetails?.profileImage.profileImageURL || "/images/default-forground.png",
                             }}
                         />
                     </MotionLink>

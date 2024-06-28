@@ -1,27 +1,20 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import Post from "@/components/Post";
 import {useRouter} from "next/navigation";
-import {useUserContext} from "@/context/UserProvider";
 import {useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import {PostSType} from "@/interface/postType";
+import { UserSType } from '@/interface/usertupe';
 
-const UserPosts = () => {
+const UserPosts = ({userDetails} : {userDetails: UserSType}) => {
 
     const router = useRouter();
-    const { userDetails } = useUserContext();
     const queryClient = useQueryClient();
     const [posts, setPosts] = useState<PostSType[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!userDetails) {
-            queryClient.invalidateQueries({ queryKey: ['get-user'] }).catch(e => {
-                router.replace('/sign-in');
-            });
-        } else {
-            getAllPost(userDetails.post);
-        }
+        getAllPost(userDetails.post);
     }, [userDetails]);
 
     const fetchPost = async (id: string): Promise<PostSType | null> => {
@@ -40,7 +33,6 @@ const UserPosts = () => {
                     }
                 }
             );
-            // console.log(res.data)
             return res.data.post as PostSType;
         } catch (error) {
             console.log(error);
@@ -60,10 +52,6 @@ const UserPosts = () => {
         setPosts(postDate);
         setLoading(false);
     };
-
-    if (!userDetails) {
-        return null; // or a loading spinner or a message saying the user is not authenticated
-    }
 
     return (
         <div className={'w-full h-auto'}>

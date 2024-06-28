@@ -1,14 +1,10 @@
 "use client"
 
-import React, {use, useEffect, useState} from 'react';
+import React from 'react';
 import SettingNav from "@/components/setting/SettingNav";
-import {Image} from "@nextui-org/image";
-import {Button, Spinner} from "@nextui-org/react";
+import {Button, Image } from "@nextui-org/react";
 import {GetIcon} from "@/components/GetIcon";
 import ProfileContains from "@/components/profile";
-import {useRouter} from "next/navigation";
-import { useUserContext } from '@/context/UserProvider'
-import { useQuery } from "@tanstack/react-query";
 import useScreenSize from "@/hooks/useScreenSize";
 import { UserSType } from '@/interface/usertupe';
 
@@ -22,8 +18,9 @@ export const ProfilePage = ({userDetails} : {userDetails: UserSType}) => {
             <div className={'w-full h-auto max-w-[1024px] items-center relative flex flex-col'}>
                 <div className={'w-full z-10 relative'}>
                     <Image
+                        loading='lazy'
                         className={'w-screen max-h-96 object-cover'}
-                        src={"https://th.bing.com/th/id/OIP.5vUWBlv-Z2l1asf_LKrsEAHaDz?rs=1&pid=ImgDetMain"}
+                        src={userDetails.profileImage.coverImageURL || "/images/pexels-pixabay-276452.jpg"}
                         alt={"hero"}
                     />
                     <div
@@ -33,9 +30,9 @@ export const ProfilePage = ({userDetails} : {userDetails: UserSType}) => {
                 </div>
                 <div
                     className={"relative left-[-28%] -mt-[72px] z-20 w-36 h-36 rounded-full overflow-hidden border-[6px] border-solid border-black"}>
-                    <img
+                    <Image
                         className={'w-full h-full object-cover'}
-                        src={userDetails.profileImage.profileImageURL || "https://www.pngkey.com/png/full/73-730477_first-name-profile-image-placeholder-png.png"}
+                        src={userDetails.profileImage.profileImageURL || "/images/default-forground.png"}
                         alt={"hero"}
                     />
                     <div
@@ -69,7 +66,7 @@ export const ProfilePage = ({userDetails} : {userDetails: UserSType}) => {
                 </div>
             </div>
             <div className={'w-full max-w-[1024px] h-[3px] bg-default-300 mt-[110px]'}/>
-            <ProfileContains/>
+            <ProfileContains userDetails={userDetails}/>
         </div>
     )
 }
