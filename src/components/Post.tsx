@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import {Badge, Avatar, Image, Button, Modal, ModalContent, ModalBody, ModalFooter, useDisclosure, Textarea, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import {GetIcon} from "@/components/GetIcon";
 import {Comment} from "@/components/Comment";
@@ -35,7 +35,20 @@ interface PopupDetails {
     isComment: boolean
 }
 
-const Post = ({id, name, time, userImg, description, userActive, isImage, containUrl, like, comment, share, preview}: PostProps) => {
+const Post = forwardRef<HTMLDivElement, PostProps>(({
+    id,
+    name,
+    time,
+    userImg,
+    description,
+    userActive,
+    isImage,
+    containUrl,
+    like,
+    comment,
+    share,
+    preview
+  }, ref) => {
     const [popupDetails, setPopupDetails] = useState<PopupDetails>({placement: 'bottom', height: 20, isComment: true});
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [notfound, setNotfound] = useState(false);
@@ -49,7 +62,7 @@ const Post = ({id, name, time, userImg, description, userActive, isImage, contai
     
     return (
         <>
-            <div className={'w-full h-auto flex flex-col items-start justify-center gap-y-4 mb-5'}>
+            <div ref={ref} className={'w-full h-auto flex flex-col items-start justify-center gap-y-4 mb-5'}>
                 <div className={'w-full h-full flex flex-col'}>
                     <div className={'w-full h-full flex gap-x-2 items-center justify-between'}>
                         <div className={"w-auto h-full flex gap-x-2 items-center justify-start"}>
@@ -213,6 +226,6 @@ const Post = ({id, name, time, userImg, description, userActive, isImage, contai
             {!preview && <hr className="border-none h-[1px] bg-default-300 mb-4"/>}
         </>
     );
-};
+});
 
 export default Post;

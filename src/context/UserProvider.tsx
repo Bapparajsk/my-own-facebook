@@ -20,6 +20,8 @@ const UserContext = createContext<UserContextType>({
     fetchUser: () => {}
 });
 
+
+
 const UserProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
 
     const [userDetails, setUserDetails] = useState<UserSType>()
@@ -34,7 +36,7 @@ const UserProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
             containerType: 'application/json'
         }
     }
-
+    
     const fetchUser = async () => {
         try {
             const app_Token = localStorage.getItem('app-token');
@@ -48,17 +50,17 @@ const UserProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
                 {headers: createdHeaders(app_Token)}
             )
             const { user } = res.data;
+            console.log(user);
             
             setUserDetails(user as UserSType);
             return user;
         } catch (error) {
             console.log(error);
-            // @ts-ignore
-            router.replace('/sign-up');
+            console.log("error from fetch user");
+            
+            throw new Error('error from fetch user');
         }
     }
-
-
 
     return (
         <UserContext.Provider

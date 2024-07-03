@@ -22,9 +22,8 @@ import Link from "next/link"
 import { validatePassword, userNameValidation, handleValidation } from "@/lib/validation";
 import axios from "axios";
 import { Toaster, toast } from 'sonner'
-import {headers} from "next/headers";
 import OtpForm from "@/components/verify/OtpForm";
-import {useSearchParams} from "next/navigation";
+import {useSearchParams, useRouter} from "next/navigation";
 
 export const Form = () => {
     const {
@@ -42,6 +41,7 @@ export const Form = () => {
     const [isWrongOtp, setIsWrongOtp] = useState<boolean>(false);
     const params = useSearchParams();
     const isInvalid = params.get("invalid");
+    const router = useRouter();
 
     const onSubmit: SubmitHandler<SignUpInputs> = async ({userName, email, password}) => {
         const isPasswordValid = handleValidation(validatePassword, password, 'password', setError, clearErrors);
@@ -157,6 +157,7 @@ export const Form = () => {
             toast.success(message, {
                 duration: 4 * 1000
             });
+            router.replace("/")
         } catch (error) {
             console.log(error);
             setIsWrongOtp(true);

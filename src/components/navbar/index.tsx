@@ -23,8 +23,6 @@ const MainNavbar = () => {
         '/verify/*',
         '/profile/upload',
     ];
-    // const shouldHideNavbar = hiddenPaths.includes(pathname);
-    // console.log(shouldHideNavbar, pathname)
 
     function isPathHidden(currentPath: string): boolean {
         return hiddenPaths.some(path => {

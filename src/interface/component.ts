@@ -11,6 +11,7 @@ export interface PostProps {
     comment: number
     share: number
     preview?: boolean
+    ref?: any
 }
 
 export interface CommentProps {

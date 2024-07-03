@@ -1,32 +1,64 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Card, CardBody, CardFooter, Image, Avatar, Button, Divider} from "@nextui-org/react";
 import Link from "next/link";
 import {GetIcon} from "@/components/GetIcon";
 import UserPosts from "@/components/profile/UserPosts";
 import { UserSType } from '@/interface/usertupe';
+import axios from 'axios';
 
 
 const ProfileContains = ({userDetails}: {userDetails: UserSType}) => {
+
+    const [Friends, setFriends] = useState([])
+
+    const getFriendes = async () => {
+        const token = localStorage.getItem('app-token');
+        if (!token) {
+            throw new Error('Token not found');
+        }
+
+        const res = await axios.get(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/friend/get-all?env=friends&page=1&limit=6`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    token: token
+                }
+            }
+        )
+
+        const data = res.data.friends;
+
+        if (data.length === 6 || data.length === 3) {
+            setFriends(res.data.friends);
+        }
+    }
+
+    useEffect(() => {
+        if (Friends.length === 0) {
+            getFriendes();
+        }
+    },[])
 
     return (
         <div className={'w-full max-w-[1024px] h-full mt-5 px-5 flex flex-col gap-y-3'}>
             <div className="relative gap-5 grid grid-cols-3 pt-8">
                 <p className={'absolute font-bold font-robot text-default-800/90 tracking-widest'}>598 <span
                     className={'text-default-800/60 font-normal'}>friend</span></p>
-                <Link href={'/friend'} className={'absolute right-0 text-blue-500'}>see All</Link>
+                <Link href={'/friend/friends'} className={'absolute right-0 text-blue-500'}>see All</Link>
                 {
-                    userDetails && Array.from(userDetails.friends).slice(0, 6).map(([key, value]) => (
+                    Friends.map((value: any, key) => (
                         <Card shadow="sm" key={String(key)} className={'h-auto'} isPressable onPress={() => console.log("item pressed")}>
                             <CardBody className="overflow-visible p-0">
                                 <Image
                                     shadow="sm"
                                     radius="lg"
                                     width="100%"
-                                    alt={value.name}
+                                    alt={value?.name}
                                     className="w-full object-cover h-[100px]"
-                                    src={value.image ? value.image : "https://i.ytimg.com/vi/YAwnAG9UXp4/hqdefault.jpg"}
+                                    src={value?.profileImage?.profileImageURL ? value.profileImage.profileImageURL : "https://i.ytimg.com/vi/YAwnAG9UXp4/hqdefault.jpg"}
                                 />
                             </CardBody>
                             <CardFooter className="text-small justify-between">

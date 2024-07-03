@@ -48,22 +48,22 @@ const MobileNavbar = ({isVisible}: {isVisible: boolean}) => {
         setNavButtonPosition(40 + (totalWidth * indexToSet) + (40 * indexToSet))
     }
 
-    // useEffect(() => {
-    //     const indexToSet = ['/', '/friend', '/reels', '/message', '/notification'].indexOf(pathName);
-    //     const data:Data  = {
-    //         home: pathName === '/',
-    //         friend: pathName === '/friend',
-    //         reels: pathName === '/reels',
-    //         massg: pathName === '/message',
-    //         notify: pathName === '/notification'
-    //     }
-    //
-    //     // @ts-ignore
-    //     const computedStyle = window.getComputedStyle(f.current);
-    //     const totalWidth = (parseInt(computedStyle.width.slice(0, -2)) - 280) / 4;
-    //     setNavButtonHover(data)
-    //     setNavButtonPosition(40 + (totalWidth * indexToSet) + (40 * indexToSet))
-    // }, []);
+    useEffect(() => {
+        const indexToSet = ['/', '/friend', '/reels', '/message', '/notification'].indexOf(pathName);
+        const data:Data  = {
+            home: pathName === '/',
+            friend: pathName === '/friend',
+            reels: pathName === '/reels',
+            massg: pathName === '/message',
+            notify: pathName === '/notification'
+        }
+    
+        // @ts-ignore
+        const computedStyle = window.getComputedStyle(f.current);
+        const totalWidth = (parseInt(computedStyle.width.slice(0, -2)) - 280) / 4;
+        setNavButtonHover(data)
+        setNavButtonPosition(40 + (totalWidth * indexToSet) + (40 * indexToSet))
+    }, []);
 
     return (
         <motion.div

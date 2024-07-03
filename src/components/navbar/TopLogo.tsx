@@ -36,8 +36,7 @@ export default function TopLogo(): React.JSX.Element | null {
                     >
                         <User
                             name={userDetails?.name}
-                            description={'full Stack Developer'}
-
+                            description={userDetails?.role}
                             avatarProps={{
                                 fallback: true,
                                 src: userDetails?.profileImage.profileImageURL || "/images/default-forground.png",

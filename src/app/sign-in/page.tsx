@@ -7,7 +7,8 @@ import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {GetIcon} from "@/components/GetIcon";
 
 const Page = () => {
-
+    console.log('Page sign page sdfjshdf asdiufhaseuihfw');
+    
     const router = useRouter();
     const params = useSearchParams();
     const isTrue = params.get("create-new-account");

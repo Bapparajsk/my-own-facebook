@@ -8,6 +8,7 @@ import MainNavbar from "@/components/navbar";
 import { UserProvider } from '@/context/UserProvider';
 import { ToasterProvider } from '@/context/ToasterContext';
 import { QueryProvider } from './QueryClientProvider'
+import { FriendsProvider } from "@/context/FriendsContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,8 +29,10 @@ export default function RootLayout({
             <ToasterProvider>
                 <QueryProvider>
                     <UserProvider>
+                      <FriendsProvider>
                         <MainNavbar/>
                         {children}
+                      </FriendsProvider>
                     </UserProvider>
                 </QueryProvider>
             </ToasterProvider>

@@ -11,14 +11,13 @@ import { UserSType } from "@/interface/usertupe";
 
 export default function Home() {
     const router = useRouter();
-    const { fetchUser } = useUserContext();
+    const { userDetails, fetchUser } = useUserContext();
 
     const {isPending, isError, data, isSuccess} = useQuery({
         queryKey: ["get-user"],
         queryFn: fetchUser,
-        staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
-        retry: 2, // Retry failed requests twice
-
+        retry: 1,
+        enabled: userDetails === undefined
     });
 
     if (isPending) {
@@ -29,33 +28,37 @@ export default function Home() {
             </div>
         );
     }
-    if(!isSuccess) {
-        router.replace('/sign-in');
+
+    if(isError) {
+        console.log("error from home");
+        router.push('/sign-in');
     }
 
-    const user = data! as UserSType;
-    return (
-        <div className={'w-full h-auto px-4'}>
-            <div className={'w-full h-auto flex gap-x-8 items-center mt-2'}>
-                    <Badge
-                        color="primary"
-                        size="md"
-                        placement={'bottom-right'}
-                        showOutline={false}
-                        content={<GetIcon name={'plus'}/>}
-                        disableAnimation={false}
-                    >
-                        <Avatar
-                            size={'lg'}
-                            isBordered={false}
-                            color={'success'}
-                            src={user.profileImage.profileImageURL || "/images/default-forground.png"}
-                        />
-                </Badge>
-                <StatusBox/>
+    if(isSuccess) {
+        return (
+            <div className={'w-full h-auto px-4'}>
+                <div className={'w-full h-auto flex gap-x-8 items-center mt-2'}>
+                        <Badge
+                            color="primary"
+                            size="md"
+                            placement={'bottom-right'}
+                            showOutline={false}
+                            content={<GetIcon name={'plus'}/>}
+                            disableAnimation={false}
+                        >
+                            <Avatar
+                                size={'lg'}
+                                isBordered={false}
+                                color={'success'}
+                                src={userDetails?.profileImage.profileImageURL || "/images/default-forground.png"}
+                            />
+                    </Badge>
+                    <StatusBox/>
+                </div>
+                <hr className="border-none h-[1px] bg-default-300 text-red-800 mt-4"/>
+                <RenderPosts />
             </div>
-            <hr className="border-none h-[1px] bg-default-300 text-red-800 mt-4"/>
-            <RenderPosts />
-        </div>
-    );
+        );
+    }
+    return null;
 }

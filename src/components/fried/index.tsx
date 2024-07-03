@@ -16,7 +16,7 @@ const ShowAllFriends = () => {
                         See all
                     </Link>
                 </div>
-                <FriendRequest seeAllFriends={true}/>
+                <FriendRequest seeAllFriends={true} fetchdata={"request"}/>
             </div>
             <hr className="border-none h-[1px] bg-default-300 text-red-800"/>
             <div className={'w-full h-auto flex flex-col gap-y-3'}>
