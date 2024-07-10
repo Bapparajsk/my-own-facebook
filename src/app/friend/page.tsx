@@ -13,14 +13,11 @@ import { useFriendsContext } from "@/context/FriendsContext";
 
 export default function Friend() {
 
-
     const router = useRouter();
     const { userDetails, fetchUser } = useUserContext();
     const { removeList } = useFriendsContext();
-    const queryClient = useQueryClient();
 
-    
-    const {isPending, isError, data, isSuccess} = useQuery({
+    const {isPending, isError} = useQuery({
         queryKey: ["get-user"],
         queryFn: fetchUser,
         retry: 1,

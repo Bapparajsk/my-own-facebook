@@ -11,7 +11,7 @@
   "dependencies": {
     "@mantine/hooks": "^7.11.0",
     "@nextui-org/react": "^2.4.1",
-    "@tanstack/react-query": "^5.45.0",
+    "@tanstack/react-query": "^5.49.2",
     "axios": "^1.7.2",
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.381.0",

@@ -1,6 +1,7 @@
 import React from 'react';
 import UserActive from './UserActive';
 import UserChatBox from './UserChatBox';
+import { QueryProvider } from '@/app/QueryClientProvider';
 
 const ChatContainer = () => {
     return (

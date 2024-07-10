@@ -8,9 +8,13 @@ import Post from '../Post';
 
 const RenderPosts = () => {
 
-    const fetchPost = async ({pageParam = 0}: {pageParam: number}) => {
-        console.log('pageParam', pageParam);
+    const fetchPost = async ({pageParam = 0}: {pageParam: number}) => {       
+        const token = localStorage.getItem('app-token');
         
+        if (!token) {
+            return ;
+        }
+
         const res = await axios.get(
             `${process.env.NEXT_PUBLIC_SERVER_URL}/api/post?page=${pageParam}`,
             {
@@ -24,12 +28,7 @@ const RenderPosts = () => {
 
     const {
         data,
-        error,
         fetchNextPage,
-        hasNextPage,
-        isFetching,
-        isFetchingNextPage,
-        status,
       } = useInfiniteQuery({
         queryKey: ['projects'],
         queryFn: fetchPost,
@@ -46,12 +45,7 @@ const RenderPosts = () => {
 
 
     useEffect(() => {
-
-        console.log('entry', entry?.isIntersecting);
-        
         if (entry?.isIntersecting) {  
-            console.log("dfjdfghdjfghui");
-            
             fetchNextPage();
         }
     }, [entry]);
@@ -74,9 +68,9 @@ const RenderPosts = () => {
                             userActive={item.userActive}
                             isImage={item.contentType.startsWith('image') ? true : false}
                             containUrl={item.contentUrl}
-                            like={0}
-                            comment={0} 
-                            share={0}
+                            like={item.likeCount}
+                            comment={item.commentCount} 
+                            share={item.shareCount}
                         />
                     }
                     return (
