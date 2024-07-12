@@ -9,6 +9,7 @@ import { UserProvider } from '@/context/UserProvider';
 import { ToasterProvider } from '@/context/ToasterContext';
 import { QueryProvider } from './QueryClientProvider'
 import { FriendsProvider } from "@/context/FriendsContext";
+import { SocketProvider } from "./SocketProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,10 +30,12 @@ export default function RootLayout({
             <ToasterProvider>
                 <QueryProvider>
                     <UserProvider>
-                      <FriendsProvider>
-                        <MainNavbar/>
-                        {children}
-                      </FriendsProvider>
+                      <SocketProvider>
+                        <FriendsProvider>
+                          <MainNavbar/>
+                          {children}
+                        </FriendsProvider>
+                      </SocketProvider>
                     </UserProvider>
                 </QueryProvider>
             </ToasterProvider>
