@@ -34,7 +34,7 @@ export const SocketProvider = ({children}: {children: React.ReactNode}) => {
           socket.off("message");
         };
 
-    }, [userDetails]);
+    }, [userDetails?._id]);
 
     return (
         <>

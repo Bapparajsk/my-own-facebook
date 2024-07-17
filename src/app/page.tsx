@@ -16,7 +16,7 @@ export default function Home() {
     const {isPending, isError, data, isSuccess} = useQuery({
         queryKey: ["get-user"],
         queryFn: fetchUser,
-        retry: 1,
+        retry: 3,
         enabled: userDetails === undefined
     });
 

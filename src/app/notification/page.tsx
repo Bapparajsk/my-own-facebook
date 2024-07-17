@@ -2,11 +2,21 @@
 
 import Nav from "@/components/fried/Nav";
 import React, {useEffect, useState} from 'react';
-import FriendRequest from "@/components/fried/FriendRequest";
 import Notifications from "@/components/notification";
+import { useQuery } from "@tanstack/react-query";
+import { useUserContext } from "@/context/UserProvider";
 
 export default function Notification() {
     const [isNavbarVisible, setNavbarVisible] = useState(true);
+    const [] = useState([]);
+    const { userDetails, fetchUser } = useUserContext();
+
+    // const { isLoading, error, data, status } = useQuery({
+    //     queryKey: ["notifications"],
+    //     queryFn: fetchUser,
+    //     retry: 3,
+    //     enabled: userDetails === undefined
+    // });
 
     useEffect(() => {
 
@@ -31,7 +41,10 @@ export default function Notification() {
       <div className={'w-full h-auto flex flex-col gap-4'}>
           <Nav isNavbarVisible={isNavbarVisible}/>
           <div className={'flex flex-col gap-4 px-4 mt-10 mb-4'}>
-              <Notifications/>
+            {
+                // isLoading ? <div>Loading...</div> :
+                <Notifications/>
+            }
           </div>
       </div>
   );

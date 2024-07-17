@@ -78,7 +78,7 @@ export const Form = () => {
             console.log(error);
             toast.dismiss(toastId)
             // @ts-ignore
-            toast.error(error.response.data.message || "Something what wrong", {
+            toast.error(error?.response?.data?.message || "Something what wrong", {
                 duration: 4 * 1000
             });
         } finally {
@@ -163,7 +163,7 @@ export const Form = () => {
             setIsWrongOtp(true);
             toast.dismiss(toastId)
             // @ts-ignore
-            toast.error(error.response.data.message || "Something what wrong please try again", {
+            toast.error(error?.response?.data?.message || "Something what wrong please try again", {
                 duration: 4 * 1000
             });
         }

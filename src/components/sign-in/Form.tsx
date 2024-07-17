@@ -60,7 +60,7 @@ export const Form = () => {
             console.log(error)
             dismiss(id);
             // @ts-ignore
-            setToastDetail({ message: error?.response.data.message || "something went wrong please try again...", type: "warning" })
+            setToastDetail({ message: error?.response?.data?.message || "something went wrong please try again...", type: "warning" })
         }
     }
 
