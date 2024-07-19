@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReelsContainer from "@/components/reels";
 import {Input, Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {motion} from "framer-motion";
@@ -12,8 +12,40 @@ import { ReelsProvider } from  "@/context/ReelsContext"
 const Reels = () => {
     const router = useRouter();
 
+    const [n, setN] = useState<string>("comming soon");
+
+    useEffect(() => {
+        const states = [
+            "coming soon", 
+            "coming soon.", 
+            "coming soon..", 
+            "coming soon..."
+        ];
+        let index = 0;
+        let f = true;
+        const intervalId = setInterval(() => {
+            setN(states[index]);
+            
+            if (f) {
+                index++;
+                if (index === 3) {
+                    f = false;
+                }
+            } else {
+                index--;
+                if (index === 0) {
+                    f = true;
+                }
+            }
+        }, 1000);
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+    }, [])
+
     return (
         <div className="relative overflow-y-scroll snap-y snap-mandatory h-screen">
+            
             <Navbar>
                 <NavbarContent justify="start">
                     <NavbarItem>
@@ -38,8 +70,10 @@ const Reels = () => {
                             className={'flex w-full gap-x-2 text-default-500'}
                         >
                             <Link
-                                href={'/upload/reel'}
+                                // api his this -> /upload/reel
+                                href={''}
                                 className={'w-[35px] h-[35px] rounded-full bg-default-200/50 flex items-center justify-center hover:bg-default-200 hover:shadow-xl'}
+                                
                             >
                                 <GetIcon name={'plus'} className={'!w-6 text-white'}/>
                             </Link>
@@ -47,9 +81,10 @@ const Reels = () => {
                     </NavbarItem>
                 </NavbarContent>
             </Navbar>
-            <ReelsProvider>
+            <div className={'h-screen w-screen flex items-center justify-center'}>{n}</div>
+            {/* <ReelsProvider>
                 <ReelsContainer />
-            </ReelsProvider>
+            </ReelsProvider> */}
         </div>
     );
 };
