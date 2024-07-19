@@ -8,15 +8,6 @@ import { useUserContext } from "@/context/UserProvider";
 
 export default function Notification() {
     const [isNavbarVisible, setNavbarVisible] = useState(true);
-    const [] = useState([]);
-    const { userDetails, fetchUser } = useUserContext();
-
-    // const { isLoading, error, data, status } = useQuery({
-    //     queryKey: ["notifications"],
-    //     queryFn: fetchUser,
-    //     retry: 3,
-    //     enabled: userDetails === undefined
-    // });
 
     useEffect(() => {
 
