@@ -7,6 +7,14 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios';
 import { Spinner } from '@nextui-org/react';
 
+interface UserActiveProps {
+    _id: string; 
+    name: string; 
+    profileImage: { profileImageURL: string | undefined }; 
+    role: string; 
+    active: boolean;
+}
+
 const UserActive = () => {
 
     const fetchUsers = async () => {
@@ -19,28 +27,30 @@ const UserActive = () => {
             }
         )
         console.log(res.data.friends);
-        
-        return res.data.friends;
+        const sortedFriends = res.data.friends.sort((a: any, b: any) => b.active - a.active);
+
+        return sortedFriends;
     }
 
-    const { data, status, isError, isPending } = useQuery({
+    const { data, isPending } = useQuery({
         queryKey: ["active-users"],
         queryFn: fetchUsers
     });
 
-    if(isPending) return <Spinner size={"md"} color="primary" />
-
     return (
         <div className={'w-auto flex h-auto overflow-x-auto gap-x-4 scrollbar-hide'}>
             {
-                data?.map((item: { _id: string; name: string; profileImage: { profileImageURL: any; }; role: string; active: boolean; }, idx: React.Key | null | undefined) => (
-                    <UserCard
-                        key={idx}
-                        name={item.name}
-                        imgSrc={item.profileImage?.profileImageURL || "images/default-forground.png"}
-                        active={item.active}
-                    />
-                ))
+                isPending ? <Spinner size={"md"} color="primary" /> : (
+                    data?.map((item: UserActiveProps) => (
+                        <UserCard
+                            key={item._id}
+                            _id={item._id}
+                            name={item.name}
+                            imgSrc={item.profileImage?.profileImageURL || "images/default-forground.png"}
+                            active={item.active}
+                        />
+                    ))
+                )
             }
         </div>
     );

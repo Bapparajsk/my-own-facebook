@@ -1,18 +1,57 @@
 "use client"
 
-import React from 'react';
+import React, { useState } from 'react';
 import {useSearchParams, useRouter } from 'next/navigation'
 import {Navbar, NavbarContent, Badge, Avatar, User} from "@nextui-org/react";
 import Link from 'next/link'
 import { motion } from 'framer-motion';
 import { GetIcon } from '@/components/GetIcon';
 import ChatScrine from '@/components/chat/ChatScrine';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+
+interface ChatUser {
+    _id: string;
+    name: string;
+    profileImage: { profileImageURL: string | undefined };
+    role: string;
+    active: boolean;
+}
 
 const Page = () => {
-    // const qurey = useSearchParams();
-    // const username: string | null = qurey.get('id');
+
     const router = useRouter();
 
+    const params = useSearchParams();
+
+    const id = params.get('id');
+    if (!id) {
+        router.push('/message');
+        console.log('no id');
+        return;
+    }
+
+    const { status , data } = useQuery({
+        queryKey: ['chat'],
+        queryFn: async () => {
+            const token = localStorage.getItem('app-token');
+            if (!token) {
+                router.push('/sign-in');
+            }
+
+            const res = await axios.get(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat/get_chat?uid=${id}`,
+                {
+                    headers: {token: token}
+                }
+            )
+
+            console.log(res.data);
+            return res.data.chat;
+        },
+        retry: 2
+    });
+    
     return (
         <div className={'w-full min-h-screen'}>
             <Navbar shouldHideOnScroll>
@@ -36,19 +75,20 @@ const Page = () => {
                         onClick={() => router.back()}
                         className={'flex w-auto gap-x-2 text-default-500'}
                     >
-                        <Badge disableAnimation={false} content="" color="success" shape="circle" placement="bottom-right">
+                        <Badge disableAnimation={false} content={data?.chatUser?.active} color="success" shape="circle" placement="bottom-right">
                             <Avatar
                                 radius="full"
-                                src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                                src={data?.chatUser?.profileImage?.profileImageURL || "/images/default-forground.png"}
                             />
                         </Badge>
                     </motion.div>
                 </NavbarContent>
             </Navbar>
-            <div className={'w-full min-h-screen'}>
-                <ChatScrine/>
+            <div className={'w-full h-full'}>
+                { status === "error" && <p>error</p> }
+                { status === "pending" && <p>Loading...</p> }
+                { status === "success" && <ChatScrine chat={data?.chat} id={id}/>}
             </div>
-
         </div>
     );
 };

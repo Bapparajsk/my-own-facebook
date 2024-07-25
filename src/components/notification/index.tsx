@@ -30,6 +30,7 @@ const Notifications = () => {
             {isPending ? <div>Loading...</div> : (
                 not.slice().reverse().map((n: any, idx) => (
                     <NotifyCard
+                        key={idx}
                         idx={idx}
                         Type={n.Type}
                         createdAt={n.createdAt}
