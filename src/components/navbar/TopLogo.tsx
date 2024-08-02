@@ -39,7 +39,7 @@ export default function TopLogo(): React.JSX.Element | null {
                             description={userDetails?.role}
                             avatarProps={{
                                 fallback: true,
-                                src: userDetails?.profileImage.profileImageURL || "/images/default-forground.png",
+                                src: userDetails?.profileImage?.profileImageURL || "/images/default-forground.png",
                             }}
                         />
                     </MotionLink>

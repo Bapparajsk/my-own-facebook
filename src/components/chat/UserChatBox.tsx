@@ -1,7 +1,20 @@
+"use client"
+
 import React from 'react';
 import ChatCard from './ChatCard';
+import { useChatContext } from "@/context/ChatContext";
+import { useQuery } from '@tanstack/react-query';
 
 const UserChatBox = () => {
+
+    const { getChatlist } = useChatContext();
+
+    // const { status, data } = useQuery({
+    //     queryKey: ['userChat'],
+    //     queryFn: getChatlist,
+    //     retry: 1,
+    // })
+
     return (
         <div className={'w-fll h-full flex flex-col gap-y-4'}>
             <ChatCard

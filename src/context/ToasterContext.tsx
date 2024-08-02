@@ -1,9 +1,9 @@
 "use client"
 
-import React, {createContext, useContext, useState} from 'react';
-import {toast, Toaster} from 'sonner'
-
-
+import NotificationBar from '@/components/NotificationBar';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import { AnimatePresence } from "framer-motion"
+import { NotyProps } from '@/components/NotificationBar/types';
 export interface ToastDetails {
     message: string;
     type: "success" | "warning" | "error" | "loading";
@@ -11,63 +11,77 @@ export interface ToastDetails {
 }
 
 interface ToasterContextType {
-    toastDetails: ToastDetails | undefined;
-    setToastDetail: (date: ToastDetails, options?: {autoremove?: boolean, durationSeconds?: number}) => string | number;
-    dismiss: (id: string | number) =>  void;
+    setNotyDetails: (details: NotyProps) => void;
 }
 
 const ToasterContext = createContext<ToasterContextType>({
-    toastDetails: undefined,
-    setToastDetail: (date: ToastDetails, options?: {autoremove?: boolean, durationSeconds?: number}) => "",
-    dismiss: (id: string | number) => {}
+    setNotyDetails: (details: NotyProps) => {},
 });
 
 const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
-    const [toastDetails, setToastDetails] = useState<ToastDetails>()
+    const [show, setShow] = useState<boolean>(false);
+    const [id, setId] = useState<NodeJS.Timeout | undefined>(undefined);
+    const [details, setDetails] = useState<NotyProps | undefined>(undefined);
 
-    // useEffect(() => {
-    //     if (toastDetails === undefined) {
-    //         return;
-    //     }
-    //
-    //     const event = toast[toastDetails.type];
-    //     event(toastDetails.message, {
-    //         duration: 5 * 1000,
-    //     });
-    //
-    // }, [toastDetails]);
+    const setNotyDetails = ({
+        heading,
+        contain,
+        type,
+        startIcon,
+        redies,
+        shadow,
+        position,
+        endIcon,
+        link,
+        userLink,
+    } : NotyProps) => {
 
-    
-
-    const setToastDetail = (date: ToastDetails, options?: {autoremove?: boolean, durationSeconds?: number}) => {
-        const event = toast[date.type];
-        const { autoremove = false, durationSeconds } = options || {};
-        const id = event(date.message, {
-            duration: date.duration || 5000,
-        });
-
-        if (autoremove) {
-            setTimeout(() => {
-                toast.dismiss(id);
-            }, durationSeconds ? durationSeconds * 1000 : 5000);
+        if (show) {
+            clearTimeout(id);
+            setShow(false);
         }
+        
+        setShow(true);
 
-        return id;
+        setDetails({
+            heading,
+            contain,
+            type,
+            startIcon,
+            redies,
+            shadow,
+            position,
+            endIcon,
+            link,
+            userLink
+        });
     }
 
-    const dismiss = (id: string | number) => {
-        toast.dismiss(id);
-    }
-    
+    useEffect(() => {
+        if (show) {
+            const timeout = setTimeout(() => {
+                setShow(false);
+            }, 5000);
+            setId(timeout);
+            return () => clearTimeout(timeout);
+        }
+    }, [show]); 
+
     return (
         <ToasterContext.Provider
             value={{
-                toastDetails,
-                setToastDetail,
-                dismiss
+                setNotyDetails,
             }}
         >
-            <Toaster  richColors position="top-right"/>
+            <AnimatePresence>
+                {show && <NotificationBar
+                    remove={() => {
+                        clearTimeout(id);
+                        setShow(false);
+                    }}
+                    {...details}
+                />}
+            </AnimatePresence>
             {children}
         </ToasterContext.Provider>
     );

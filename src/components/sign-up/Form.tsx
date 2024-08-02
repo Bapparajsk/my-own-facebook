@@ -1,7 +1,7 @@
 'use client'
 
-import React, {useEffect, useRef, useState} from 'react';
-import {useForm, SubmitHandler} from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import {
     Input,
     Button,
@@ -14,16 +14,16 @@ import {
     CardHeader,
     CardBody
 } from "@nextui-org/react";
-import {EyeFilledIcon, EyeSlashFilledIcon} from "@nextui-org/shared-icons";
-import {SignUpInputs} from "@/interface/inputTypes"
-import {singIconDetails} from "@/app/data";
-import {ImageLoader} from "@/components/ImageLoader";
+import { EyeFilledIcon, EyeSlashFilledIcon } from "@nextui-org/shared-icons";
+import { SignUpInputs } from "@/interface/inputTypes"
+import { singIconDetails } from "@/app/data";
+import { ImageLoader } from "@/components/ImageLoader";
 import Link from "next/link"
 import { validatePassword, userNameValidation, handleValidation } from "@/lib/validation";
 import axios from "axios";
-import { Toaster, toast } from 'sonner'
 import OtpForm from "@/components/verify/OtpForm";
-import {useSearchParams, useRouter} from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useToasterContext } from "@/context/ToasterContext";
 
 export const Form = () => {
     const {
@@ -43,14 +43,20 @@ export const Form = () => {
     const isInvalid = params.get("invalid");
     const router = useRouter();
 
+    const { setNotyDetails } = useToasterContext();
+
     const onSubmit: SubmitHandler<SignUpInputs> = async ({userName, email, password}) => {
         const isPasswordValid = handleValidation(validatePassword, password, 'password', setError, clearErrors);
         if (!isPasswordValid) return;
 
         const isUserNameValid = handleValidation(userNameValidation, userName, 'userName', setError, clearErrors);
         if (!isUserNameValid) return;
-        const toastId = toast("please wait", {
-            icon: <Spinner size="sm" />
+
+        setNotyDetails({
+            startIcon: <Spinner size="sm" />,
+            contain: {
+                message: "please wait..."
+            },
         });
         setIsSummit(true);
 
@@ -69,17 +75,23 @@ export const Form = () => {
             console.log(res.data);
             const { accessToken, message } = res.data;
             setAccessToken(accessToken);
-            toast.dismiss(toastId)
-            toast.success(message, {
-                duration: 4 * 1000
+
+            setNotyDetails({
+                contain: {
+                    message: message
+                },
+                type: "success"
             });
+
             onOpen();
         } catch (error) {
             console.log(error);
-            toast.dismiss(toastId)
-            // @ts-ignore
-            toast.error(error?.response?.data?.message || "Something what wrong", {
-                duration: 4 * 1000
+            setNotyDetails({
+                contain: {
+                    // @ts-ignore
+                    message: error?.response?.data?.message || "Something what wrong"
+                },
+                type: "error"
             });
         } finally {
             setIsSummit(false);
@@ -88,8 +100,11 @@ export const Form = () => {
 
 
     const resendOtp = async () => {
-        const toastId = toast("please wait", {
-            icon: <Spinner size="sm" />
+        setNotyDetails({
+            startIcon: <Spinner size="sm" />,
+            contain: {
+                message: "please wait..."
+            },
         });
 
         const config = {
@@ -108,29 +123,44 @@ export const Form = () => {
 
            const { accessToken, message } = res.data;
            setAccessToken(accessToken);
-           toast.dismiss(toastId)
-           toast.success(message, {
-               duration: 4 * 1000
-           });
-       } catch (error) {
-           console.log(error);
-           toast.dismiss(toastId)
-           // @ts-ignore
-           toast.error(error.response.data.message || "Something what wrong", {
-               duration: 4 * 1000
-           });
+
+            setNotyDetails({
+                contain: {
+                    message: message
+                },
+                type: "success"
+            });
+
+        } catch (error) {
+            console.log(error);
+            setNotyDetails({
+                contain: {
+                    // @ts-ignore
+                    message: error?.response?.data?.message || "Something what wrong"
+                },
+                type: "error"
+            });
        }
     }
 
     const submitOtp  = async (otp: string) => {
         console.log(otp);
         if (otp.length < 4) {
-            toast.warning("Please enter 4 digit otp");
+
+            setNotyDetails({
+                contain: {
+                    message: "Please enter 4 digit otp"
+                },
+                type: "warning"
+            });
             return;
         }
-        // setIsWrongOtp
-        const toastId = toast("please wait", {
-            icon: <Spinner size="sm" />
+
+        setNotyDetails({
+            startIcon: <Spinner size="sm" />,
+            contain: {
+                message: "please wait..."
+            },
         });
 
         const body = {
@@ -153,31 +183,42 @@ export const Form = () => {
 
             const { token, message, user } = res.data;
             localStorage.setItem("app-token", token);
-            toast.dismiss(toastId)
-            toast.success(message, {
-                duration: 4 * 1000
+
+            setNotyDetails({
+                contain: {
+                    message: message
+                },
+                type: "success"
             });
+
             router.replace("/")
         } catch (error) {
             console.log(error);
             setIsWrongOtp(true);
-            toast.dismiss(toastId)
-            // @ts-ignore
-            toast.error(error?.response?.data?.message || "Something what wrong please try again", {
-                duration: 4 * 1000
+
+            setNotyDetails({
+                contain: {
+                    // @ts-ignore
+                    message: error?.response?.data?.message || "Something what wrong"
+                },
+                type: "error"
             });
         }
     }
 
     useEffect(() => {
         if (isInvalid) {
-            toast.warning("Something what wrong please try again");
+            setNotyDetails({
+                contain: {
+                    message: "Something what wrong please try again"
+                },
+                type: "warning"
+            });
         }
     }, [isInvalid]);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} >
-            <Toaster expand={false} position="top-right" richColors/>
             <div className={'w-full h-auto flex items-center justify-center'}>
                 <h1 className={'text-[40px] font-medium text-blue-500'}>sign-up</h1>
             </div>

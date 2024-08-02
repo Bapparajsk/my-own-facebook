@@ -8,3 +8,10 @@ export const initializeSocket = (): Socket => {
   }
   return socket;
 };
+
+export const getSocket = (): Socket => {
+  if (!socket) {
+    return initializeSocket();
+  }
+  return socket;
+}

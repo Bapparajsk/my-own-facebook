@@ -12,12 +12,14 @@ interface UserContextType {
     userDetails: UserSType | undefined,
     setUserDetails: Dispatch<SetStateAction<UserSType | undefined>>
     fetchUser: () => void
+    getId: () => string | null
 }
 
 const UserContext = createContext<UserContextType>({
     userDetails: undefined,
     setUserDetails: () => {},
-    fetchUser: () => {}
+    fetchUser: () => {},
+    getId: () => null 
 });
 
 
@@ -28,7 +30,7 @@ const UserProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
     const router = useRouter();
 
 
-    const { setToastDetail } = useToasterContext();
+    const { setNotyDetails } = useToasterContext();
 
     function createdHeaders (token: string) {
         return {
@@ -57,9 +59,14 @@ const UserProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
         } catch (error) {
             console.log(error);
             console.log("error from fetch user");
-            
-            throw new Error('error from fetch user');
         }
+    }
+
+    const getId = (): string | null => {
+        if (userDetails === undefined) {
+            return null;
+        }
+        return userDetails._id as string;
     }
 
     return (
@@ -67,7 +74,8 @@ const UserProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
             value={{
                 setUserDetails,
                 userDetails,
-                fetchUser
+                fetchUser,
+                getId
             }}
         >
             {children}

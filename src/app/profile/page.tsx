@@ -7,7 +7,7 @@ import { useUserContext } from '@/context/UserProvider'
 import { useQuery } from "@tanstack/react-query";
 import useScreenSize from "@/hooks/useScreenSize";
 import { ProfilePage } from '@/components/profile/ProfilePage';
-import { UserSType } from '@/interface/usertupe';
+import { usePathname } from "next/navigation";
 
 const Profile = () => {
 
@@ -22,6 +22,10 @@ const Profile = () => {
         retry: 2, // Retry failed requests twice
         
     });
+
+    const pathname = usePathname();
+    console.log(pathname);
+    
 
     if (isPending) {
         console.log("data is loading please wiet");

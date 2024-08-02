@@ -17,10 +17,22 @@ module.exports = {
         "setting": 'linear-gradient(135deg, rgba(123,128,152,0.49) 0%, rgba(16,0,255,0.49) 35%, rgba(16,0,255,0.49) 50%, rgba(16,0,255,0.49) 65%, rgba(163,105,117,0.50) 100%);'
       },
       boxShadow: {
-        'sm-box': 'rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;'
-      }
+        'sm-box': 'rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;',
+        'custom': '0 4px 30px rgba(0, 0, 0, 0.1)',
+      },
+      backdropFilter: {
+        'none': 'none',
+        'blur': 'blur(4.9px)',
+      },
+      colors: {
+        'custom-transparent': 'rgba(255, 255, 255, 0)',
+        'custom-border': 'rgba(255, 255, 255, 0.37)',
+      },
     },
   },
+
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui(),
+  ],
 };

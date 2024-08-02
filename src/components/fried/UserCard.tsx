@@ -28,8 +28,8 @@ const UserCard = ({id, userImg, name, isFriendRequest, sendFriendRequest, isMyFr
             return acceptFriendRequest(_id);
         },
     });
-
-    console.log("isMyFriend", isMyFriend);
+    
+    console.log(mutation.isPaused, mutation.isSuccess);
     
 
     return (
@@ -48,7 +48,7 @@ const UserCard = ({id, userImg, name, isFriendRequest, sendFriendRequest, isMyFr
                             mutation.mutate({tag: "send-request", _id: id});
                         }
                     }}>
-                        { isFriendRequest ? "Confirm" : "Add Friend"}
+                        { isFriendRequest ? "Confirm" : "Add Friend" } 
                     </Button>}
                     {!isMyFriend && !sendFriendRequest && <Button onClick={() => rejectFriendRequest(id)} color="primary" variant="flat" className={'grow'}>
                         Ignore

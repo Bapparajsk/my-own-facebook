@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useSearchParams, useRouter } from 'next/navigation'
 import {Navbar, NavbarContent, Badge, Avatar, User} from "@nextui-org/react";
 import Link from 'next/link'
@@ -9,6 +9,8 @@ import { GetIcon } from '@/components/GetIcon';
 import ChatScrine from '@/components/chat/ChatScrine';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useChatContext } from "@/context/ChatContext";
+import { useUserContext } from "@/context/UserProvider";
 
 interface ChatUser {
     _id: string;
@@ -18,11 +20,20 @@ interface ChatUser {
     active: boolean;
 }
 
+interface Chat {
+    _id: string;
+    sender: string; 
+    message: string; 
+    time: Date;
+}
+
 const Page = () => {
 
     const router = useRouter();
 
     const params = useSearchParams();
+    const { setChat } = useChatContext();
+    const { getId, fetchUser } = useUserContext();
 
     const id = params.get('id');
     if (!id) {
@@ -35,10 +46,15 @@ const Page = () => {
         queryKey: ['chat'],
         queryFn: async () => {
             const token = localStorage.getItem('app-token');
+
             if (!token) {
                 router.push('/sign-in');
             }
 
+            if (getId() === null) {
+                await fetchUser();
+            }
+        
             const res = await axios.get(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat/get_chat?uid=${id}`,
                 {
@@ -47,10 +63,16 @@ const Page = () => {
             )
 
             console.log(res.data);
-            return res.data.chat;
+            setChat(res.data.chat);
+            return res.data;
         },
         retry: 2
     });
+
+    
+    useEffect(() => {
+        console.log("reload chat page");
+    })
     
     return (
         <div className={'w-full min-h-screen'}>
@@ -75,7 +97,12 @@ const Page = () => {
                         onClick={() => router.back()}
                         className={'flex w-auto gap-x-2 text-default-500'}
                     >
-                        <Badge disableAnimation={false} content={data?.chatUser?.active} color="success" shape="circle" placement="bottom-right">
+                        <Badge 
+                            content={data?.chatUser?.active && ""} 
+                            color="success" 
+                            shape="circle" 
+                            placement="bottom-right"
+                        >
                             <Avatar
                                 radius="full"
                                 src={data?.chatUser?.profileImage?.profileImageURL || "/images/default-forground.png"}
@@ -87,7 +114,7 @@ const Page = () => {
             <div className={'w-full h-full'}>
                 { status === "error" && <p>error</p> }
                 { status === "pending" && <p>Loading...</p> }
-                { status === "success" && <ChatScrine chat={data?.chat} id={id}/>}
+                { status === "success" && <ChatScrine id={id} myid={getId()}/>}
             </div>
         </div>
     );

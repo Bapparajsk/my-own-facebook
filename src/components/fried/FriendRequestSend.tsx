@@ -32,7 +32,8 @@ const FriendRequestSend = () => {
                         id={user._id}
                         key={idx} 
                         userImg={user.profileImage?.profileImageURL || "/images/default-forground.png"} 
-                        name={user.name} isFriendRequest={false}
+                        name={user.name} 
+                        isFriendRequest={false}
                         sendFriendRequest
                     />
                 ))

@@ -21,9 +21,11 @@ const ChatCard = ({imgSrc, name, lastMessage, isActive, id}: ChatCardProps) => {
                         src={imgSrc}
                     />
                 </Badge>
-                <div className="h-full flex flex-col items-scart justify-center text-sm">
-                    <strong>{name}</strong>
-                    <p className={'font-light'}>{lastMessage}</p>
+                <div className="w-full h-full flex justify-between text-sm">
+                    <div>
+                        <strong>{name}</strong>
+                        <p className={'font-light'}>{lastMessage}</p>
+                    </div>
                 </div>
             </div>
         </Link>

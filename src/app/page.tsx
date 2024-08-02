@@ -31,7 +31,8 @@ export default function Home() {
 
     if(isError) {
         console.log("error from home");
-        router.push('/sign-in');
+        router.replace('/sign-in');
+        return;
     }
 
     if(isSuccess) {

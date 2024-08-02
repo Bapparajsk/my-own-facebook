@@ -24,17 +24,19 @@ export const SocketProvider = ({children}: {children: React.ReactNode}) => {
         }
 
         // Handle custom events
-        socket.on("message", (message: string) => {
-          console.log("Received message:", message);
-        });
+        // socket.on("message", (message: string) => {
+        //   console.log("Received message:", message);
+        // });
     
+        
+
         // Clean up on unmount
         return () => {
           socket.off("connect");
           socket.off("message");
         };
 
-    }, [userDetails?._id]);
+    }, [userDetails]);
 
     return (
         <>

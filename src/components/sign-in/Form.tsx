@@ -1,14 +1,12 @@
 'use client'
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import {Input, Button, User, Card, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem} from "@nextui-org/react";
-import {EyeFilledIcon} from "@nextui-org/shared-icons";
-import {EyeSlashFilledIcon} from "@nextui-org/shared-icons";
-import {SignIpInputs} from "@/interface/inputTypes"
+import { Input, Button, User, Card, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Spinner } from "@nextui-org/react";
+import { EyeFilledIcon, EyeSlashFilledIcon } from "@nextui-org/shared-icons";
+import { SignIpInputs } from "@/interface/inputTypes"
 import Link from "next/link"
 import { useRouter } from "next/navigation";
-import {validatePassword} from "@/lib/validation";
 import axios from "axios";
 import { useToasterContext } from '@/context/ToasterContext';
 import { useUserContext } from '@/context/UserProvider';
@@ -31,12 +29,19 @@ export const Form = () => {
 
     const router = useRouter();
 
-    const { setToastDetail, dismiss } = useToasterContext();
+    const { setNotyDetails } = useToasterContext();
     const { setUserDetails,userDetails } = useUserContext();
 
     const onSubmit: SubmitHandler<SignIpInputs> = async ({email, password}) => {
 
-        const id = setToastDetail({message: "please wait...", type: "loading"})
+        setNotyDetails({
+            startIcon: <Spinner />,
+            contain: {
+                name: "Logging in...",
+                message: "Please wait a moment"
+            },
+            type: "default",
+        })
 
         const body = {
             email,
@@ -49,22 +54,37 @@ export const Form = () => {
             );
 
             const { token, user, message } = res.data;
-            dismiss(id);
-            setToastDetail({ message, type: "success" });
+            setNotyDetails({
+                contain: {
+                    name: "Login successful",
+                    message: message
+                },
+                type: "success",
+            })
 
             localStorage.setItem("app-token", token);
             setUserDetails(user);
-            router.replace("/", { scroll: true});
 
         } catch (error) {
             console.log(error)
-            dismiss(id);
-            // @ts-ignore
-            setToastDetail({ message: error?.response?.data?.message || "something went wrong please try again...", type: "warning" })
+            setNotyDetails({
+                contain: {
+                    name: "Login failed",
+                    // @ts-ignore
+                    message: error?.response?.data?.message || "An error occurred"
+                },
+                type: "error",
+            });
         }
     }
 
-    const [isVisible, setIsVisible] = React.useState(false);
+    useEffect(() => {
+        if (userDetails) {
+            router.push('/');
+        }
+    }, [userDetails])
+
+    const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
     const [logDintUser, setLogDintUser] = useState<LogDintUser[]>([])
 

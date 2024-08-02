@@ -31,7 +31,7 @@ const Requests = () => {
         <div className={'w-full h-auto flex flex-col gap-4'}>
             <Nav isNavbarVisible={isNavbarVisible}/>
             <div className={'flex flex-col gap-4 px-4 mt-10'}>
-                <FriendRequest seeAllFriends={false}/>
+                <FriendRequest seeAllFriends={false} fetchdata={"send-request"}/>
             </div>
         </div>
     );
