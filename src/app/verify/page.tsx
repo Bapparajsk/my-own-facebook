@@ -9,6 +9,7 @@ import {BirthDate, UserDetails} from "@/components/verify/UserDetails";
 import {UserDetailsSubmit} from '@/lib/user'
 import {Password} from "@/components/verify/Password";
 import {UserSType} from "@/interface/usertupe";
+import { Spinner } from '@nextui-org/react';
 
 const Verify = () => {
 
@@ -17,10 +18,19 @@ const Verify = () => {
     const router = useRouter();
     const token = params.get('token');
     const [nextStep, setNextStep] = useState<number>(1);
+    const { setNotyDetails } = useToasterContext();
 
     useEffect(() => {
         if (token === null) {
-            setToastDetail({message: 'token are not valid', type: 'error'});
+            // setToastDetail({message: 'token are not valid', type: 'error'});
+            setNotyDetails({
+                type: "error",
+                isNameFull: true,
+                contain: {
+                    name: "token are not valid",
+                    message: "please try again..."
+                }
+            });
             router.back();
             return;
         }
@@ -29,55 +39,132 @@ const Verify = () => {
 
     }, [token]);
 
-    const { setToastDetail, dismiss } = useToasterContext();
+    
     const [userDetails, setUserDetails] = useState<UserSType>()
 
     const init = async (token: string) => {
         const data = await getUser(token);
 
         if (data === null) {
-            setToastDetail({message: 'token are not valid', type: 'error'});
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    name: "token are not valid",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
             router.push('/sign-up', {scroll: true});
             return;
         }
         console.log(data);
         setUserDetails(data)
-        setToastDetail({message: `welcome to our app ${data.name}`, type: 'success'});
+        // setToastDetail({message: `welcome to our app ${data.name}`, type: 'success'});
+        setNotyDetails({
+            type: "success",
+            contain: {
+                name: data.name,
+                message: `welcome to our app`
+            }
+        });
     }
 
     const submitUserDetails = async (name: string | null, role: string, {day, month, year}: BirthDate) => {
-        const id = setToastDetail({message: `please wait...`, type: 'loading'});
+        
+        setNotyDetails({
+            startIcon: <Spinner />,
+            contain: {
+                name: "please wait...",
+                message: "submitting data"
+            },
+            isNameFull: true,
+        });
+        
+
         if (token === null){
-            setToastDetail({message: 'token are not valid', type: 'error'});
+
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    name: "token are not valid",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
+
             router.push('/sign-up', {scroll: true});
             return;
         }
 
         const isSuccess = await UserDetailsSubmit(name, role, {day, month, year}, token);
-        dismiss(id)
         if (!isSuccess) {
-            setToastDetail({message: `something went wrong, please try again...`, type: 'error'});
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    name: "something went wrong",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
             return;
         }
-        setToastDetail({message: `Data Submitted successful...`, type: 'success'});
+
+        setNotyDetails({
+            type: "success",
+            contain: {
+                name: "Data Submitted successful",
+                message: "welcome to our app"
+            },
+            isNameFull: true,
+        });
         setNextStep(3);
     }
 
     const submitPassword = async (password: string) => {
-        const id = setToastDetail({message: `please wait...`, type: 'loading'});
+        const id = setNotyDetails({
+            startIcon: <Spinner />,
+            contain: {
+                name: "please wait...",
+                message: "submitting data"
+            },
+            isNameFull: true,
+        });
         if (token === null){
-            setToastDetail({message: 'token are not valid', type: 'error'});
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    name: "token are not valid",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
             router.push('/sign-up', {scroll: true});
             return;
         }
 
         const isSuccess = await setNewPassword(token, password);
-        dismiss(id);
+        // dismiss(id);
         if (!isSuccess) {
-            setToastDetail({message: `something went wrong, please try again...`, type: 'error'});
+            // setToastDetail({message: `something went wrong, please try again...`, type: 'error'});
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    name: "something went wrong",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
             return;
         }
-        setToastDetail({message: `Data Submitted successful...`, type: 'success'});
+
+        setNotyDetails({
+            type: "success",
+            contain: {
+                name: "Data Submitted successful",
+                message: "welcome to our app"
+            },
+            isNameFull: true,
+        });
         setNextStep(2);
     }
 

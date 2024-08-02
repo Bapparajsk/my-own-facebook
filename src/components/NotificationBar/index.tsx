@@ -9,7 +9,9 @@ import { useRouter } from "next/navigation";
 
 const NotificationBar =  forwardRef<HTMLDivElement, NotyProps>(({
     heading, contain, type, startIcon ,remove,
-    redies, shadow, position, endIcon, link, userLink
+    redies, shadow, position, endIcon, link, userLink,
+    isNameFull
+
 }, ref) => {
 
     const details: ToastDetails = type ? colors(type) : colors('default');
@@ -38,18 +40,27 @@ const NotificationBar =  forwardRef<HTMLDivElement, NotyProps>(({
                 duration: 0.3
             }}
             ref={ref} 
-            className={`w-auto h-[65px] rounded-${redies} ${details.backGround} p-2 flex gap-x-4 items-center absolute ${Position} ${boxShadow} z-50`}
+            className={`w-auto h-[60px] rounded-${redies} ${details.backGround} p-2 flex gap-x-4 items-center absolute ${Position} ${boxShadow} z-50`}
         >
-            <div className={'w-auto h-full'} onClick={() => userLink && router.push(userLink)}>
+            <div className={'w-auto h-full flex items-center justify-center'} onClick={() => userLink && router.push(userLink)}>
                 {heading ? heading : startIcon ? startIcon : details.HandIcon}
             </div>
-            <div 
-                className={`w-40 h-full overflow-x-auto ${length <= 22 && "flex items-center"}`}
+            <div className={`w-40 ${length <= 22 && "flex items-center"}`}
                 onClick={() => link && router.push(link)}
             >
                 <p>
-                    <span className={`${details.name.font} ${details.name.color} text-small`}>{contain?.name || "Jhon"} </span>
-                    <span className={`${details.message.font} ${details.message.color} text-sm`}>{contain?.message || "hey"}</span>
+                    <span className={`${details.name.font} ${details.name.color} text-sm`}>
+                        { 
+                            isNameFull ? contain?.name :
+                            contain?.name ? contain.name.length > 10 ? contain.name.slice(0, 10) + "..." : contain.name : "jhon doe"
+                        } 
+                    </span>
+                    <span> </span>
+                    <span className={`${details.message.font} ${details.message.color} text-sm`}>
+                        {
+                            contain?.message ? contain.message.length > 23 ? contain.message.slice(0, 23) + "..." : contain.message : "hey send friend requrest"
+                        }
+                    </span>
                 </p>
             </div>
             <div className={`w-[2px] h-full ${details.border}`}/>

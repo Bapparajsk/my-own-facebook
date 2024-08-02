@@ -27,5 +27,6 @@ export interface NotyProps {
     type?: 'success' | 'error' | 'warning' | 'info' | 'default';
     link?: string;
     userLink?: string;
+    isNameFull?: boolean;
     remove?: () => void;
 }

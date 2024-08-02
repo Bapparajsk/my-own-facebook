@@ -34,6 +34,7 @@ const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) =>
         endIcon,
         link,
         userLink,
+        isNameFull
     } : NotyProps) => {
 
         if (show) {
@@ -53,7 +54,8 @@ const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) =>
             position,
             endIcon,
             link,
-            userLink
+            userLink,
+            isNameFull
         });
     }
 

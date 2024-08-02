@@ -1,4 +1,4 @@
-import {Button, Card, CardBody, CardHeader, Input, Chip} from "@nextui-org/react";
+import {Button, Card, CardBody, CardHeader, Input, Chip, Spinner} from "@nextui-org/react";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {set, SubmitHandler, useForm} from "react-hook-form";
 import OtpForm from "@/components/verify/OtpForm";
@@ -25,13 +25,27 @@ export const Email = ({emails, token}: EmailProps) => {
     const [isValidOtp, setIsValidOtp] = useState<boolean>(false)
     const router = useRouter()
 
-    const { setToastDetail, dismiss } = useToasterContext();
+    const { setNotyDetails } = useToasterContext();
     const { setUserDetails } = useUserContext();
 
     const onSubmitEmail: SubmitHandler<VerifyEmail> =async ({email}) => {
-        const id = setToastDetail({message: `please wait...`, type: 'loading'});
+        setNotyDetails({
+            type: "default",
+            contain: {
+                name: "please wait...",
+                message: "we are sending otp..."
+            },
+            isNameFull: true,
+        })
         if (token === null){
-            setToastDetail({message: 'token are not valid', type: 'error'});
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    name: "token are not valid",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
             router.push('/sign-up', {scroll: true});
             return;
         }
@@ -39,7 +53,14 @@ export const Email = ({emails, token}: EmailProps) => {
         const isExist = emails?.some((item) => item.value === email);
 
         if (isExist) {
-            setToastDetail({message: 'email already exists', type: 'warning'});
+            setNotyDetails({
+                type: "warning",
+                contain: {
+                    name: "email already exists",
+                    message: "please try another email..."
+                },
+                isNameFull: true,
+            });
             return;
         }
 
@@ -56,21 +77,51 @@ export const Email = ({emails, token}: EmailProps) => {
                 },
                 {headers}
             )
-            dismiss(id);
-            setToastDetail({message: `otp send Successful...`, type: 'success'});
+            // dismiss(id);
+            // setToastDetail({message: `otp send Successful...`, type: 'success'});
+
+            setNotyDetails({
+                type: "success",
+                contain: {
+                    name: "otp send Successful...",
+                    message: "please check your email"
+                },
+                isNameFull: true,
+            })
+
             setIsSendOTP(true);
         } catch (error) {
-            console.log(error);
-            dismiss(id);
-            // @ts-ignore
-            setToastDetail({message: error?.response?.data?.message || "something went wrong please try again..." , type: 'warning'});
+            console.log(error);        
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    //@ts-ignore
+                    name: error?.response?.data?.message || "something went wrong",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            })
         }
     }
 
     const submitOTP = async (otp: string) => {
-        const id = setToastDetail({message: `please wait...`, type: 'loading'});
+        const id = setNotyDetails({
+            type: "default",
+            contain: {
+                name: "please wait...",
+                message: "we are verifying otp..."
+            },
+            isNameFull: true,
+        })
         if (token === null){
-            setToastDetail({message: 'token are not valid', type: 'error'});
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    name: "token are not valid",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
             router.push('/sign-up', {scroll: true});
             return;
         }
@@ -88,15 +139,28 @@ export const Email = ({emails, token}: EmailProps) => {
                 },
                 {headers}
             )
-            dismiss(id);
+            // dismiss(id);
             emails?.push({value: watch("email") });
-            setToastDetail({message: `email add Successful`, type: 'success'});
+            setNotyDetails({
+                type: "success",
+                contain: {
+                    name: "email add Successful",
+                    message: "you can now use this email"
+                },
+                isNameFull: true,
+            })
             setIsSendOTP(true);
         } catch (error) {
             console.log(error);
-            dismiss(id);
-            // @ts-ignore
-            setToastDetail({message: error?.response?.data?.message || "something went wrong please try again..." , type: 'warning'});
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    //@ts-ignore
+                    name: error?.response?.data?.message || "something went wrong",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
         }
     }
 
@@ -105,9 +169,26 @@ export const Email = ({emails, token}: EmailProps) => {
     }
 
     const skip = async () => {
-        const id = setToastDetail({message: `please wait...`, type: 'loading'});
+        // const id = setToastDetail({message: `please wait...`, type: 'loading'});
+        setNotyDetails({
+            startIcon: <Spinner />,
+            type: "default",
+            contain: {
+                name: "please wait...",
+                message: "we are verifying your email..."
+            },
+            isNameFull: true,
+        })
+
         if (token === null){
-            setToastDetail({message: 'token are not valid', type: 'error'});
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    name: "token are not valid",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
             router.push('/sign-up', {scroll: true});
             return;
         }
@@ -127,13 +208,19 @@ export const Email = ({emails, token}: EmailProps) => {
 
             setUserDetails(user)
             localStorage.setItem('app-token', app_token);
-            dismiss(id);
+            // dismiss(id);
             router.replace('/', {scroll: true});
         } catch (error) {
             console.log(error);
-            dismiss(id);
-            // @ts-ignore
-            setToastDetail({message: error?.response?.data?.message || "something went wrong please try again..." , type: 'warning'});
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    //@ts-ignore
+                    name: error?.response?.data?.message || "something went wrong",
+                    message: "please try again..."
+                },
+                isNameFull: true,
+            });
         }
     }
 

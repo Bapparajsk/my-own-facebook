@@ -20,70 +20,70 @@ const Default = (): ToastDetails => {
 
 const Success = (): ToastDetails => {
     return ({
-        backGround: 'bg-green-500/50',
+        backGround: 'bg-[#E6FFF4]',
         name: {
-            color: 'text-default-50',
-            font: 'font-sans'
+            color: 'text-[#009836]',
+            font: ''
         },
         message: {
-            color: 'text-default-100',
-            font: 'font-roboto'
+            color: 'text-[#009836]/80',
+            font: ''
         },
-        border: 'bg-[#ECFFE6]',
-        iconColor: "#F5F7F8",
-        HandIcon: <CircleCheckBig color={'green'} />
+        border: 'bg-[#009836]',
+        iconColor: "#009836",
+        HandIcon: <CircleCheckBig color={'#009836'} />
     });
 }
 
 const Error = (): ToastDetails => {
     return ({
-        backGround: 'bg-red-500/50',
+        backGround: 'bg-[#FFEEEF]',
         name: {
-            color: 'text-default-50',
-            font: 'font-sans'
+            color: 'text-[#FF2D2D]',
+            font: ''
         },
         message: {
-            color: 'text-default-100',
-            font: 'font-roboto'
+            color: 'text-[#FF2D2D]/80',
+            font: ''
         },
-        border: 'bg-[#FFEBEB]',
-        iconColor: "#F5F7F8",   
-        HandIcon: <ShieldAlert color={'white'} />
+        border: 'bg-[#FF2D2D]',
+        iconColor: "#FF2D2D",   
+        HandIcon: <ShieldAlert color={'#FF2D2D'} />
     });
 }
 
 const Warning = (): ToastDetails => {
     return ({
-        backGround: 'bg-yellow-500/50',
+        backGround: 'bg-[#FFFEEF]',
         name: {
-            color: 'text-default-50',
-            font: 'font-sans'
+            color: 'text-[#ED7000]',
+            font: ''
         },
         message: {
-            color: 'text-default-50',
-            font: 'font-roboto'
+            color: 'text-[#ED7000]/80',
+            font: ''
         },
-        border: 'bg-[#FFEBEB]',
-        iconColor: "#F5F7F8",
-        HandIcon: <TriangleAlert color={'white'} />
+        border: 'bg-[#ED7000]',
+        iconColor: "#ED7000",
+        HandIcon: <TriangleAlert color={'#ED7000'} />
     });
 }
 
 const InfoIcon = (): ToastDetails=> {
     return ({
-        backGround: 'bg-blue-500/50',
+        backGround: 'bg-[#EEF7FF]',
         name: {
-            color: 'text-default-50',
-            font: 'font-sans'
+            color: 'text-[#1455DF]',
+            font: ''
         },
         message: {
-            color: 'text-default-100',
-            font: 'font-roboto'
+            color: 'text-[#1455DF]/80',
+            font: ''
         },
-        border: 'bg-[#ECFFE6]',
-        iconColor: "#F5F7F8",
-        HandIcon: <Info color={'white'} />
-    })
+        border: 'bg-[#1455DF]',
+        iconColor: "#1455DF",
+        HandIcon: <Info color={'#1455DF'} />
+    });
 }
 
 const colors = (type: string): ToastDetails => {
