@@ -37,8 +37,7 @@ export const Form = () => {
         setNotyDetails({
             startIcon: <Spinner />,
             contain: {
-                name: "Logging in...",
-                message: "Please wait a moment"
+                message: "Please wait Logging in..."
             },
             type: "default",
         })
@@ -56,7 +55,6 @@ export const Form = () => {
             const { token, user, message } = res.data;
             setNotyDetails({
                 contain: {
-                    name: "Login successful",
                     message: message
                 },
                 type: "success",
@@ -69,7 +67,6 @@ export const Form = () => {
             console.log(error)
             setNotyDetails({
                 contain: {
-                    name: "Login failed",
                     // @ts-ignore
                     message: error?.response?.data?.message || "An error occurred"
                 },

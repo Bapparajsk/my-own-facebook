@@ -24,6 +24,22 @@ const ChatContext = createContext<ChatContextType>({
     setChat: (chat: any) => {},
     getChatlist: async () => {}
 });
+
+const getPathname = () => {
+    if (typeof window !== 'undefined') {
+        return window.location.pathname;
+    }
+    return '';
+}
+
+const getQuery = () => {
+    if (typeof window != 'undefined') {
+        const query = new URLSearchParams(window.location.search).get('id');
+        return query;
+    }
+
+    return null;
+}
  
 const ChatProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
 
@@ -37,10 +53,7 @@ const ChatProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
     const { setNotyDetails } = useToasterContext();
 
     socket.on('receive-message', (data: any) => {
-
-        const pathname = usePathname();
-        console.log(pathname);
-        console.log(data);
+        const pathname = getPathname();
         
         if (!pathname.startsWith("/message")) {
             setNotyDetails({
@@ -53,13 +66,13 @@ const ChatProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
                 link: "/message/chat/?id=" + data.senderId
             })
             return;
-        } else if (pathname.startsWith(`/message/chat=${data.senderId}`)) {
+        } else if (data.senderId == getQuery()) {
             setChat([...chat, {
                 sender: data.senderId,
                 message: data.message
             }]);
             return;
-        } else if (!pathname.startsWith(`/message/chat=${data.senderId}`)) {
+        } else if (data.senderId != getQuery()) {
             setNotyDetails({
                 startIcon:  <Avatar src={data.senderImage} size="md" />,
                 contain: {

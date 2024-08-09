@@ -1,6 +1,7 @@
 import React from 'react';
 import {Avatar, Badge} from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
+import { formatName } from '@/utils/format';
 
 interface UserCardProps {
     imgSrc: string
@@ -27,7 +28,7 @@ const UserCard = ({imgSrc, name, active, _id} : UserCardProps) => {
             >
                 <Avatar src={imgSrc} size="lg" />
             </Badge>
-            <p className={'font-light leading-4 text-sm text-center'}>{name}</p>
+            <p className={'font-light leading-4 text-sm text-center'}>{formatName(name, 13)}</p>
         </div>
     );
 };

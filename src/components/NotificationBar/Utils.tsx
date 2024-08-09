@@ -3,13 +3,13 @@ import { ToastDetails } from "./types";
 
 const Default = (): ToastDetails => {
     return ({
-        backGround: 'bg-slate-500/50',
+        backGround: 'bg-white',
         name: {
-            color: 'text-default-50',
+            color: 'text-black',
             font: 'font-sans'
         },
         message: {
-            color: 'text-default-200/80',
+            color: 'text-black/80',
             font: 'font-roboto'
         },
         border: 'bg-[#FFEBEB]',

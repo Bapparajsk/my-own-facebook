@@ -31,20 +31,18 @@ export const Email = ({emails, token}: EmailProps) => {
     const onSubmitEmail: SubmitHandler<VerifyEmail> =async ({email}) => {
         setNotyDetails({
             type: "default",
+            startIcon: <Spinner />,
             contain: {
-                name: "please wait...",
-                message: "we are sending otp..."
+                message: "please wait we are sending otp..."
             },
-            isNameFull: true,
         })
         if (token === null){
             setNotyDetails({
                 type: "error",
                 contain: {
-                    name: "token are not valid",
-                    message: "please try again..."
+                    name: "",
+                    message: "token are not valid please try again..."
                 },
-                isNameFull: true,
             });
             router.push('/sign-up', {scroll: true});
             return;
@@ -56,10 +54,8 @@ export const Email = ({emails, token}: EmailProps) => {
             setNotyDetails({
                 type: "warning",
                 contain: {
-                    name: "email already exists",
-                    message: "please try another email..."
+                    message: "email already exists please try another email..."
                 },
-                isNameFull: true,
             });
             return;
         }
@@ -77,16 +73,12 @@ export const Email = ({emails, token}: EmailProps) => {
                 },
                 {headers}
             )
-            // dismiss(id);
-            // setToastDetail({message: `otp send Successful...`, type: 'success'});
 
             setNotyDetails({
                 type: "success",
                 contain: {
-                    name: "otp send Successful...",
-                    message: "please check your email"
+                    message: "otp send successfully please check your email..."
                 },
-                isNameFull: true,
             })
 
             setIsSendOTP(true);
@@ -96,10 +88,8 @@ export const Email = ({emails, token}: EmailProps) => {
                 type: "error",
                 contain: {
                     //@ts-ignore
-                    name: error?.response?.data?.message || "something went wrong",
-                    message: "please try again..."
+                    message: error?.response?.data?.message || "something went wrong" + " please try again..."
                 },
-                isNameFull: true,
             })
         }
     }
@@ -107,20 +97,17 @@ export const Email = ({emails, token}: EmailProps) => {
     const submitOTP = async (otp: string) => {
         const id = setNotyDetails({
             type: "default",
+            startIcon: <Spinner />,
             contain: {
-                name: "please wait...",
-                message: "we are verifying otp..."
+                message: "we are verifying otp please wait..."
             },
-            isNameFull: true,
         })
         if (token === null){
             setNotyDetails({
                 type: "error",
                 contain: {
-                    name: "token are not valid",
-                    message: "please try again..."
+                    message: "token are not valid please try again..."
                 },
-                isNameFull: true,
             });
             router.push('/sign-up', {scroll: true});
             return;
@@ -144,10 +131,8 @@ export const Email = ({emails, token}: EmailProps) => {
             setNotyDetails({
                 type: "success",
                 contain: {
-                    name: "email add Successful",
-                    message: "you can now use this email"
+                    message: "email add Successful you can now use this email"
                 },
-                isNameFull: true,
             })
             setIsSendOTP(true);
         } catch (error) {
@@ -156,10 +141,8 @@ export const Email = ({emails, token}: EmailProps) => {
                 type: "error",
                 contain: {
                     //@ts-ignore
-                    name: error?.response?.data?.message || "something went wrong",
-                    message: "please try again..."
+                    message:error?.response?.data?.message || "something went wrong" +  " please try again..."
                 },
-                isNameFull: true,
             });
         }
     }
@@ -174,8 +157,7 @@ export const Email = ({emails, token}: EmailProps) => {
             startIcon: <Spinner />,
             type: "default",
             contain: {
-                name: "please wait...",
-                message: "we are verifying your email..."
+                message: "we are verifying your email please wait..."
             },
             isNameFull: true,
         })
@@ -184,10 +166,8 @@ export const Email = ({emails, token}: EmailProps) => {
             setNotyDetails({
                 type: "error",
                 contain: {
-                    name: "token are not valid",
-                    message: "please try again..."
+                    message: "token are not valid please try again..."
                 },
-                isNameFull: true,
             });
             router.push('/sign-up', {scroll: true});
             return;
@@ -208,7 +188,6 @@ export const Email = ({emails, token}: EmailProps) => {
 
             setUserDetails(user)
             localStorage.setItem('app-token', app_token);
-            // dismiss(id);
             router.replace('/', {scroll: true});
         } catch (error) {
             console.log(error);
@@ -216,10 +195,8 @@ export const Email = ({emails, token}: EmailProps) => {
                 type: "error",
                 contain: {
                     //@ts-ignore
-                    name: error?.response?.data?.message || "something went wrong",
-                    message: "please try again..."
+                    message: error?.response?.data?.message || "something went wrong" + "please try again..."
                 },
-                isNameFull: true,
             });
         }
     }

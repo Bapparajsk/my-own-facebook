@@ -25,10 +25,8 @@ const Verify = () => {
             // setToastDetail({message: 'token are not valid', type: 'error'});
             setNotyDetails({
                 type: "error",
-                isNameFull: true,
                 contain: {
-                    name: "token are not valid",
-                    message: "please try again..."
+                    message: "token are not valid please try again..."
                 }
             });
             router.back();
@@ -49,10 +47,8 @@ const Verify = () => {
             setNotyDetails({
                 type: "error",
                 contain: {
-                    name: "token are not valid",
-                    message: "please try again..."
+                    message: "token are not valid please try again..."
                 },
-                isNameFull: true,
             });
             router.push('/sign-up', {scroll: true});
             return;
@@ -73,9 +69,9 @@ const Verify = () => {
         
         setNotyDetails({
             startIcon: <Spinner />,
+            type: "info",
             contain: {
-                name: "please wait...",
-                message: "submitting data"
+                message: "submitting data please wait..."
             },
             isNameFull: true,
         });
@@ -86,10 +82,8 @@ const Verify = () => {
             setNotyDetails({
                 type: "error",
                 contain: {
-                    name: "token are not valid",
-                    message: "please try again..."
+                    message: "token are not valid please try again..."
                 },
-                isNameFull: true,
             });
 
             router.push('/sign-up', {scroll: true});
@@ -101,10 +95,8 @@ const Verify = () => {
             setNotyDetails({
                 type: "error",
                 contain: {
-                    name: "something went wrong",
-                    message: "please try again..."
+                    message: "something went wrong please try again..."
                 },
-                isNameFull: true,
             });
             return;
         }
@@ -112,8 +104,7 @@ const Verify = () => {
         setNotyDetails({
             type: "success",
             contain: {
-                name: "Data Submitted successful",
-                message: "welcome to our app"
+                message: "Data Submitted"
             },
             isNameFull: true,
         });
@@ -124,35 +115,27 @@ const Verify = () => {
         const id = setNotyDetails({
             startIcon: <Spinner />,
             contain: {
-                name: "please wait...",
-                message: "submitting data"
+                message: "submitting data please wait..."
             },
-            isNameFull: true,
         });
         if (token === null){
             setNotyDetails({
                 type: "error",
                 contain: {
-                    name: "token are not valid",
-                    message: "please try again..."
+                    message: "token are not valid please try again..."
                 },
-                isNameFull: true,
             });
             router.push('/sign-up', {scroll: true});
             return;
         }
 
         const isSuccess = await setNewPassword(token, password);
-        // dismiss(id);
         if (!isSuccess) {
-            // setToastDetail({message: `something went wrong, please try again...`, type: 'error'});
             setNotyDetails({
                 type: "error",
                 contain: {
-                    name: "something went wrong",
-                    message: "please try again..."
+                    message: "something went wrong please try again..."
                 },
-                isNameFull: true,
             });
             return;
         }
@@ -160,10 +143,8 @@ const Verify = () => {
         setNotyDetails({
             type: "success",
             contain: {
-                name: "Data Submitted successful",
-                message: "welcome to our app"
+                message: "password set goto next step"
             },
-            isNameFull: true,
         });
         setNextStep(2);
     }

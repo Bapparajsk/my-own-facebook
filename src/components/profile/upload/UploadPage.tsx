@@ -11,7 +11,8 @@ import {
     Image,
     Button,
     Input,
-    Textarea
+    Textarea,
+    Spinner
 } from "@nextui-org/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { UserSType } from '@/interface/usertupe';
@@ -75,15 +76,17 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
         }
     };
 
-    const { setToastDetail } = useToasterContext();
+    const { setNotyDetails } = useToasterContext();
 
     const postUpload = async () => {
         console.log(inputAccptType, inputSrc, file);
         
         if ((inputAccptType === "image" || inputAccptType === "video") && (inputSrc === null || file === null)) {
-            setToastDetail({
-                message: "Please select a file",
-                type: "error"
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    message: "Please select a file to upload..."
+                }
             });
             return;
         }
@@ -148,24 +151,36 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
     const fetchPost = useMutation({
         mutationFn: postUpload,
         onMutate: () => {
-            setToastDetail({
-                message: "Uploading...",
-                type: "loading"
-            },{autoremove: true, durationSeconds: 3});
+            setNotyDetails({
+                type: "default",
+                startIcon: <Spinner size={"sm"}/>,
+                contain: {
+                    message: "Uploading..."
+                }
+            })
         },
 
         onError: () => {
-            setToastDetail({
-                message: "Failed to upload, try again later...",
-                type: "error"
-            });
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    message: "Failed to upload, try again later..."
+                }
+            })
         },
 
         onSuccess: () => {
-            setToastDetail({
-                message: "Uploaded",
+            setNotyDetails({
                 type: "success",
+                contain: {
+                    message: "Uploaded..."
+                }
             });
+
+            setInoutSrc(null);
+            setFile(null);
+            setDescription("");
+            
         }
     });
 

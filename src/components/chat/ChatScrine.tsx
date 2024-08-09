@@ -88,7 +88,7 @@ const ChatScrine = ({id, myid}: {id: string, myid: string | null}) => {
                 {
                     chat?.map((message: any, index: number) => (
                         index === chat.length - 1 ? (
-                            message.sender != id ? (
+                            message.sender === id ? (
                                 console.log('send you'),
                                 
                                 <SendYou ref={messagesEndRef} key={index} message={message.message}/>
@@ -97,7 +97,7 @@ const ChatScrine = ({id, myid}: {id: string, myid: string | null}) => {
                                 <SendMe ref={messagesEndRef} key={index} message={message.message}/>
                             )
                         ) :
-                        message.sender != id ? (
+                        message.sender === id ? (
                             <SendYou key={index} message={message.message}/>
                         ) : (
                             <SendMe key={index} message={message.message}/>

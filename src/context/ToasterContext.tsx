@@ -21,9 +21,10 @@ const ToasterContext = createContext<ToasterContextType>({
 const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
     const [show, setShow] = useState<boolean>(false);
     const [id, setId] = useState<NodeJS.Timeout | undefined>(undefined);
+    const [tempDetails, setTempDetails] = useState<NotyProps | undefined>(undefined);
     const [details, setDetails] = useState<NotyProps | undefined>(undefined);
 
-    const setNotyDetails = ({
+    const setNotyDetails = async ({
         heading,
         contain,
         type,
@@ -40,11 +41,11 @@ const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) =>
         if (show) {
             clearTimeout(id);
             setShow(false);
+            await new Promise((res) => setTimeout(res, 500));
         }
         
         setShow(true);
-
-        setDetails({
+        setTempDetails({
             heading,
             contain,
             type,
@@ -65,9 +66,12 @@ const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) =>
                 setShow(false);
             }, 5000);
             setId(timeout);
+
+            setDetails(tempDetails);
+
             return () => clearTimeout(timeout);
         }
-    }, [show]); 
+    }, [show, tempDetails]); 
 
     return (
         <ToasterContext.Provider
