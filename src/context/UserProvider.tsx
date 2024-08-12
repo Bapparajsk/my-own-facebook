@@ -52,7 +52,6 @@ const UserProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
                 {headers: createdHeaders(app_Token)}
             )
             const { user } = res.data;
-            console.log(user);
             
             setUserDetails(user as UserSType);
             return user;

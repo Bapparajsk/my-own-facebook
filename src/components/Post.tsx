@@ -1,39 +1,21 @@
 "use client"
 
 import React, { forwardRef, useState } from 'react';
-import {Badge, Avatar, Image, Button, Modal, ModalContent, ModalBody, ModalFooter, useDisclosure, Textarea, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
-import {GetIcon} from "@/components/GetIcon";
-import {Comment} from "@/components/Comment";
-import {PostProps} from "@/interface/component";
+import { 
+    Badge, Avatar, Image, Button, Modal, ModalContent, 
+    ModalBody, ModalFooter, useDisclosure, Textarea, 
+    Dropdown, DropdownTrigger, DropdownMenu, DropdownItem
+} from "@nextui-org/react";
+import { GetIcon } from "@/components/GetIcon";
+import { Comment } from "@/components/Comment";
+import { PostProps } from "@/interface/component";
 import Share from "@/components/Share";
 import { useUserContext } from "@/context/UserProvider";
 import { Ellipsis } from 'lucide-react';
 import { DeleteDocumentBulkIcon, EditDocumentBulkIcon } from "@nextui-org/shared-icons";
+import { formatNumber, getDate } from '@/utils/post';
+import { PopupDetails } from '@/interface/post';
 
-
-function formatNumber(num: number): string {
-    if (num >= 1e9) {
-        return (num / 1e9).toFixed(2) + 'B';
-    } else if (num >= 1e6) {
-        return (num / 1e6).toFixed(2) + 'M';
-    } else if (num >= 1e3) {
-        return (num / 1e3).toFixed(2) + 'K';
-    } else {
-        return num.toString();
-    }
-}
-
-function getDate(time: Date): string {
-    const date = new Date(time);
-    return date.toDateString();
-
-}
-
-interface PopupDetails {
-    placement: "bottom" | "center" | undefined
-    height: number
-    isComment: boolean
-}
 
 const Post = forwardRef<HTMLDivElement, PostProps>(({
     id,

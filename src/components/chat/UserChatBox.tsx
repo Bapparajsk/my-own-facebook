@@ -13,7 +13,10 @@ const UserChatBox = () => {
         queryKey: ['userChat'],
         queryFn: getChatlist,
         retry: 1,
-    })
+    });
+
+    console.log(data, "datadfgjhaeriqerhuwhj");
+    
 
     return (
         <div className={'w-fll h-full flex flex-col gap-y-4'}>

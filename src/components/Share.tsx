@@ -6,7 +6,6 @@ import { CheckIcon } from '@nextui-org/shared-icons'
 export default function Share() {
     const renderCell = React.useCallback((user: { [x: string]: any; avatar: any; email: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<React.AwaitedReactNode> | null | undefined; team: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; status: string | number; }, columnKey: string | number) => {
         const cellValue = user[columnKey];
-        console.log(columnKey);
 
         switch (columnKey) {
             case "name":
@@ -33,7 +32,6 @@ export default function Share() {
         }
     }, []);
 
-    // @ts-ignore
     return (
         <Table aria-label="Example table with custom cells">
             <TableHeader columns={columns}>

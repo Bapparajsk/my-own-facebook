@@ -34,13 +34,13 @@ export const Form = () => {
 
     const onSubmit: SubmitHandler<SignIpInputs> = async ({email, password}) => {
 
-        setNotyDetails({
-            startIcon: <Spinner />,
-            contain: {
-                message: "Please wait Logging in..."
-            },
-            type: "default",
-        })
+        // setNotyDetails({
+        //     startIcon: <Spinner />,
+        //     contain: {
+        //         message: "Please wait Logging in..."
+        //     },
+        //     type: "default",
+        // })
 
         const body = {
             email,

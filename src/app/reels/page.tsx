@@ -2,12 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import ReelsContainer from "@/components/reels";
-import {Input, Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
-import {motion} from "framer-motion";
+import {Button, Input, Navbar, NavbarContent, NavbarItem, Spinner} from "@nextui-org/react";
+import {AnimatePresence, motion} from "framer-motion";
 import {GetIcon} from "@/components/GetIcon";
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
-import { ReelsProvider } from  "@/context/ReelsContext"
+import { AnimatedCheckIcon } from '@/components/AnimatedCheckIcon';
+
 
 const Reels = () => {
     const router = useRouter();
@@ -42,6 +43,16 @@ const Reels = () => {
         // Cleanup interval on component unmount
         return () => clearInterval(intervalId);
     }, [])
+
+    const [v, setV] = useState<"stop" | "prosess" | "success">("stop");
+
+    useEffect(() => {
+        if(v === "prosess") {
+            setTimeout(() => {
+                setV("success");
+            }, 5000);
+        }
+    }, [v])
 
     return (
         <div className="relative overflow-y-scroll snap-y snap-mandatory h-screen">
@@ -81,12 +92,26 @@ const Reels = () => {
                     </NavbarItem>
                 </NavbarContent>
             </Navbar>
-            <div className={'h-screen w-screen flex items-center justify-center'}>{n}</div>
+            {/* <div className={'h-screen w-screen flex items-center justify-center'}>{n}</div> */}
             {/* <ReelsProvider>
                 <ReelsContainer />
             </ReelsProvider> */}
+            <div className={'w-full h-full flex items-center justify-center px-10'}>
+                <Button
+                    color={v === "stop" ? "primary" : v === "prosess" ? "warning" : "success"}
+                    variant={v === "stop" ? "flat" : v === "prosess" ? "ghost" : "shadow"}
+                    onClick={() => setV("prosess")}
+                    isLoading={v === "prosess"}
+                    disabled={v === "success"}
+                    fullWidth
+                >
+                    {v === "stop" ? "Start" : v === "success" && <AnimatedCheckIcon/> }
+                </Button>
+            </div>
         </div>
     );
 };
+
+
 
 export default Reels;

@@ -33,6 +33,7 @@ const ChatScrine = ({id, myid}: {id: string, myid: string | null}) => {
         }
 
         const message = inputRef.current.value;
+        inputRef.current.focus();
         
         socket.emit('send-message', {
             friendId: id,
@@ -41,7 +42,8 @@ const ChatScrine = ({id, myid}: {id: string, myid: string | null}) => {
 
         setChat([...chat, {
             sender: myid,
-            message: message
+            message: message,
+            time: new Date()
         }])
 
         console.log(inputRef.current);
@@ -65,7 +67,7 @@ const ChatScrine = ({id, myid}: {id: string, myid: string | null}) => {
     }, [chat]);
 
     return (
-        <div className={'w-full h-full'}>
+        <div className={'w-full h-dvh'}>
             <div className={'w-screen z-50 fixed bottom-0 bg-black/20 py-2 flex gap-x-2 px-2 backdrop-blur-xl'}>
                 <Textarea
                     ref={inputRef}
@@ -91,16 +93,16 @@ const ChatScrine = ({id, myid}: {id: string, myid: string | null}) => {
                             message.sender === id ? (
                                 console.log('send you'),
                                 
-                                <SendYou ref={messagesEndRef} key={index} message={message.message}/>
+                                <SendYou ref={messagesEndRef} key={index} message={message.message} time={message.time}/>
                             ) : (
                                 console.log('send me'),
-                                <SendMe ref={messagesEndRef} key={index} message={message.message}/>
+                                <SendMe ref={messagesEndRef} key={index} message={message.message} time={message.time}/>
                             )
                         ) :
                         message.sender === id ? (
-                            <SendYou key={index} message={message.message}/>
+                            <SendYou key={index} message={message.message} time={message.time}/>
                         ) : (
-                            <SendMe key={index} message={message.message}/>
+                            <SendMe key={index} message={message.message} time={message.time}/>
                         )
                     ))
                 }

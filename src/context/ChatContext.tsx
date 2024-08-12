@@ -10,7 +10,8 @@ import axios from 'axios';
 
 interface ChatType {
     sender: string,
-    message: string
+    message: string,
+    time: Date
 }
 
 interface ChatContextType {
@@ -45,7 +46,8 @@ const ChatProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
 
     const [chat, setChat] = useState<{
         sender: string,
-        message: string
+        message: string,
+        time: Date
     }[]>([]);
     const [chatList, setChatList] = useState([]);
 
@@ -69,7 +71,8 @@ const ChatProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
         } else if (data.senderId == getQuery()) {
             setChat([...chat, {
                 sender: data.senderId,
-                message: data.message
+                message: data.message,
+                time: data.time
             }]);
             return;
         } else if (data.senderId != getQuery()) {
