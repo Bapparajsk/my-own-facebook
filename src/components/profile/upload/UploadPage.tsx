@@ -53,6 +53,9 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
             return;
         }
 
+        console.log("file", file);
+        
+
         if (file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = (e: ProgressEvent<FileReader>) => {
@@ -78,9 +81,7 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
 
     const { setNotyDetails } = useToasterContext();
 
-    const postUpload = async () => {
-        console.log(inputAccptType, inputSrc, file);
-        
+    const postUpload = async () => {        
         if ((inputAccptType === "image" || inputAccptType === "video") && (inputSrc === null || file === null)) {
             setNotyDetails({
                 type: "error",
@@ -88,7 +89,7 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                     message: "Please select a file to upload..."
                 }
             });
-            return;
+            throw new Error("Please select a file to upload...");
         }
 
         try {
@@ -160,7 +161,9 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
             })
         },
 
-        onError: () => {
+        onError: (e) => {
+            console.log("mmmm", e.message);
+            
             setNotyDetails({
                 type: "error",
                 contain: {
@@ -183,6 +186,13 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
             
         }
     });
+
+    const cancel = () => {
+        setInoutSrc(null);
+        setFile(null);
+        setDescription("");
+        setPreviewMood(false);
+    }
 
     useEffect(() => {
         if (inputRef.current) {
@@ -223,7 +233,7 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                             <Button
                                 color={"warning"}
                                 variant={previewMood ? 'shadow' : 'flat'}
-                                onClick={() => setPreviewMood(!previewMood)}
+                                onClick={() => file && setPreviewMood(!previewMood)}
                             >
                                 Preview
                             </Button>
@@ -231,6 +241,8 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                                 color={'success'}
                                 variant={'shadow'}
                                 onClick={() => fetchPost.mutate()}
+                                isLoading={fetchPost.isPending}
+                                // isDisabled={fetchPost.isSuccess}
                             >
                                 Post
                             </Button>
@@ -238,15 +250,16 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                     </CardHeader>
                     <Divider/>
                     <CardBody className={'gap-y-2'}>
-                        <div className={'w-full h-auto'}>
+                        {file && <div className={'w-full h-auto'}>
                             <Textarea
                                 variant="bordered"
                                 labelPlacement="outside"
                                 placeholder={`Say something about this ${inputAccptType}...`}
                                 className="w-full tracking-widest"
                                 onChange={(e) => setDescription(e.target.value)}
+                                value={description === "" ? `` : description}
                             />
-                        </div>
+                        </div>}
                         <Input 
                             ref={inputRef} 
                             id={'containt-input'} 
@@ -258,17 +271,18 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                         {inputSrc && (
                             previewMood && (
                                 <Post
+                                    idx={0}
                                     id='sdfhsd'
                                     name={userDetails.name}
                                     time={new Date()}
-                                    userImg='https://avatars.githubusercontent.com/u/86160567?s=200&v=4'
+                                    userImg={userDetails.profileImage?.profileImageURL || "/images/default-forground.png"}
                                     description={description}
                                     userActive={true}
                                     isImage={inputSrc.type === "image"}
                                     containUrl={inputSrc.value}
-                                    like={0}
-                                    comment={0}
-                                    share={0}
+                                    likeCount={0}
+                                    commentCount={0}
+                                    shareCount={0}
                                     preview={true}
                                 />
                             ) || (
@@ -295,7 +309,7 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                                         variant={"shadow"} 
                                         className={"absolute right-1 top-1 z-10"} 
                                         color={"warning"}
-                                        onClick={() => setInoutSrc(null)}
+                                        onClick={cancel}
                                     >
                                         <X />
                                         {fileSize && formatSize(fileSize)}
@@ -336,13 +350,14 @@ export const UploadPage = ({userDetails} : {userDetails: UserSType}) => {
                                 variant={'shadow'}
                                 fullWidth
                                 className={'grow'}
-                                onClick={() => fetchPost.mutate()}
+                                onClick={() => file && fetchPost.mutate()}
                             >
                                 Post
                             </Button>
                             <Button
                                 color={'danger'}
                                 variant={'shadow'}
+                                onClick={cancel}
                             >
                                 Cancel
                             </Button>

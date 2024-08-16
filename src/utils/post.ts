@@ -41,8 +41,35 @@ const getDate = (time: Date): string => {
     return date.toDateString();
 }
 
+const likePost = async (postId: string, userId: string | undefined) => {
+    const url = process.env.NEXT_PUBLIC_SERVER_URL;
+
+    if (!url || !userId) {
+        console.log('url or userId is not defined');
+        console.log('url:', url);
+        console.log('userId:', userId);
+        
+        
+        return ;
+    }
+
+    const res = await axios.patch(
+        `${url}/api/post/update?event=like&id=${postId}`,
+        {
+            userId
+        },
+        {
+            headers: {
+                token: localStorage.getItem('app-token')
+            }
+        }
+    )
+    return res.data;
+}
+
 export {
     fetchPost,
     formatNumber,
-    getDate
+    getDate,
+    likePost
 };

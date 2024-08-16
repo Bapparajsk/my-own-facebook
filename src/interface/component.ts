@@ -1,4 +1,5 @@
 export interface PostProps {
+    idx: number
     id: string
     name: string
     time: Date
@@ -7,9 +8,9 @@ export interface PostProps {
     userActive: boolean
     isImage: boolean
     containUrl: string | undefined
-    like: number
-    comment: number
-    share: number
+    likeCount: number
+    commentCount: number
+    shareCount: number
     preview?: boolean
     ref?: any
 }

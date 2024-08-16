@@ -1,12 +1,15 @@
 "use client"
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useIntersection } from '@mantine/hooks';
 import Post from '../Post';
 import { fetchPost } from '@/utils/post';
 
 const RenderPosts = () => {
+
+    // const [Post, setPost] = useState<any[]>([]);
+
     const {
         data,
         fetchNextPage,
@@ -29,25 +32,48 @@ const RenderPosts = () => {
         }
     }, [entry]);
 
-    const post = data?.pages.flatMap((page) => page.data);
+
+    // how to this post veriabal update in oanather component
+    let post = data?.pages.flatMap((page) => page.data);
+
 
     return (
         <div className={'w-full h-auto mt-4'}>
             {
                 post?.map((item, idx) => {                    
-                    if (idx === post.length-1) {
+                    if (post && idx === post.length-1) {
                         return <Post
                             ref={ref}
                             key={idx}
+                            idx={idx}
+                            id={item._id}
+                            name={item.name}
+                            time={item.createdAt}
+                            userImg={item.imageUrl}
+                            description={item.description}
+                            userActive={item.userActive}
                             isImage={item.contentType.startsWith('image') ? true : false}
-                            {...item}
+                            containUrl={item.contentUrl}
+                            likeCount={item.likeCount}
+                            commentCount={item.commentCount} 
+                            shareCount={item.shareCount}
                         />
                     }
                     return (
                         <Post
+                            idx={idx}
                             key={idx}
+                            id={item._id}
+                            name={item.name}
+                            time={item.createdAt}
+                            userImg={item.imageUrl}
+                            description={item.description}
+                            userActive={item.userActive}
                             isImage={item.contentType.startsWith('image') ? true : false}
-                            {...item}
+                            containUrl={item.contentUrl}
+                            likeCount={item.likeCount}
+                            commentCount={item.commentCount} 
+                            shareCount={item.shareCount}
                         />
                     )
                 })

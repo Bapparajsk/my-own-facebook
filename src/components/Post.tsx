@@ -13,11 +13,13 @@ import Share from "@/components/Share";
 import { useUserContext } from "@/context/UserProvider";
 import { Ellipsis } from 'lucide-react';
 import { DeleteDocumentBulkIcon, EditDocumentBulkIcon } from "@nextui-org/shared-icons";
-import { formatNumber, getDate } from '@/utils/post';
+import { formatNumber, getDate, likePost } from '@/utils/post';
 import { PopupDetails } from '@/interface/post';
+import { useMutation } from '@tanstack/react-query';
 
 
 const Post = forwardRef<HTMLDivElement, PostProps>(({
+    idx,
     id,
     name,
     time,
@@ -26,10 +28,10 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
     userActive,
     isImage,
     containUrl,
-    like,
-    comment,
-    share,
-    preview
+    likeCount,
+    commentCount,
+    shareCount,
+    preview,
   }, ref) => {
     const [popupDetails, setPopupDetails] = useState<PopupDetails>({placement: 'bottom', height: 20, isComment: true});
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -41,6 +43,16 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
     }
 
     const { userDetails } = useUserContext();
+
+    const likePostMutation = useMutation({
+        mutationFn: async () => {
+            if (!userDetails) {
+                return;
+            }
+            return likePost(id, userDetails._id);
+        }
+    })
+
     
     return (
         <>
@@ -129,10 +141,15 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                         color="primary"  
                         variant={userDetails && userDetails.like[id] ? "shadow" : "flat"} 
                         className={'grow'}
-                        disabled={userDetails && userDetails.like[id] ? true : false}
+                        onClick={() => {
+                            if (!userDetails) {
+                                return;
+                            }
+                            likePostMutation.mutate();
+                        }}
                     >
                         <GetIcon name={'like'} className={'!w-6'}/>
-                        <span>{formatNumber(like)}</span>
+                        <span>{likePostMutation.isSuccess ? formatNumber(likeCount + 1) : formatNumber(likeCount)}</span>
                     </Button>
                     <Button
                         onPress={() => handleClick({placement: 'bottom', height: 20, isComment: true})}
@@ -141,7 +158,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                         className={'grow'}
                     >
                         <GetIcon name={'comment'} className={'!w-6'}/>
-                        <span>{formatNumber(comment)}</span>
+                        <span>{formatNumber(commentCount)}</span>
                     </Button>
                     <Button
                         onPress={() => handleClick({placement: 'center', height: 30, isComment: false})}
@@ -150,7 +167,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                         className={'grow'}
                     >
                         <GetIcon name={'share'} className={'!w-6'}/>
-                        <span>{formatNumber(share)}</span>
+                        <span>{formatNumber(shareCount)}</span>
                     </Button>
                 </div>
             </div>

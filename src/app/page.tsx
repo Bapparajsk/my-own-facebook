@@ -36,27 +36,7 @@ export default function Home() {
 
     return (
         <div className={'w-full h-auto px-4'}>
-            {status === "success" && <>
-                <div className={'w-full h-auto flex gap-x-8 items-center mt-2'}>
-                    <Badge
-                        color="primary"
-                        size="md"
-                        placement={'bottom-right'}
-                        showOutline={false}
-                        content={<GetIcon name={'plus'}/>}
-                        disableAnimation={false}
-                    >
-                        <Avatar
-                            size={'lg'}
-                            isBordered={false}
-                            color={'success'}
-                            src={userDetails?.profileImage.profileImageURL || "/images/default-forground.png"}
-                        />
-                </Badge>
-                </div>
-                <hr className="border-none h-[1px] bg-default-300 text-red-800 mt-4"/>
-                <RenderPosts />
-            </>}
+            {status === "success" && <RenderPosts />}
         </div>
     );
 }
