@@ -40,7 +40,9 @@ const RenderPosts = () => {
     return (
         <div className={'w-full h-auto mt-4'}>
             {
-                post?.map((item, idx) => {                    
+                post?.map((item, idx) => {          
+                    console.log(item);
+                              
                     if (post && idx === post.length-1) {
                         return <Post
                             ref={ref}
@@ -57,6 +59,7 @@ const RenderPosts = () => {
                             likeCount={item.likeCount}
                             commentCount={item.commentCount} 
                             shareCount={item.shareCount}
+                            comments={item.comments}
                         />
                     }
                     return (
@@ -74,6 +77,7 @@ const RenderPosts = () => {
                             likeCount={item.likeCount}
                             commentCount={item.commentCount} 
                             shareCount={item.shareCount}
+                            comments={item.comments}
                         />
                     )
                 })

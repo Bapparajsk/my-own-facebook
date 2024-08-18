@@ -1,11 +1,14 @@
 import React from "react";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip} from "@nextui-org/react";
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Checkbox, Button} from "@nextui-org/react";
 import {columns, users} from "@/app/teptData";
 import { CheckIcon } from '@nextui-org/shared-icons'
 
 export default function Share() {
     const renderCell = React.useCallback((user: { [x: string]: any; avatar: any; email: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<React.AwaitedReactNode> | null | undefined; team: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; status: string | number; }, columnKey: string | number) => {
         const cellValue = user[columnKey];
+
+        console.log(user);
+        
 
         switch (columnKey) {
             case "name":
@@ -21,13 +24,9 @@ export default function Share() {
                 )
             case 'send':
                 return (
-                    <Chip
-                        variant="faded"
-                        color="success"
-                        startContent={<CheckIcon />}
-                    >
-                        send
-                    </Chip>
+                    <Button variant="ghost">
+                        <CheckIcon />
+                    </Button>
                 )
         }
     }, []);
@@ -39,7 +38,7 @@ export default function Share() {
                     NAME
                 </TableColumn>
                 <TableColumn key={'send'} align={"end"}>
-                    {''}
+                    <Checkbox size="sm">Select All</Checkbox>
                 </TableColumn>
             </TableHeader>
             <TableBody items={users}>

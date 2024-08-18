@@ -1,21 +1,22 @@
 "use client"
 
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { 
     Badge, Avatar, Image, Button, Modal, ModalContent, 
     ModalBody, ModalFooter, useDisclosure, Textarea, 
     Dropdown, DropdownTrigger, DropdownMenu, DropdownItem
 } from "@nextui-org/react";
 import { GetIcon } from "@/components/GetIcon";
-import { Comment } from "@/components/Comment";
-import { PostProps } from "@/interface/component";
+import Comment from "@/components/Comment";
+import { CommentType, PostProps } from "@/interface/component";
 import Share from "@/components/Share";
 import { useUserContext } from "@/context/UserProvider";
 import { Ellipsis } from 'lucide-react';
 import { DeleteDocumentBulkIcon, EditDocumentBulkIcon } from "@nextui-org/shared-icons";
-import { formatNumber, getDate, likePost } from '@/utils/post';
+import { formatNumber, getDate, postUpdate } from '@/utils/post';
 import { PopupDetails } from '@/interface/post';
 import { useMutation } from '@tanstack/react-query';
+import { set } from 'react-hook-form';
 
 
 const Post = forwardRef<HTMLDivElement, PostProps>(({
@@ -32,26 +33,105 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
     commentCount,
     shareCount,
     preview,
+    comments
   }, ref) => {
     const [popupDetails, setPopupDetails] = useState<PopupDetails>({placement: 'bottom', height: 20, isComment: true});
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [notfound, setNotfound] = useState(false);
+    const [postComments, setPostComments] = useState<CommentType[]>([]);
+    const [commentMessage, setCommentMessage] = useState<string>('');
+    const [postCommentsCount, setpostCommentsCount] = useState<number>(commentCount);
+    const lastCommentRef = useRef<HTMLDivElement>(null);
 
     const handleClick = (data: PopupDetails) => {
         setPopupDetails(data);
         onOpen()
     }
 
-    const { userDetails } = useUserContext();
+    const commentMutation = useMutation({
+        mutationFn: async () => {
+
+            if (!userDetails) {
+                return ;
+            }
+
+            setPostComments([...postComments, {
+                id: userDetails._id,
+                userId: userDetails._id,
+                userName: userDetails.name,
+                userImage: userDetails.profileImage?.profileImageURL || '/images/default-forground.png',
+                createdAt: new Date(),
+                modify: new Date(),
+                comment: commentMessage,
+            }]);
+
+            setCommentMessage('');
+
+            return postUpdate({event: 'comment', id}, {userId: userDetails._id, comment: commentMessage});
+        },
+        onSuccess(data) {
+            setpostCommentsCount(postCommentsCount + 1);
+            const { commentId } = data;
+            if (!commentId) {
+                return;
+            }
+
+            const comment = postComments.find((comment) => comment.id === userDetails?._id);
+
+            if (!comment) {
+                return;
+            }
+
+            postComments[postComments.length - 1].id = commentId;
+            setPostComments(postComments);
+        },
+    })
+
+    const { userDetails, setUserDetails } = useUserContext();
+    const [postLike, setPostLike] = useState<number>(likeCount);
 
     const likePostMutation = useMutation({
         mutationFn: async () => {
             if (!userDetails) {
                 return;
             }
-            return likePost(id, userDetails._id);
+
+            const event = userDetails.like[id] ? 'dislike' : 'like';
+            
+            if (event === "like") {
+                const user = userDetails;
+                if (!user) {
+                    return ;
+                }
+                user.like[id] = id;
+                setUserDetails(user);
+                setPostLike(postLike + 1);
+            } else if (event === "dislike") {
+                const user = userDetails;
+                if (!user) {
+                    return ;
+                }
+                delete user.like[id];
+                setUserDetails(user);
+                setPostLike(postLike - 1);
+            }
+
+            return postUpdate({event, id}, {userId: userDetails._id});
+        },
+    });
+
+    useEffect(() => {
+        if (comments) {
+            setPostComments(Object.values(comments));
         }
-    })
+
+    }, [])
+
+    useEffect(() => {
+        if (lastCommentRef.current) {
+            lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [postComments])
 
     
     return (
@@ -141,6 +221,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                         color="primary"  
                         variant={userDetails && userDetails.like[id] ? "shadow" : "flat"} 
                         className={'grow'}
+                        isLoading={likePostMutation.isPending}
                         onClick={() => {
                             if (!userDetails) {
                                 return;
@@ -149,16 +230,20 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                         }}
                     >
                         <GetIcon name={'like'} className={'!w-6'}/>
-                        <span>{likePostMutation.isSuccess ? formatNumber(likeCount + 1) : formatNumber(likeCount)}</span>
+                        <span>{
+                            formatNumber(postLike)
+                        }</span>
                     </Button>
                     <Button
-                        onPress={() => handleClick({placement: 'bottom', height: 20, isComment: true})}
+                        onPress={() => {
+                            handleClick({placement: 'bottom', height: 20, isComment: true});
+                        }}
                         color="primary"
                         variant="flat"
                         className={'grow'}
                     >
                         <GetIcon name={'comment'} className={'!w-6'}/>
-                        <span>{formatNumber(commentCount)}</span>
+                        <span>{formatNumber(postCommentsCount)}</span>
                     </Button>
                     <Button
                         onPress={() => handleClick({placement: 'center', height: 30, isComment: false})}
@@ -185,19 +270,26 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                     {(onClose) => (
                         <>
                             <ModalBody className={'mt-2'}>
-                                <Comment
-                                    key={2}
-                                    name={'Sohey khatun'}
-                                    comment={'hello bappa a kis ki photo hey'}
-                                    profileImageUrl={'https://th.bing.com/th/id/OIP.TXJ-iZJ33GINbidIe2rg9AAAAA?rs=1&pid=ImgDetMain'}
-                                />
-                                <Comment
-                                    key={2}
-                                    name={'Susmita aktar'}
-                                    comment={'Can you write the installation steps? Each details pls. I want to this make myself'}
-                                    profileImageUrl={'https://i.pinimg.com/originals/bb/c3/8f/bbc38f08f0347efb0b29edb119d3c18f.jpg'}
-                                />
-                                <Share/>
+                                {
+                                    popupDetails.isComment ? (
+                                        postComments.map((comment, idx) => {
+                                            if (idx === postComments.length - 1) {
+                                                return <Comment
+                                                    key={idx}
+                                                    {...comment}
+                                                    ref={lastCommentRef}
+                                                />
+                                            }
+                                            return <Comment
+                                                key={idx}
+                                                {...comment}
+                                            />
+                                        })
+                                            
+                                    ) : (
+                                        <Share/>
+                                    )
+                                }
                             </ModalBody>
                             {popupDetails.isComment && <ModalFooter>
                                 <div className="flex w-full gap-x-2">
@@ -210,8 +302,15 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                                         placeholder="Write a comment..."
                                         radius={'md'}
                                         minRows={1}
+                                        value={commentMessage}
+                                        onValueChange={(value) => setCommentMessage(value)}
                                         endContent={
-                                            <Button color="primary" onPress={onClose}>
+                                            <Button 
+                                                color="primary" 
+                                                onClick={() => commentMutation.mutate()} 
+                                                isLoading={commentMutation.isPending}
+                                                
+                                            >
                                                 Action
                                             </Button>
                                         }

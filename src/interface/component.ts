@@ -13,10 +13,15 @@ export interface PostProps {
     shareCount: number
     preview?: boolean
     ref?: any
+    comments?: Map<string, CommentType>
 }
 
-export interface CommentProps {
-    name: string
+export interface CommentType {
+    id: string,
+    userId: string,
+    userName: string,
+    userImage: string | undefined,
+    createdAt: Date
+    modify: Date
     comment: string
-    profileImageUrl: string
 }
