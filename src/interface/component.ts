@@ -24,4 +24,5 @@ export interface CommentType {
     createdAt: Date
     modify: Date
     comment: string
+    _userId?: string | undefined
 }

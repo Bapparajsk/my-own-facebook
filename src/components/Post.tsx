@@ -278,11 +278,13 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                                                     key={idx}
                                                     {...comment}
                                                     ref={lastCommentRef}
+                                                    _userId={userDetails?._id}
                                                 />
                                             }
                                             return <Comment
                                                 key={idx}
                                                 {...comment}
+                                                _userId={userDetails?._id}
                                             />
                                         })
                                             
