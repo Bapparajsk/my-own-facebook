@@ -8,8 +8,6 @@ import { fetchPost } from '@/utils/post';
 
 const RenderPosts = () => {
 
-    // const [Post, setPost] = useState<any[]>([]);
-
     const {
         data,
         fetchNextPage,
@@ -36,14 +34,11 @@ const RenderPosts = () => {
     // how to this post veriabal update in oanather component
     let post = data?.pages.flatMap((page) => page.data);
 
-
     return (
         <div className={'w-full h-auto mt-4'}>
             {
-                post?.map((item, idx) => {          
-                    console.log(item);
-                              
-                    if (post && idx === post.length-1) {
+                post?.map((item, idx) => {                         
+                    if (post && idx === post.length-2) {
                         return <Post
                             ref={ref}
                             key={idx}

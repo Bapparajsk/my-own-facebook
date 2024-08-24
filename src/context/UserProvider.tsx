@@ -46,7 +46,7 @@ const UserProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
                 router.replace('/sign-up');
                 return;
             }
-        
+            
             const res = await axios.get(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user`,
                 {headers: createdHeaders(app_Token)}
@@ -54,7 +54,7 @@ const UserProvider = ({ children }: Readonly<{children: React.ReactNode}>) => {
             const { user } = res.data;
             
             setUserDetails(user as UserSType);
-            return user;
+            return user as UserSType;
         } catch (error) {
             console.log(error);
             console.log("error from fetch user");

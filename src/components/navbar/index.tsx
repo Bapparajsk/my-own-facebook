@@ -22,6 +22,7 @@ const MainNavbar = () => {
         '/message/*',
         '/verify/*',
         '/profile/upload',
+        '/share-post'
     ];
 
     function isPathHidden(currentPath: string): boolean {

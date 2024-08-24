@@ -4,6 +4,9 @@ import NotificationBar from '@/components/NotificationBar';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import { AnimatePresence } from "framer-motion"
 import { NotyProps } from '@/components/NotificationBar/types';
+import { getSocket } from '@/utils/socket';
+import { Socket } from 'socket.io-client';
+import { Avatar } from '@nextui-org/react';
 export interface ToastDetails {
     message: string;
     type: "success" | "warning" | "error" | "loading";
@@ -23,6 +26,8 @@ const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) =>
     const [id, setId] = useState<NodeJS.Timeout | undefined>(undefined);
     const [tempDetails, setTempDetails] = useState<NotyProps | undefined>(undefined);
     const [details, setDetails] = useState<NotyProps | undefined>(undefined);
+
+    const socket: Socket  = getSocket();
 
     const setNotyDetails = async ({
         heading,
@@ -60,6 +65,20 @@ const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) =>
         });
     }
 
+    socket.on("new-post", (postData) => {
+        console.log("new post", postData);
+        
+        setNotyDetails({
+            startIcon: <Avatar src={postData.userImage || ""} size="md" />,
+            contain: {
+                name: postData.userName,
+                message: "New post"
+            },
+            type: "info",
+            link: `/share-post?postId=${postData.postId}`
+        })
+    });
+
     useEffect(() => {
         if (show) {
             const timeout = setTimeout(() => {
@@ -72,6 +91,8 @@ const ToasterProvider = ({ children }: Readonly<{children: React.ReactNode}>) =>
             return () => clearTimeout(timeout);
         }
     }, [show, tempDetails]); 
+
+
 
     return (
         <ToasterContext.Provider

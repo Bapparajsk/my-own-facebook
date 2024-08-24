@@ -1,21 +1,22 @@
 "use client"
 
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
-import { 
-    Badge, Avatar, Image, Button, Modal, ModalContent, 
-    ModalBody, ModalFooter, useDisclosure, Textarea, 
+import {
+    Badge, Avatar, Image, Button, Modal, ModalContent,
+    ModalBody, ModalFooter, useDisclosure, Textarea,
     Dropdown, DropdownTrigger, DropdownMenu, DropdownItem
 } from "@nextui-org/react";
 import { GetIcon } from "@/components/GetIcon";
 import Comment from "@/components/Comment";
 import { CommentType, PostProps } from "@/interface/component";
-import Share from "@/components/Share";
+import Share, { Friend } from "@/components/Share";
 import { useUserContext } from "@/context/UserProvider";
 import { Ellipsis } from 'lucide-react';
 import { DeleteDocumentBulkIcon, EditDocumentBulkIcon } from "@nextui-org/shared-icons";
 import { formatNumber, getDate, postUpdate } from '@/utils/post';
 import { PopupDetails } from '@/interface/post';
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 import { set } from 'react-hook-form';
 
 
@@ -34,14 +35,17 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
     shareCount,
     preview,
     comments
-  }, ref) => {
-    const [popupDetails, setPopupDetails] = useState<PopupDetails>({placement: 'bottom', height: 20, isComment: true});
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+}, ref) => {
+    const [popupDetails, setPopupDetails] = useState<PopupDetails>({ placement: 'bottom', height: 20, isComment: true });
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [notfound, setNotfound] = useState(false);
     const [postComments, setPostComments] = useState<CommentType[]>([]);
     const [commentMessage, setCommentMessage] = useState<string>('');
     const [postCommentsCount, setpostCommentsCount] = useState<number>(commentCount);
     const lastCommentRef = useRef<HTMLDivElement>(null);
+    const [shareFriend, setShareFriend] = useState<Friend[]>([]);
+    const [isLoding, setIsLoading] = useState<boolean>(true);
+    const [postShareCount, setPostShareCount] = useState<number>(shareCount);
 
     const handleClick = (data: PopupDetails) => {
         setPopupDetails(data);
@@ -52,7 +56,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
         mutationFn: async () => {
 
             if (!userDetails) {
-                return ;
+                return;
             }
 
             setPostComments([...postComments, {
@@ -67,7 +71,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
 
             setCommentMessage('');
 
-            return postUpdate({event: 'comment', id}, {userId: userDetails._id, comment: commentMessage});
+            return postUpdate({ event: 'comment', id }, { userId: userDetails._id, comment: commentMessage });
         },
         onSuccess(data) {
             setpostCommentsCount(postCommentsCount + 1);
@@ -97,11 +101,11 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
             }
 
             const event = userDetails.like[id] ? 'dislike' : 'like';
-            
+
             if (event === "like") {
                 const user = userDetails;
                 if (!user) {
-                    return ;
+                    return;
                 }
                 user.like[id] = id;
                 setUserDetails(user);
@@ -109,16 +113,41 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
             } else if (event === "dislike") {
                 const user = userDetails;
                 if (!user) {
-                    return ;
+                    return;
                 }
                 delete user.like[id];
                 setUserDetails(user);
                 setPostLike(postLike - 1);
             }
 
-            return postUpdate({event, id}, {userId: userDetails._id});
+            return postUpdate({ event, id }, { userId: userDetails._id });
         },
     });
+
+    const getFrientList = async () => {
+
+        handleClick({ placement: 'center', height: 30, isComment: false });
+
+        const token = localStorage.getItem("app-token");
+        if (!token) {
+            throw new Error("No token found");
+        }
+
+        const url = process.env.NEXT_PUBLIC_SERVER_URL;
+
+        if (!url) {
+            throw new Error("No url found");
+        }
+
+        const res = await axios.get(
+            `${url}/api/friend/get-all?isAll=true&env=friends`,
+            { headers: { token } }
+        );
+
+
+        setIsLoading(false);
+        setShareFriend(res.data.friends);
+    }
 
     useEffect(() => {
         if (comments) {
@@ -133,7 +162,6 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
         }
     }, [postComments])
 
-    
     return (
         <>
             <div ref={ref} className={'w-full h-auto flex flex-col items-start justify-center gap-y-4 mb-5'}>
@@ -155,7 +183,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                         <div>
                             <Dropdown>
                                 <DropdownTrigger>
-                                    <Button 
+                                    <Button
                                         color={"secondary"}
                                         variant={"flat"}
                                         isIconOnly
@@ -166,19 +194,19 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                                 <DropdownMenu aria-label="Static Actions">
                                     <DropdownItem key="edit">
                                         <div className={'w-full h-auto flex items-center justify-start gap-x-2'}>
-                                            <EditDocumentBulkIcon/> 
+                                            <EditDocumentBulkIcon />
                                             <span>Edit Post</span>
                                         </div>
                                     </DropdownItem>
                                     <DropdownItem key="share">
                                         <div className={'w-full h-auto flex items-center justify-start gap-x-2'}>
-                                            <GetIcon name={'share'} className={'!w-4'}/> 
-                                            <span> Share Post </span> 
+                                            <GetIcon name={'share'} className={'!w-4'} />
+                                            <span> Share Post </span>
                                         </div>
                                     </DropdownItem>
                                     <DropdownItem key="delete" className="text-danger" color="danger">
                                         <div className={'w-full h-auto flex items-center justify-start gap-x-2'}>
-                                            <DeleteDocumentBulkIcon/> 
+                                            <DeleteDocumentBulkIcon />
                                             <span>Delete Post</span>
                                         </div>
                                     </DropdownItem>
@@ -217,9 +245,9 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                     )}
                 </div>
                 <div className={'w-full h-auto flex items-center justify-center gap-x-2'}>
-                    <Button 
-                        color="primary"  
-                        variant={userDetails && userDetails.like[id] ? "shadow" : "flat"} 
+                    <Button
+                        color="primary"
+                        variant={userDetails && userDetails?.like[id] ? "shadow" : "flat"}
                         className={'grow'}
                         isLoading={likePostMutation.isPending}
                         onClick={() => {
@@ -229,30 +257,30 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                             likePostMutation.mutate();
                         }}
                     >
-                        <GetIcon name={'like'} className={'!w-6'}/>
+                        <GetIcon name={'like'} className={'!w-6'} />
                         <span>{
                             formatNumber(postLike)
                         }</span>
                     </Button>
                     <Button
                         onPress={() => {
-                            handleClick({placement: 'bottom', height: 20, isComment: true});
+                            handleClick({ placement: 'bottom', height: 20, isComment: true });
                         }}
                         color="primary"
                         variant="flat"
                         className={'grow'}
                     >
-                        <GetIcon name={'comment'} className={'!w-6'}/>
+                        <GetIcon name={'comment'} className={'!w-6'} />
                         <span>{formatNumber(postCommentsCount)}</span>
                     </Button>
                     <Button
-                        onPress={() => handleClick({placement: 'center', height: 30, isComment: false})}
+                        onClick={getFrientList}
                         color="primary"
                         variant="flat"
                         className={'grow'}
                     >
-                        <GetIcon name={'share'} className={'!w-6'}/>
-                        <span>{formatNumber(shareCount)}</span>
+                        <GetIcon name={'share'} className={'!w-6'} />
+                        <span>{formatNumber(postShareCount)}</span>
                     </Button>
                 </div>
             </div>
@@ -262,7 +290,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                 onOpenChange={onOpenChange}
                 backdrop={'blur'}
                 hideCloseButton={true}
-                style={{ height: `calc(100vh - ${popupDetails.height}%)`}}
+                style={{ height: `calc(100vh - ${popupDetails.height}%)` }}
                 scrollBehavior={'inside'}
                 radius={'sm'}
             >
@@ -287,9 +315,23 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                                                 _userId={userDetails?._id}
                                             />
                                         })
-                                            
+
                                     ) : (
-                                        <Share/>
+                                        <Share
+                                            setShareFriend={setShareFriend}
+                                            shareFriend={shareFriend}
+                                            isLoding={isLoding}
+                                            postId={id}
+                                            setPostShareCount={async () => {
+                                                setPostShareCount(postShareCount + 1);
+                                                // sent request to server
+                                                await axios.patch(
+                                                    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/post/update?event=share&id=${id}`,
+                                                    { userId: userDetails?._id },
+                                                    { headers: { token: localStorage.getItem("app-token") } }
+                                                )
+                                            }}
+                                        />
                                     )
                                 }
                             </ModalBody>
@@ -307,13 +349,12 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                                         value={commentMessage}
                                         onValueChange={(value) => setCommentMessage(value)}
                                         endContent={
-                                            <Button 
-                                                color="primary" 
-                                                onClick={() => commentMutation.mutate()} 
+                                            <Button
+                                                color="primary"
+                                                onClick={() => commentMutation.mutate()}
                                                 isLoading={commentMutation.isPending}
-                                                
                                             >
-                                                Action
+                                                Comment
                                             </Button>
                                         }
                                     />
@@ -323,7 +364,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                     )}
                 </ModalContent>
             </Modal>}
-            {!preview && <hr className="border-none h-[1px] bg-default-300 mb-4"/>}
+            {!preview && <hr className="border-none h-[1px] bg-default-300 mb-4" />}
         </>
     );
 });

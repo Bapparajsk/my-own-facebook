@@ -4,8 +4,8 @@ import React, {useMemo} from 'react';
 import {Avatar, Badge, Popover, PopoverTrigger, PopoverContent, Button} from "@nextui-org/react";
 import {GetIcon} from "@/components/GetIcon"
 import { getColorName, getIconName } from '@/utils/Utils';
-
-interface NotificationProps {
+import { useRouter } from "next/navigation"
+export interface NotificationProps {
     Type: string
     createdAt: Date
     description: string
@@ -14,10 +14,13 @@ interface NotificationProps {
     name: string
     userId: string
     idx: number
+    link?: string
 }
 
 
-const NotifyCard = ({Type, description, image , isvew, name, createdAt} : NotificationProps) => {
+const NotifyCard = ({Type, description, image , isvew, name, createdAt, link} : NotificationProps) => {
+    const router = useRouter()
+    
     const PopUpcContent = useMemo(() => {
         return (
             <PopoverContent>
@@ -53,6 +56,7 @@ const NotifyCard = ({Type, description, image , isvew, name, createdAt} : Notifi
             </div>
             <div className={'w-full h-full flex flex-col items-start justify-center'}>
                 <p>{name && (<strong className={'text-blue-300'}>{name}</strong>)} {description}</p>
+                {link && <strong onClick={() => router.push(link)} className={'text-blue-300 cursor-pointer hover:underline duration-500'}>Checkout now</strong>}
                 <br/>
                 <p>{new Date(createdAt).toDateString()}</p>
             </div>

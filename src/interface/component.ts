@@ -14,6 +14,7 @@ export interface PostProps {
     preview?: boolean
     ref?: any
     comments?: Map<string, CommentType>
+    onePost?: boolean
 }
 
 export interface CommentType {

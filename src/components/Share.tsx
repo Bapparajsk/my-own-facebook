@@ -7,8 +7,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { formatName } from "@/utils/format";
 import { AnimatedCheckIcon } from "./AnimatedCheckIcon";
+import { useToasterContext } from "@/context/ToasterContext";
 
-interface Friend {
+export interface Friend {
     _id: string;
     idx: number;
     name: string;
@@ -18,38 +19,20 @@ interface Friend {
     isSend?: boolean;
 }
 
-export default function Share() {
-    const queryClient = useQueryClient();
-    const { data, status } = useQuery({
-        queryKey: ["sharFriends"],
-        queryFn: async () => {
-            const token = localStorage.getItem("app-token");
-            if (!token) {
-                throw new Error("No token found");
-            }
-
-            const url = process.env.NEXT_PUBLIC_SERVER_URL;
-
-            if (!url) {
-                throw new Error("No url found");
-            }
-
-            const res = await axios.get(
-                `${url}/api/friend/get-all?isAll=true&env=friends`,
-                { headers: { token } }
-            );
-
-            return res.data.friends as Friend[];
-        },
-        retry: 2,
-        
-    });
+export default function Share({ shareFriend, isLoding, postId, setShareFriend, setPostShareCount }:
+    { shareFriend: Friend[], isLoding: boolean, postId: string, setShareFriend: (data: Friend[]) => void, setPostShareCount: () => void }) {
+    
+    const { setNotyDetails } = useToasterContext();
 
     const sharMutation = useMutation({
         mutationFn: async ({ id, idx }: { id: string, idx: number }) => {
             const token = localStorage.getItem("app-token");
             if (!token) {
                 throw new Error("No token found");
+            }
+
+            if (shareFriend && shareFriend[idx].isSend) {
+                return { id, idx, isSend: true };
             }
 
             const url = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -59,19 +42,38 @@ export default function Share() {
             }
 
             // TODO: send request to server
-
-            return { id, idx };
-        },
-        onSuccess: ({ id, idx }) => {
-            queryClient.setQueryData<Friend[]>(["sharFriends"], (oldData) =>
-                oldData?.map((friend, index) =>
-                    index === idx ? { ...friend, isSend: true } : friend
-                )
+            await axios.post(
+                `${url}/api/friend/share-post`,
+                {
+                    friendId: id,
+                    postId: postId
+                },
+                {
+                    headers: {
+                        token: token
+                    }
+                }
             );
+
+            return { id, idx, isSend: false };
+        },
+        onSuccess: (data) => {
+            if (!data.isSend) {
+                const newShareFriend = [...shareFriend];
+                newShareFriend[data.idx].isSend = true;
+                setShareFriend(newShareFriend);
+                setPostShareCount();
+            };
         },
         onError: (error) => {
-            console.error("Error sharing:", error);
-            // Handle error
+            setNotyDetails({
+                type: "error",
+                contain: {
+                    name: "Error",
+                    message: error.message || "Something went wrong"
+                },
+                
+            });
         }
     });
 
@@ -79,16 +81,13 @@ export default function Share() {
 
         return () => {
 
-            if (status === "pending") {
-                queryClient.cancelQueries({ queryKey: ["sharFriends"], exact: true });
-            }
-
             if (sharMutation.isPending) {
                 sharMutation.reset();
             }
         }
 
-    }, [status, sharMutation, queryClient]);
+    },  [sharMutation]);
+
 
     const renderCell = useCallback((user: Friend, columnKey: any) => {
         const userRole = user.role ? formatName(user.role, 24) : "No Role";
@@ -127,11 +126,11 @@ export default function Share() {
             default:
                 return null;
         }
-    }, [sharMutation]);
+    }, [shareFriend]);
 
     return (
         <Fragment>
-            {status === "pending" ? <p>Loading...</p> : status === "error" ? <p>Error</p> : status === "success" && data && data.length === 0 ? <p>No data found</p> : (
+            {isLoding ? "loding" : (
                 <Table aria-label="Example table with custom cells">
                     <TableHeader columns={columns}>
                         <TableColumn key={'name'} align={"start"}>
@@ -141,12 +140,14 @@ export default function Share() {
                             {''}
                         </TableColumn>
                     </TableHeader>
-                    <TableBody items={data}>
-                        {(item) => (
-                            <TableRow key={item._id}>
-                                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                            </TableRow>
-                        )}
+                    <TableBody>
+                        {
+                            shareFriend.map((item, idx) => (
+                                <TableRow key={item._id}>
+                                    {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                </TableRow>
+                            ))
+                        }
                     </TableBody>
                 </Table>
             )}
