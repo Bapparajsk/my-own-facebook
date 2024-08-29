@@ -5,9 +5,10 @@ import React, {useState} from "react";
 import {Main} from "@/components/setting/event/Main";
 import { qualification } from '@/app/data'
 import {BriefcaseBusiness} from "lucide-react";
+import { UserSType } from "@/interface/usertupe";
 
 
-export const Role = () => {
+export const Role = ({user} : {user: UserSType}) => {
 
     const [role, setRole] = useState('Software Engineering');
 
@@ -18,6 +19,8 @@ export const Role = () => {
 
     return (
         <Main
+            user={user}
+            updateName={false}
             inputComponent={
                 <Select
                     startContent={ <BriefcaseBusiness /> }
@@ -35,9 +38,10 @@ export const Role = () => {
                     ))}
                 </Select>
             }
-            name={'Bapparaj Sk'}
             onSubmit={onSubmit}
-            role={role}
+            onSubmitButton={
+                <button type="submit" className={'btn btn-primary'}>Save</button>
+            }
         />
     );
 };

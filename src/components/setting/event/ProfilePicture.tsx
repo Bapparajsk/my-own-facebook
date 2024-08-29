@@ -4,8 +4,9 @@ import React from "react";
 import {ChevronLeft, Plus} from "lucide-react";
 import {Card, Avatar, CardBody, CardHeader, Button} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { UserSType } from "@/interface/usertupe";
 
-export const ProfilePicture = () => {
+export const ProfilePicture = ({user} : {user: UserSType}) => {
 
     const router = useRouter();
 

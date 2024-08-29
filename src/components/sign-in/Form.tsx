@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Input, Button, User, Card, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Spinner } from "@nextui-org/react";
+import { Input, Button, User, Card, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem } from "@nextui-org/react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@nextui-org/shared-icons";
 import { SignIpInputs } from "@/interface/inputTypes"
 import Link from "next/link"
@@ -10,37 +10,30 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useToasterContext } from '@/context/ToasterContext';
 import { useUserContext } from '@/context/UserProvider';
+import { UserSType } from '@/interface/usertupe';
 
 interface LogDintUser {
-    name: string
-    description?: string
-    url?: string
+    name: string;
+    role: string | undefined;
+    imageId: string | undefined;
 }
 
 export const Form = () => {
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
-        clearErrors,
-        setError
     } = useForm<SignIpInputs>()
 
     const router = useRouter();
 
     const { setNotyDetails } = useToasterContext();
     const { setUserDetails,userDetails } = useUserContext();
+    const [isVisible, setIsVisible] = useState(false);
+    const toggleVisibility = () => setIsVisible(!isVisible);
+    const [logDintUser, setLogDintUser] = useState<LogDintUser[]>([])
 
     const onSubmit: SubmitHandler<SignIpInputs> = async ({email, password}) => {
-
-        // setNotyDetails({
-        //     startIcon: <Spinner />,
-        //     contain: {
-        //         message: "Please wait Logging in..."
-        //     },
-        //     type: "default",
-        // })
 
         const body = {
             email,
@@ -52,7 +45,7 @@ export const Form = () => {
                 body
             );
 
-            const { token, user, message } = res.data;
+            const { token, user, message } = res.data as { token: string, user: UserSType, message: string };
             setNotyDetails({
                 contain: {
                     message: message
@@ -62,6 +55,15 @@ export const Form = () => {
 
             localStorage.setItem("app-token", token);
             setUserDetails(user);
+            
+            const logsUsers = [...logDintUser]
+            logDintUser.push({
+                name: user.name,
+                role: user.role,
+                imageId: user.profileImage.profileImageURL || undefined
+            });
+
+            localStorage.setItem('login-users', JSON.stringify(logsUsers));
 
         } catch (error) {
             console.log(error)
@@ -77,13 +79,19 @@ export const Form = () => {
 
     useEffect(() => {
         if (userDetails) {
-            router.push('/');
+            router.replace('/');
         }
     }, [userDetails])
 
-    const [isVisible, setIsVisible] = useState(false);
-    const toggleVisibility = () => setIsVisible(!isVisible);
-    const [logDintUser, setLogDintUser] = useState<LogDintUser[]>([])
+    useEffect(() => {
+        const login = localStorage.getItem('login-users');
+        if (login) {
+            const data = JSON.parse(login) as LogDintUser[];
+            setLogDintUser(data);
+        }
+    }, [])
+
+    
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -98,9 +106,9 @@ export const Form = () => {
                                 return <div key={idx} className={'w-full h-full'}>
                                     <User
                                         name={item.name}
-                                        description={item.description}
+                                        description={item.role}
                                         avatarProps={{
-                                            src: item.url
+                                            src: item.imageId || "/images/default-forground.png"
                                         }}
                                     />
                                 </div>
@@ -117,9 +125,9 @@ export const Form = () => {
                                                     <div key={idx} className={'w-full h-full'}>
                                                         <User
                                                             name={item.name}
-                                                            description={item.description}
+                                                            description={item.role}
                                                             avatarProps={{
-                                                                src: item.url
+                                                                src: item.imageId || "/images/default-forground.png"
                                                             }}
                                                         />
                                                     </div>
@@ -135,9 +143,9 @@ export const Form = () => {
                             return <div key={idx} className={'w-full h-full'}>
                                 <User
                                     name={item.name}
-                                    description={item.description}
+                                    description={item.role}
                                     avatarProps={{
-                                        src: item.url
+                                        src: item.imageId || "/images/default-forground.png"
                                     }}
                                 />
                             </div>

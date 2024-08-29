@@ -5,8 +5,9 @@ import { ChevronLeft } from "lucide-react";
 import { Card, DatePicker, CardBody, CardHeader, Button } from "@nextui-org/react";
 import { parseDate } from "@internationalized/date";
 import { useRouter } from 'next/navigation'
+import { UserSType } from "@/interface/usertupe";
 
-export const Birthday = () => {
+export const Birthday = ({user} : {user: UserSType}) => {
 
     const router = useRouter();
 

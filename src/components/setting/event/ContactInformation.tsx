@@ -15,10 +15,11 @@ import { AtSign, ChevronLeft, Phone, Plus } from "lucide-react";
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
+import { UserSType } from "@/interface/usertupe";
 
 const MotionCard = motion(Card);
 
-export const ContactInformation = () => {
+export const ContactInformation = ({user} : {user: UserSType}) => {
     const PopUpcContent = useMemo(() => {
         return (
             <PopoverContent>
