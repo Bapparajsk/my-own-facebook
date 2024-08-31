@@ -57,7 +57,7 @@ export const qualification = [
     {key: "fsd", label: "Full Stack Developer"},
     {key: "se", label: "Software Engineering"},
     {key: "sde", label: "Software Developer Engineering"},
-    {key: "DevOps", label: "Development and Operations (DevOps)"},
+    {key: "dao", label: "Development and Operations"},
     {key: "eh", label: "Ethical Hacker"},
     {key: "fed", label: "Front end Developer"},
     {key: "bed", label: "Back end Developer"},

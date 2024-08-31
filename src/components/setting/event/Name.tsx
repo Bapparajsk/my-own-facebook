@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useToasterContext } from "@/context/ToasterContext";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/UserProvider";
+import axios from "axios";
 
 export const Name = ({ user }: { user: UserSType }) => {
     const {
@@ -34,8 +35,17 @@ export const Name = ({ user }: { user: UserSType }) => {
                 return;
             }
 
-            await new Promise((resolve, rej) => setTimeout(resolve, 1000));
-            
+            const url = process.env.NEXT_PUBLIC_SERVER_URL;
+            const token = localStorage.getItem('app-token');
+            if (!url || !token) {
+                throw new Error('Invalid token or url');
+            }
+
+            await axios.patch(
+                `${url}/api/add/change-username`,
+                { name },
+                { headers: { token } }
+            );
         },
         onError: (error) => {
             setNotyDetails({

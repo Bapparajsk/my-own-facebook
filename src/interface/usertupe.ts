@@ -33,7 +33,7 @@ export interface UserSType {
     active: boolean
     role: string
     dateOfBirth: DateOfBirthType,
-    emails: { value: string }[]
+    emails: { value: string, isPrimary: true }[]
     profileImage: {
         coverImageURL?: string
         profileImageURL?: string

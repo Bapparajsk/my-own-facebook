@@ -6,7 +6,7 @@ import {Email} from "@/components/verify/Email";
 const Page = () => {
     return (
         <div className={'w-full max-w-[500px]'}>
-            <Email/>
+            <Email emails={undefined} token={null}/>
         </div>
     );
 };

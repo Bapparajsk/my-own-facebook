@@ -38,8 +38,13 @@ export const Main = ({ inputComponent, onSubmit, user, updateName = true, onSubm
                     {inputComponent}
                     <div className={'flex items-start gap-x-2'}>
                         <TriangleAlert color={'#F5A524'} />
-                        <p className={'font-light text-[12px] text-[#F5A524]'}>If you change your {updateName ? 'name' : 'role'},
-                            you can't change it again for 60 days.</p>
+                        <p className={'font-light text-[12px] text-[#F5A524]'}>
+                            {updateName ?
+                                "If you change your name you can't change it again for 60 days." :
+                                "Select a role that best describes you. This will help us to provide you with the best experience."
+                            }
+
+                        </p>
                     </div>
                     <div className={"w-full flex items-center justify-center"}>
                         {onSubmitButton}
