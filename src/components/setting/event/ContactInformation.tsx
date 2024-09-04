@@ -241,7 +241,6 @@ export const ContactInformation = ({ user }: { user: UserSType }) => {
                                             }}
                                         />}
                                 </AnimatePresence>
-
                             </ModalBody>
                         </>
                     )}

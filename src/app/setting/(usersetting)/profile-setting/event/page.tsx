@@ -4,11 +4,6 @@ import React from 'react';
 import { useSearchParams, useRouter } from 'next/navigation'
 import { EventType } from "@/components/setting/EventType";
 import { useUserContext } from "@/context/UserProvider";
-import { useQuery } from "@tanstack/react-query";
-import { UserSType } from '@/interface/usertupe';
-import axios from 'axios';
-
-
 
 const Page = () => {
 
