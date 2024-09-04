@@ -2,10 +2,6 @@ import axios from "axios";
 import { isValidEmail } from "./utils";
 
 export const verifyEmail = async (inputEmail: string) => {
-    if (!isValidEmail(inputEmail)) {
-        throw new Error("Invalid email");
-    }
-
     const url = process.env.NEXT_PUBLIC_SERVER_URL;
     const token = localStorage.getItem('app-token');
     if (!url || !token) {

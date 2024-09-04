@@ -28,6 +28,7 @@ import useScreenSize from "@/hooks/useScreenSize";
 import { OtpInput } from "@/components/OtpInput";
 import { useMutation } from "@tanstack/react-query";
 import { verifyEmail, verifyOtp } from "@/lib/credential";
+import { isExistEmailfromList, isValidEmail } from "@/lib/utils";
 
 const MotionCard = motion.create(Card);
 
@@ -43,7 +44,17 @@ export const ContactInformation = ({ user }: { user: UserSType }) => {
     const size = useScreenSize();
 
     const verifyEmailMoutation = useMutation({
-        mutationFn: async (email: string) => await verifyEmail(email),
+        mutationFn: async (email: string) => {
+            if (!isValidEmail(inputEmail)) {
+                throw new Error("Invalid email");
+            }
+
+            if (isExistEmailfromList({ list: emals, email})) {
+                throw new Error("Email already exist");
+            }
+
+            await verifyEmail(email);
+        },
         onError: (error) => {
             setNotyDetails({ type: "error", contain: { message: error.message || "An error occurred" } });
         },
