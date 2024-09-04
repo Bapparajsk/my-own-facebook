@@ -16,6 +16,7 @@ export const getRoleKey = (role: string): string => {
 }
 
 export const formatEmail = (email: string, p: string = "*"): string => {
+
     const [name, domain] =  email.split('@');
 
     let fastChar = name.charAt(0);

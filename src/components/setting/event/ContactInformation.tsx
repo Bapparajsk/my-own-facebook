@@ -15,28 +15,57 @@ import {
     ModalBody,
     useDisclosure,
     Input,
-    ModalFooter
 } from "@nextui-org/react";
 import React, { useCallback, useState } from "react";
 import { GetIcon } from "@/components/GetIcon";
 import { AtSign, ChevronLeft, Phone, Plus, X } from "lucide-react";
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import Link from "next/link";
 import { UserSType } from "@/interface/usertupe";
 import { formatEmail } from "@/utils/format";
 import { useToasterContext } from "@/context/ToasterContext";
 import useScreenSize from "@/hooks/useScreenSize";
+import { OtpInput } from "@/components/OtpInput";
+import { useMutation } from "@tanstack/react-query";
+import { verifyEmail, verifyOtp } from "@/lib/credential";
 
-const MotionCard = motion(Card);
+const MotionCard = motion.create(Card);
 
 export const ContactInformation = ({ user }: { user: UserSType }) => {
     const [emals, setEmails] = useState<{ value: string, isPrimary: boolean }[]>(user.emails);
-    const [DropDown, setDropDown] = useState(false);
+    const [inputEmail, setInputEmail] = useState<string>('');
+    const [otpComponent, openotpComponent] = useState<boolean>(false);
+
+
     const router = useRouter();
     const { setNotyDetails } = useToasterContext();
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const size = useScreenSize();
+
+    const verifyEmailMoutation = useMutation({
+        mutationFn: async (email: string) => await verifyEmail(email),
+        onError: (error) => {
+            setNotyDetails({ type: "error", contain: { message: error.message || "An error occurred" } });
+        },
+        onSuccess: () => {
+            setNotyDetails({ type: "success", contain: { message: "OTP sent to your email" } });
+            openotpComponent(true);
+        }
+    });
+
+    const verifyOtpMoutation = useMutation({
+        mutationFn: async (otp: string) => await verifyOtp(otp),
+        onError: (error) => {
+            setNotyDetails({ type: "error", contain: { message: error.message || "An error occurred" } });
+        },
+        onSuccess: ({ email }: { email: string }) => {
+            setEmails([...emals, { value: email, isPrimary: false }]);
+            setNotyDetails({ type: "success", contain: { message: "Email added successfully" } });
+            setInputEmail('');
+            openotpComponent(false);
+            onClose()
+        }
+    });
 
     const PopUpcContent = useCallback(({ isPrimary }: { isPrimary: boolean }) => {
         return (
@@ -122,8 +151,8 @@ export const ContactInformation = ({ user }: { user: UserSType }) => {
                 </Accordion>
             </CardBody>
             <Modal
-                size={size <= 760 ? "full": "md"}
-                isOpen={true}
+                size={size <= 760 ? "full" : "md"}
+                isOpen={isOpen}
                 placement={"bottom-center"}
                 onOpenChange={onOpenChange}
                 motionProps={{
@@ -176,12 +205,31 @@ export const ContactInformation = ({ user }: { user: UserSType }) => {
                                         isRequired
                                         fullWidth
                                         className="min-w-[300px]"
+                                        value={inputEmail}
+                                        onValueChange={(e) => setInputEmail(e)}
                                     />
-                                    <Button color="primary" variant="shadow">
-                                        Add Email
+                                    <Button
+                                        color="primary"
+                                        variant="shadow"
+                                        onPress={() => verifyEmailMoutation.mutate(inputEmail)}
+                                        isLoading={verifyEmailMoutation.isPending}
+                                        disabled={verifyEmailMoutation.isSuccess}
+                                    >
+                                        Verify Email
                                     </Button>
                                 </div>
-                                
+                                <AnimatePresence>
+                                    {otpComponent &&
+                                        <OtpInput
+                                            getOtp={(otp) => verifyOtpMoutation.mutate(otp)}
+                                            buttonProps={{
+                                                color: "primary",
+                                                variant: "shadow",
+                                                isLoading: verifyOtpMoutation.isPending,
+                                                disabled: verifyOtpMoutation.isSuccess
+                                            }}
+                                        />}
+                                </AnimatePresence>
 
                             </ModalBody>
                         </>

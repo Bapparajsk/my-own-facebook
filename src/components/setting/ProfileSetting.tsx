@@ -41,7 +41,7 @@ export const ProfileSetting = () => {
         {
             name: 'Profile picture',
             link: 'profile-picture',
-            icon: <Image />
+            icon: <Cake />
         }
     ]
 
