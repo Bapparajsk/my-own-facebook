@@ -1,11 +1,10 @@
 "use client"
 
 import { useEffect, ReactNode } from "react";
-import { initializeSocket } from "../utils/socket";
+import { initializeSocket } from "@/utils/socket";
 import { useUserContext } from "@/context/UserProvider";
 
 export const SocketProvider = ({children}: {children: ReactNode}) => {
-
     const { userDetails } = useUserContext();
 
     useEffect(() => {

@@ -19,7 +19,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { set } from 'react-hook-form';
 
-
+// eslint-disable-next-line react/display-name
 const Post = forwardRef<HTMLDivElement, PostProps>(({
     idx,
     id,
@@ -46,6 +46,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
     const [shareFriend, setShareFriend] = useState<Friend[]>([]);
     const [isLoding, setIsLoading] = useState<boolean>(true);
     const [postShareCount, setPostShareCount] = useState<number>(shareCount);
+
 
     const handleClick = (data: PopupDetails) => {
         setPopupDetails(data);
@@ -223,13 +224,13 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({
                 <div>
                     {isImage ? (
                         <Image
-                            loading={'lazy'}
+                            // loading={'lazy'}
                             className={'w-screen h-auto object-cover'}
                             alt="NextUI hero Image with delay"
-                            src={notfound ? '/notfound.jpg' : containUrl}
-                            onError={() => {
-                                setNotfound(true);
-                            }}
+                            src={containUrl}
+                            // onError={() => {
+                            //     setNotfound(true);
+                            // }}
                         />
                     ) : (
                         <video className={'w-screen h-full object-cover'} controls preload={'https://th.bing.com/th/id/OIP.yQ5dqe9e_mtXsEk9EHo5IwHaKX?w=182&h=254&c=7&r=0&o=5&dpr=1.3&pid=1.7'}>

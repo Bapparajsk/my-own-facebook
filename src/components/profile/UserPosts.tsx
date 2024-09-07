@@ -25,7 +25,7 @@ const UserPosts = ({userDetails} : {userDetails: UserSType}) => {
 
         try {
             const res = await axios.get(
-                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/post/${id}`,
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/post/user-post`,
                 {
                     headers: {
                         token: appToken,
@@ -43,13 +43,29 @@ const UserPosts = ({userDetails} : {userDetails: UserSType}) => {
     const getAllPost = async (posts: { postId: string }[]): Promise<void> => {
         setLoading(true);
         const postDate: PostSType[] = [];
-        for (const item of posts) {
-            const p = await fetchPost(item.postId);
-            if (p !== null) {
-                postDate.push(p);
+
+        try {
+            const appToken = localStorage.getItem("app-token");
+            if (appToken === null) {
+                throw new Error("Token not found");
             }
+
+            const res = await axios.get(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/post/user-post`,
+                {
+                    headers: {
+                        token: appToken,
+                        containerType: 'application/json'
+                    }
+                }
+            );
+
+            const { post } = res.data as { post: PostSType[] };
+            setPosts(post);
+        } catch (error) {
+            console.log(error);
+            setPosts([]);
         }
-        setPosts(postDate);
         setLoading(false);
     };
 
@@ -61,18 +77,19 @@ const UserPosts = ({userDetails} : {userDetails: UserSType}) => {
                 posts.map((item, idx) => {
                     console.log(item, "item")
                     return (<Post
+                        idx={idx}
                         id={item._id}
                         key={idx}
                         name={item.name}
                         time={item.createdAt}
-                        userImg={item.imageUrl ? item.imageUrl : ""}
+                        userImg={userDetails.profileImage.profileImageURL || "/images/default-forground.png"}
                         description={item.description}
                         userActive={true}
                         isImage={item.contentType !== "video/mp4"}
                         containUrl={item.contentUrl}
-                        like={item.likeCount}
-                        comment={item.commentCount}
-                        share={item.shareCount}
+                        likeCount={item.likeCount}
+                        commentCount={item.commentCount}
+                        shareCount={item.shareCount}
                     />)
             })
             )}

@@ -34,6 +34,8 @@ export default function Home() {
         );
     }
 
+    console.log(userDetails)
+
     return (
         <div className={'w-full h-auto px-4'}>
             {status === "success" && <RenderPosts />}

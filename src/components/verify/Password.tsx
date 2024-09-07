@@ -11,19 +11,21 @@ interface PasswordInput {
     oldPassword?: string;
     password: string
     confirmPassword: string
+
 }
 
 interface PasswordInputProps {
     resetOldPass?: boolean
-    onSubmit: (pass: string, oldpass?: string) => void
+    onSubmit?: (password: string, oldPassword?: string) => void
+    SubmitButton?: React.ReactNode
 }
 
-export const Password = ({resetOldPass, onSubmit}: PasswordInputProps) => {
+export const Password = ({resetOldPass, onSubmit, SubmitButton}: PasswordInputProps) => {
     const [isVisible, setIsVisible] = useState<{password: boolean, cPassword: boolean}>({
         password: false,
         cPassword: false,
     });
-    const [passwordWrongError, setPasswordWrongError] = useState()
+
     const {
         register,
         handleSubmit,
@@ -33,7 +35,7 @@ export const Password = ({resetOldPass, onSubmit}: PasswordInputProps) => {
     }= useForm<PasswordInput>();
 
     const handlePasswordSubmit:SubmitHandler<PasswordInput> = useCallback((data) => {
-        const { password, confirmPassword } = data;
+        const { password, confirmPassword, oldPassword } = data;
 
         let isValid = validatePassword(password);
 
@@ -47,6 +49,24 @@ export const Password = ({resetOldPass, onSubmit}: PasswordInputProps) => {
             clearErrors('password');
         }
 
+        if (resetOldPass) {
+            if (!oldPassword) {
+                setError('oldPassword', {
+                    type: 'manual',
+                    message: 'Old password is required'
+                });
+                return;
+            } else if (password === oldPassword) {
+                setError('oldPassword', {
+                    type: 'manual',
+                    message: 'Old password and new password should not be same'
+                });
+                return;
+            } else {
+                clearErrors('oldPassword');
+            }
+        }
+
         if (password !== confirmPassword) {
             setError("confirmPassword", {
                 type: "manual",
@@ -57,7 +77,9 @@ export const Password = ({resetOldPass, onSubmit}: PasswordInputProps) => {
             clearErrors("confirmPassword");
         }
 
-        onSubmit(password);
+        if (onSubmit) {
+            onSubmit(password, oldPassword);
+        }
 
     }, [setError, clearErrors])
 
@@ -109,7 +131,6 @@ export const Password = ({resetOldPass, onSubmit}: PasswordInputProps) => {
                     }
                     <Input
                         label="Password"
-
                         variant="bordered"
                         placeholder="Enter your password"
                         endContent={
@@ -177,9 +198,12 @@ export const Password = ({resetOldPass, onSubmit}: PasswordInputProps) => {
                             </Link>
                         )
                     }
-                    <Button type={'submit'} color="primary" variant="shadow" className={'mt-2'}>
-                        Save Password
-                    </Button>
+                    {
+                        SubmitButton ? SubmitButton :
+                        <Button type={'submit'} color="primary" variant="shadow" className={'mt-2'}>
+                            Save Password
+                        </Button>
+                    }
                 </form>
             </CardBody>
         </Card>
